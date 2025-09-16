@@ -1,0 +1,29 @@
+{
+  "columns": [
+    {
+      "id": "cheats",
+      "title": "Cheat Sheets",
+      "cards": []
+    },
+    {
+      "id": "colors",
+      "title": "Colors & Gradients",
+      "cards": []
+    },
+    {
+      "id": "images",
+      "title": "Images & Icons",
+      "cards": []
+    },
+    {
+      "id": "docs",
+      "title": "Guides & References",
+      "cards": []
+    },
+    {
+      "id": "ui",
+      "title": "UI Kits & Components",
+      "cards": []
+    }
+  ]
+}
