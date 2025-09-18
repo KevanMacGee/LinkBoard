@@ -1,2 +1,0 @@
-This is just about the final-ish, good enough version. The columns are too high in number, it's a little squished. There is sort of bug, when you drag an item, it doesn't go into the new column unless it overlaps an existing one. If you try to put in the empty area at the bottom of a column, it doesn't go. It's like it has to be "over" an existing card to trigger the dragging.
-I can't find any other issues but I am still testing.

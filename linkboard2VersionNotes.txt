@@ -1,1 +1,0 @@
-This is the version where columns work and are draggable. You can delete a column but it moves the links to the "first other column". Also, when you create a new column, you can't drag links to it. You can edit an existing link in another column to be in that new column, but not drag it in. You can drag it out of the new column after it has been placed there.
