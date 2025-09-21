@@ -34,7 +34,7 @@
       backdrop-filter: blur(8px);
       border-bottom: 1px solid #e5e7eb;
     }
-    .bar { max-width: 1600px; margin: 0 auto; padding: 14px 18px; display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center; }
+    .bar { max-width: 1600px; margin: 0 auto; padding: 14px 18px; display: grid; grid-template-columns: 1fr 2fr 1fr; gap: 12px; align-items: center; }
     h1 { font-size: 18px; margin: 0; letter-spacing: .2px; font-weight: 650; display: flex; align-items: center; gap: 10px; }
     h1 .dot { width: 10px; height: 10px; border-radius: 999px; background: var(--accent); box-shadow: 0 0 12px var(--accent); display: inline-block; }
 
@@ -43,6 +43,7 @@
       appearance: none; border: 1px solid #e5e7eb; border-radius: 10px; padding: 8px 12px; cursor: pointer; color: var(--text);
       background: linear-gradient(180deg, #f3f6fb, #e9eef7);
       box-shadow: var(--shadow);
+      font-family: inherit; text-decoration: none;
     }
     .actions button:hover, .actions label.btn:hover { outline: 2px solid rgba(37,99,235,.18); }
     .actions button.danger { background: linear-gradient(180deg, #ffe4e6, #fecaca); color: #7f1d1d; border-color: #fecaca; }
@@ -89,8 +90,29 @@
     .hint { color: var(--muted); font-size: 12px; }
     .kbd { background: #f8fafc; border: 1px solid #e5e7eb; padding: 2px 6px; border-radius: 8px; font-weight: 600; }
 
-    footer { position: fixed; right: 10px; bottom: 10px; opacity: .6; font-size: 12px; }
-    footer a { color: var(--muted); text-decoration: none; }
+    /* Search Row */
+    .search-row { max-width: 1600px; margin: 0 auto; padding: 0 18px; display: flex; justify-content: center; margin-top: 12px; }
+    .search-row .search { max-width: 600px; width: 100%; }
+
+    /* Bottom Actions */
+    .bottom-actions {
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 0 18px;
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+    .bottom-actions button, .bottom-actions label.btn {
+      appearance: none; border: 1px solid #e5e7eb; border-radius: 10px; padding: 8px 12px; cursor: pointer; color: var(--text);
+      background: linear-gradient(180deg, #f3f6fb, #e9eef7);
+      box-shadow: var(--shadow);
+      font-family: inherit; text-decoration: none;
+    }
+    .bottom-actions button:hover, .bottom-actions label.btn:hover { outline: 2px solid rgba(37,99,235,.18); }
+    .bottom-actions button.danger { background: linear-gradient(180deg, #ffe4e6, #fecaca); color: #7f1d1d; border-color: #fecaca; }
 
     /* Column Manager */
     .cols-list{ display:grid; gap:10px; }
@@ -153,13 +175,21 @@
     [data-theme="dark"] .btn-icon:hover { color: var(--text); border-color: #3a3a3a; }
     [data-theme="dark"] .actions button,
     [data-theme="dark"] .actions label.btn,
+    [data-theme="dark"] .bottom-actions button,
+    [data-theme="dark"] .bottom-actions label.btn,
     [data-theme="dark"] .pill {
       background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
       border: 1px solid var(--border);
       color: var(--text);
       box-shadow: none;
+      font-family: inherit; text-decoration: none;
     }
     [data-theme="dark"] .pill.danger {
+      background: linear-gradient(180deg, rgba(255, 64, 64, .18), rgba(64, 0, 0, .08));
+      color: #ffdada;
+      border-color: #5a1d1d;
+    }
+    [data-theme="dark"] .bottom-actions button.danger {
       background: linear-gradient(180deg, rgba(255, 64, 64, .18), rgba(64, 0, 0, .08));
       color: #ffdada;
       border-color: #5a1d1d;
@@ -179,18 +209,15 @@
 <body>
   <header>
     <div class="bar">
-      <div style="display:flex;align-items:center;gap:12px;width:100%;">
-        <h1><span class="dot"></span> LinkBoard <span class="hint" style="font-weight:500;">— your draggable, portable web‑dev links</span></h1>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <h1><span class="dot"></span> LinkBoard <span class="hint" style="font-weight:500;">— draggable links</span></h1>
       </div>
-      <div class="actions">
-        <input id="q" class="search" type="text" placeholder="Search title, domain, or note…  (press / to focus)" aria-label="Search" />
+      <div style="display:flex;align-items:center;justify-content:center;gap:12px;">
+        <input id="q" class="search" type="text" placeholder="Search title, domain, or note…  (press / to focus)" aria-label="Search" style="max-width:600px;" />
+      </div>
+      <div class="actions" style="justify-content: flex-end;">
         <button id="btnAdd">+ Add Link (A)</button>
-        <button id="btnExport">Export</button>
-        <label class="btn" for="importFile">Import</label>
-        <input id="importFile" type="file" accept="application/json" hidden />
-        <button id="btnBookmarklet">Bookmarklet</button>
         <button id="btnCols">Columns</button>
-        <button id="btnReset" class="danger" title="Clear all data">Reset</button>
         <button id="btnTheme" title="Toggle dark/light">🌙 Dark</button>
       </div>
     </div>
@@ -198,8 +225,17 @@
 
   <div class="wrap">
     <div id="board" class="board" role="list" aria-label="Link columns"></div>
-    <p class="hint" style="margin-top:14px;">Drag cards between columns. Everything saves to <strong>localStorage</strong>. Use <span class="kbd">Export</span> to back up or sync via Git/Gist. Keyboard: <span class="kbd">A</span> add, <span class="kbd">/</span> search.</p>
   </div>
+
+  <div class="bottom-actions">
+    <button id="btnExport">Export</button>
+    <label class="btn" for="importFile">Import</label>
+    <input id="importFile" type="file" accept="application/json" hidden />
+    <button id="btnBookmarklet">Bookmarklet</button>
+    <button id="btnReset" class="danger" title="Clear all data">Reset</button>
+  </div>
+
+  <p class="hint" style="margin-top:8px; text-align:center;">Drag cards between columns. Everything saves to <strong>localStorage</strong>. Use <span class="kbd">Export</span> to back up or sync via Git/Gist. Keyboard: <span class="kbd">A</span> add, <span class="kbd">/</span> search.</p>
 
   <!-- Add/Edit Dialog -->
   <dialog id="dialog">
@@ -290,9 +326,6 @@
     </form>
   </dialog>
 
-  <footer>
-    <a href="#" id="about">v1.1.2 • local first</a>
-  </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js" integrity="sha256-ymhDBwPE9ZYOkHNYZ8bpTSm1o943EH2BAOWjAQB+nm4=" crossorigin="anonymous"></script>
   <script>
