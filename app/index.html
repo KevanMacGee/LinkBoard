@@ -153,6 +153,8 @@
       color: var(--text);
       box-shadow: var(--shadow);
     }
+    /* Ensure the modal surface is not too transparent in dark mode */
+    [data-theme="dark"] dialog { background: linear-gradient(180deg, var(--panel), var(--panel-2)); }
     [data-theme="dark"] .col header { 
       border-bottom: 1px solid var(--border);
       background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
@@ -242,7 +244,7 @@
     <form method="dialog">
       <div class="dlg-head">
         <h3 id="dlgTitle">Add Link</h3>
-        <button class="pill alt" value="cancel" aria-label="Close">✕</button>
+        <button class="pill alt" value="cancel" aria-label="Close" formnovalidate>✕</button>
       </div>
       <div class="dlg-body">
         <div class="row">
@@ -263,7 +265,7 @@
         </div>
       </div>
       <div class="dlg-foot">
-        <button class="pill alt" value="cancel">Cancel</button>
+        <button class="pill alt" value="cancel" formnovalidate>Cancel</button>
         <button id="dlgDelete" class="pill danger" value="delete" style="display:none;">Delete</button>
         <button id="dlgSave" class="pill" value="default">Save</button>
       </div>
@@ -290,7 +292,7 @@
     <form method="dialog">
       <div class="dlg-head">
         <h3>Manage Columns</h3>
-        <button class="pill alt" value="cancel" aria-label="Close">✕</button>
+        <button class="pill alt" value="cancel" aria-label="Close" formnovalidate>✕</button>
       </div>
       <div class="dlg-body">
         <div id="colsList" class="cols-list"></div>
@@ -311,7 +313,7 @@
     <form method="dialog">
       <div class="dlg-head">
         <h3>Delete Column</h3>
-        <button class="pill alt" value="cancel" aria-label="Close">✕</button>
+        <button class="pill alt" value="cancel" aria-label="Close" formnovalidate>✕</button>
       </div>
       <div class="dlg-body">
         <div class="row">
@@ -320,7 +322,7 @@
         </div>
       </div>
       <div class="dlg-foot">
-        <button class="pill alt" value="cancel">Cancel</button>
+        <button class="pill alt" value="cancel" formnovalidate>Cancel</button>
         <button class="pill" value="default">Delete</button>
       </div>
     </form>
@@ -709,7 +711,7 @@
   const bmDlg = document.getElementById('dlgBm');
   document.getElementById('btnBookmarklet').addEventListener('click', ()=>{
     const here = location.href.split('#')[0];
-    const js = `javascript:(()=>{const u=encodeURIComponent(location.href),t=encodeURIComponent(document.title);window.open('${here}?add='+u+'&title='+t,'_blank');})();`;
+    const js = `javascript:((()=>{const u=encodeURIComponent(location.href),t=encodeURIComponent(document.title);window.open('${here}?add='+u+'&title='+t,'_blank');})())`;
     const link = document.getElementById('bmLink');
     link.textContent = 'Add to LinkBoard'; link.href = js; bmDlg.showModal();
   });
