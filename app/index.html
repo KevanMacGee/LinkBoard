@@ -816,6 +816,23 @@
           return url;
         }
       }
+      function normalizeUrl(value) {
+        if (typeof value !== "string") return "";
+        let raw = value.trim();
+        if (!raw) return "";
+        if (raw.startsWith("//")) {
+          raw = "https:" + raw;
+        } else if (!/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(raw)) {
+          raw = "https://" + raw;
+        }
+        try {
+          const url = new URL(raw);
+          if (url.protocol !== "http:" && url.protocol !== "https:") return "";
+          return url.toString();
+        } catch {
+          return "";
+        }
+      }
       function favicon(url) {
         const host = domainFrom(url);
         return `https://icons.duckduckgo.com/ip2/${host}.ico`;
@@ -880,18 +897,65 @@
         const li = document.createElement("li");
         li.className = "card";
         li.dataset.cardId = card.id;
-        li.innerHTML = `
-      <div class="icon"><img src="${favicon(card.url)}" alt=""></div>
-      <div>
-        <a class="title" href="${card.url}" target="_blank" rel="noopener">${escapeHTML(
-          card.title || domainFrom(card.url)
-        )}</a>
-        <div class="meta">${escapeHTML(domainFrom(card.url))}${card.note ? " • " + escapeHTML(card.note) : ""}</div>
-      </div>
-      <div class="buttons">
-        <button class="btn-icon" title="Edit" aria-label="Edit" data-act="edit">✎</button>
-        <button class="btn-icon" title="Delete" aria-label="Delete" data-act="del">🗑</button>
-      </div>`;
+
+        const normalizedUrl = normalizeUrl(card.url || "");
+        const displayUrl = normalizedUrl || (typeof card.url === "string" ? card.url.trim() : "");
+        const titleText = (card.title || "").trim() || domainFrom(displayUrl) || displayUrl || "Untitled";
+
+        const iconDiv = document.createElement("div");
+        iconDiv.className = "icon";
+        if (normalizedUrl) {
+          const img = document.createElement("img");
+          img.src = favicon(normalizedUrl);
+          img.alt = "";
+          iconDiv.appendChild(img);
+        }
+
+        const contentDiv = document.createElement("div");
+        if (normalizedUrl) {
+          const link = document.createElement("a");
+          link.className = "title";
+          link.textContent = titleText;
+          link.href = normalizedUrl;
+          link.target = "_blank";
+          link.rel = "noopener";
+          contentDiv.appendChild(link);
+        } else {
+          const span = document.createElement("span");
+          span.className = "title";
+          span.textContent = titleText;
+          contentDiv.appendChild(span);
+        }
+
+        const meta = document.createElement("div");
+        meta.className = "meta";
+        const domainText = domainFrom(displayUrl);
+        const noteText = (card.note || "").trim();
+        if (domainText) meta.append(domainText);
+        if (noteText) {
+          if (domainText) meta.append(" • ");
+          meta.append(noteText);
+        }
+        contentDiv.appendChild(meta);
+
+        const buttons = document.createElement("div");
+        buttons.className = "buttons";
+        const editBtn = document.createElement("button");
+        editBtn.className = "btn-icon";
+        editBtn.title = "Edit";
+        editBtn.setAttribute("aria-label", "Edit");
+        editBtn.dataset.act = "edit";
+        editBtn.textContent = "✎";
+        const deleteBtn = document.createElement("button");
+        deleteBtn.className = "btn-icon";
+        deleteBtn.title = "Delete";
+        deleteBtn.setAttribute("aria-label", "Delete");
+        deleteBtn.dataset.act = "del";
+        deleteBtn.textContent = "🗑";
+        buttons.append(editBtn, deleteBtn);
+
+        li.append(iconDiv, contentDiv, buttons);
+
         li.addEventListener("click", (e) => {
           const act = e.target?.dataset?.act;
           if (act === "edit") openDialog(card, findColIdByCard(card.id));
@@ -1017,6 +1081,28 @@
       const fCol = document.getElementById("fCol");
       const dlgDelete = document.getElementById("dlgDelete");
 
+      function readDialogData() {
+        const raw = (fUrl.value || "").trim();
+        if (!raw) {
+          alert("Please enter a URL.");
+          return null;
+        }
+        if (/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(raw) && !/^https?:/i.test(raw)) {
+          alert("Only HTTP and HTTPS URLs are allowed.");
+          return null;
+        }
+        const normalizedUrl = normalizeUrl(raw);
+        if (!normalizedUrl) {
+          alert("Please enter a valid URL (http:// or https://).");
+          return null;
+        }
+        return {
+          url: normalizedUrl,
+          title: fTitle.value.trim(),
+          note: fNote.value.trim(),
+        };
+      }
+
       function openDialog(card = null, colId = null) {
         fCol.innerHTML = state.columns
           .map((c, i) => `<option value="${c.id}">${i + 1}. ${escapeHTML(c.title)}</option>`)
@@ -1039,8 +1125,14 @@
                 return;
               }
               if (dlg.returnValue === "cancel") return;
-              const data = { url: fUrl.value.trim(), title: fTitle.value.trim(), note: fNote.value.trim() };
-              if (!data.url) return;
+              const data = readDialogData();
+              if (!data) {
+                dlg.returnValue = "";
+                dlg.showModal();
+                dlg.addEventListener("close", onClose, { once: true });
+                setTimeout(() => fUrl.focus(), 50);
+                return;
+              }
               updateCard(card.id, data, fCol.value);
             },
             { once: true }
@@ -1059,8 +1151,14 @@
             function onClose() {
               dlg.removeEventListener("close", onClose);
               if (dlg.returnValue === "cancel") return;
-              const data = { url: fUrl.value.trim(), title: fTitle.value.trim(), note: fNote.value.trim() };
-              if (!data.url) return;
+              const data = readDialogData();
+              if (!data) {
+                dlg.returnValue = "";
+                dlg.showModal();
+                dlg.addEventListener("close", onClose, { once: true });
+                setTimeout(() => fUrl.focus(), 50);
+                return;
+              }
               if (!data.title) data.title = domainFrom(data.url);
               addCard(data, fCol.value);
             },
