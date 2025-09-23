@@ -1,0 +1,208 @@
+{
+  "columns": [
+    {
+      "id": "cheats",
+      "title": "Cheat Sheets",
+      "cards": [
+        {
+          "id": "pe3m083",
+          "url": "https://devdocs.io/",
+          "title": "DevDocs",
+          "note": "Fast multi-docs viewer"
+        },
+        {
+          "id": "rsxnqmv",
+          "url": "https://getbootstrap.com/docs/5.3/",
+          "title": "Bootstrap 5 Docs",
+          "note": "Components, utilities, examples"
+        },
+        {
+          "id": "8pn9xc7",
+          "url": "https://developer.mozilla.org/en-US/docs/Web/HTML/Element",
+          "title": "MDN HTML Elements",
+          "note": "Authoritative reference"
+        },
+        {
+          "id": "ksh2r0c",
+          "url": "https://css-tricks.com/snippets/css/a-guide-to-flexbox/",
+          "title": "Flexbox Guide (CSS‑Tricks)",
+          "note": "Visual guide to flex"
+        },
+        {
+          "id": "vnn33vu",
+          "url": "https://css-tricks.com/snippets/css/complete-guide-grid/",
+          "title": "CSS Grid Guide (CSS‑Tricks)",
+          "note": "Layout reference"
+        }
+      ]
+    },
+    {
+      "id": "colors",
+      "title": "Colors & Gradients",
+      "cards": [
+        {
+          "id": "77ypg4s",
+          "url": "https://coolors.co",
+          "title": "Coolors",
+          "note": "Palette generator"
+        },
+        {
+          "id": "e62ycdu",
+          "url": "https://color.adobe.com",
+          "title": "Adobe Color",
+          "note": "Palettes & harmony rules"
+        },
+        {
+          "id": "pwmhfil",
+          "url": "https://cssgradient.io",
+          "title": "CSS Gradient",
+          "note": "Create CSS gradients"
+        },
+        {
+          "id": "pal6px1",
+          "url": "https://gradienthunt.com",
+          "title": "Gradient Hunt",
+          "note": "Curated gradients"
+        },
+        {
+          "id": "m9te5ki",
+          "url": "https://happyhues.co",
+          "title": "Happy Hues",
+          "note": "Palettes with live examples"
+        },
+        {
+          "id": "1r65yrg",
+          "url": "https://maketintsandshades.com",
+          "title": "Tints & Shades",
+          "note": "Shade scale generator"
+        }
+      ]
+    },
+    {
+      "id": "images",
+      "title": "Images & Icons",
+      "cards": [
+        {
+          "id": "1ibsqc6",
+          "url": "https://unsplash.com",
+          "title": "Unsplash",
+          "note": "Free photos"
+        },
+        {
+          "id": "lbteekz",
+          "url": "https://pixabay.com",
+          "title": "Pixabay",
+          "note": "Free images & vectors"
+        },
+        {
+          "id": "58d48fc",
+          "url": "https://svgrepo.com",
+          "title": "SVG Repo",
+          "note": "Free SVG icons"
+        },
+        {
+          "id": "omh37hy",
+          "url": "https://icons.getbootstrap.com",
+          "title": "Bootstrap Icons",
+          "note": "1,800+ icons"
+        },
+        {
+          "id": "0glwdtx",
+          "url": "https://fonts.google.com/icons",
+          "title": "Material Symbols",
+          "note": "Google icon set"
+        },
+        {
+          "id": "sa1iv3f",
+          "url": "https://www.pexels.com",
+          "title": "Pexels",
+          "note": "Free stock photos/videos"
+        },
+        {
+          "id": "pjoyyni",
+          "url": "https://favicon.io",
+          "title": "Favicon.io",
+          "note": "Generate favicons & logos"
+        }
+      ]
+    },
+    {
+      "id": "docs",
+      "title": "Guides & References",
+      "cards": [
+        {
+          "id": "mbsdcn7",
+          "url": "https://developer.mozilla.org",
+          "title": "MDN Web Docs",
+          "note": "Core web docs"
+        },
+        {
+          "id": "5vj0eco",
+          "url": "https://web.dev/learn/",
+          "title": "web.dev / Learn",
+          "note": "Google’s guided courses"
+        },
+        {
+          "id": "1kdp5re",
+          "url": "https://www.w3schools.com/bootstrap5/",
+          "title": "W3Schools Bootstrap 5 Tutorial",
+          "note": "Quick reference"
+        },
+        {
+          "id": "h387yus",
+          "url": "https://a11yproject.com/checklist/",
+          "title": "A11Y Project Checklist",
+          "note": "Accessibility checklist"
+        },
+        {
+          "id": "kzylzoy",
+          "url": "https://caniuse.com",
+          "title": "Can I use…",
+          "note": "Browser support tables"
+        }
+      ]
+    },
+    {
+      "id": "ui",
+      "title": "UI Kits & Components",
+      "cards": [
+        {
+          "id": "9acb94z",
+          "url": "https://getbootstrap.com/docs/5.3/examples/",
+          "title": "Bootstrap Examples",
+          "note": "Starter layouts"
+        },
+        {
+          "id": "ik8084m",
+          "url": "https://bootswatch.com",
+          "title": "Bootswatch",
+          "note": "Free Bootstrap themes"
+        },
+        {
+          "id": "smp6t79",
+          "url": "https://bootsnipp.com",
+          "title": "Bootsnipp",
+          "note": "Community Bootstrap snippets"
+        },
+        {
+          "id": "wsnpxfj",
+          "url": "https://loading.io/css/",
+          "title": "loading.io — CSS loaders",
+          "note": "Spinners & loaders"
+        },
+        {
+          "id": "8ia7iyz",
+          "url": "https://www.haikei.app",
+          "title": "Haikei",
+          "note": "Blob/wave/mesh SVG generators"
+        },
+        {
+          "id": "bt9sj7f",
+          "url": "https://heropatterns.com",
+          "title": "Hero Patterns",
+          "note": "SVG background patterns"
+        }
+      ]
+    }
+  ]
+}
