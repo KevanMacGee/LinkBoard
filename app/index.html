@@ -680,117 +680,25 @@
 
       // ——— Data & Storage ———
       const STORAGE_KEY = "linkboard.v1";
-      const DEFAULT_COLUMNS = [
-        {
-          id: "cheats",
-          title: "Cheat Sheets",
-          cards: [
-            { id: uid(), url: "https://devdocs.io/", title: "DevDocs", note: "Fast multi-docs viewer" },
-            {
-              id: uid(),
-              url: "https://getbootstrap.com/docs/5.3/",
-              title: "Bootstrap 5 Docs",
-              note: "Components, utilities, examples",
-            },
-            {
-              id: uid(),
-              url: "https://developer.mozilla.org/en-US/docs/Web/HTML/Element",
-              title: "MDN HTML Elements",
-              note: "Authoritative reference",
-            },
-            {
-              id: uid(),
-              url: "https://css-tricks.com/snippets/css/a-guide-to-flexbox/",
-              title: "Flexbox Guide (CSS‑Tricks)",
-              note: "Visual guide to flex",
-            },
-            {
-              id: uid(),
-              url: "https://css-tricks.com/snippets/css/complete-guide-grid/",
-              title: "CSS Grid Guide (CSS‑Tricks)",
-              note: "Layout reference",
-            },
-          ],
-        },
-        {
-          id: "colors",
-          title: "Colors & Gradients",
-          cards: [
-            { id: uid(), url: "https://coolors.co", title: "Coolors", note: "Palette generator" },
-            { id: uid(), url: "https://color.adobe.com", title: "Adobe Color", note: "Palettes & harmony rules" },
-            { id: uid(), url: "https://cssgradient.io", title: "CSS Gradient", note: "Create CSS gradients" },
-            { id: uid(), url: "https://gradienthunt.com", title: "Gradient Hunt", note: "Curated gradients" },
-            { id: uid(), url: "https://happyhues.co", title: "Happy Hues", note: "Palettes with live examples" },
-            {
-              id: uid(),
-              url: "https://maketintsandshades.com",
-              title: "Tints & Shades",
-              note: "Shade scale generator",
-            },
-          ],
-        },
-        {
-          id: "images",
-          title: "Images & Icons",
-          cards: [
-            { id: uid(), url: "https://unsplash.com", title: "Unsplash", note: "Free photos" },
-            { id: uid(), url: "https://www.pexels.com", title: "Pexels", note: "Free stock photos/videos" },
-            { id: uid(), url: "https://pixabay.com", title: "Pixabay", note: "Free images & vectors" },
-            { id: uid(), url: "https://svgrepo.com", title: "SVG Repo", note: "Free SVG icons" },
-            { id: uid(), url: "https://icons.getbootstrap.com", title: "Bootstrap Icons", note: "1,800+ icons" },
-            { id: uid(), url: "https://fonts.google.com/icons", title: "Material Symbols", note: "Google icon set" },
-            { id: uid(), url: "https://favicon.io", title: "Favicon.io", note: "Generate favicons & logos" },
-          ],
-        },
-        {
-          id: "docs",
-          title: "Guides & References",
-          cards: [
-            { id: uid(), url: "https://developer.mozilla.org", title: "MDN Web Docs", note: "Core web docs" },
-            { id: uid(), url: "https://web.dev/learn/", title: "web.dev / Learn", note: "Google’s guided courses" },
-            {
-              id: uid(),
-              url: "https://www.w3schools.com/bootstrap5/",
-              title: "W3Schools Bootstrap 5 Tutorial",
-              note: "Quick reference",
-            },
-            {
-              id: uid(),
-              url: "https://a11yproject.com/checklist/",
-              title: "A11Y Project Checklist",
-              note: "Accessibility checklist",
-            },
-            { id: uid(), url: "https://caniuse.com", title: "Can I use…", note: "Browser support tables" },
-          ],
-        },
-        {
-          id: "ui",
-          title: "UI Kits & Components",
-          cards: [
-            {
-              id: uid(),
-              url: "https://getbootstrap.com/docs/5.3/examples/",
-              title: "Bootstrap Examples",
-              note: "Starter layouts",
-            },
-            { id: uid(), url: "https://bootswatch.com", title: "Bootswatch", note: "Free Bootstrap themes" },
-            { id: uid(), url: "https://bootsnipp.com", title: "Bootsnipp", note: "Community Bootstrap snippets" },
-            {
-              id: uid(),
-              url: "https://loading.io/css/",
-              title: "loading.io — CSS loaders",
-              note: "Spinners & loaders",
-            },
-            { id: uid(), url: "https://www.haikei.app", title: "Haikei", note: "Blob/wave/mesh SVG generators" },
-            { id: uid(), url: "https://heropatterns.com", title: "Hero Patterns", note: "SVG background patterns" },
-          ],
-        },
-      ];
+
+      const INITIAL_COLUMN_COUNT = 3;
+
+      function createBlankColumns(count = INITIAL_COLUMN_COUNT) {
+        return Array.from({ length: count }, (_, idx) => ({
+          id: uid(),
+          title: `Column ${idx + 1}`,
+          cards: [],
+        }));
+      }
+
+      function createInitialState() {
+        return { columns: createBlankColumns() };
+      }
 
       /** @typedef {{id:string,url:string,title?:string,note?:string}} Card */
       /** @type {{columns: {id:string,title:string,cards: Card[]}[]}} */
       let state = load();
-      if (!state) state = { columns: DEFAULT_COLUMNS };
+      if (!state) state = createInitialState();
       migrateState();
       save();
 
@@ -840,12 +748,12 @@
       function ensureColumns() {
         if (!Array.isArray(state.columns)) state.columns = [];
         if (state.columns.length === 0) {
-          state.columns = DEFAULT_COLUMNS;
+          state.columns = createBlankColumns();
         }
       }
       function migrateState() {
         if (!state || !Array.isArray(state.columns)) {
-          state = { columns: DEFAULT_COLUMNS };
+          state = createInitialState();
           return;
         }
         state.columns = state.columns.map((c) => ({
@@ -965,10 +873,11 @@
       }
 
       function findColIdByCard(id) {
+        ensureColumns();
         for (const c of state.columns) {
           if (c.cards.some((x) => x.id === id)) return c.id;
         }
-        return state.columns[0]?.id || "cheats";
+        return state.columns[0]?.id || null;
       }
 
       function makeSortable(listEl) {
@@ -1104,6 +1013,7 @@
       }
 
       function openDialog(card = null, colId = null) {
+        ensureColumns();
         fCol.innerHTML = state.columns
           .map((c, i) => `<option value="${c.id}">${i + 1}. ${escapeHTML(c.title)}</option>`)
           .join("");
@@ -1185,6 +1095,7 @@
         reader.onload = () => {
           try {
             state = JSON.parse(reader.result);
+            migrateState();
             save();
             render();
           } catch (err) {
@@ -1195,8 +1106,15 @@
       });
       document.getElementById("btnReset").addEventListener("click", () => {
         if (confirm("Clear all LinkBoard data?")) {
-          localStorage.removeItem(STORAGE_KEY);
-          state = { columns: DEFAULT_COLUMNS };
+          const columns = Array.isArray(state.columns) && state.columns.length
+            ? state.columns.map((col, idx) => ({
+                id: col.id || uid(),
+                title: (col.title || "").trim() || `Column ${idx + 1}`,
+                cards: [],
+              }))
+            : createBlankColumns();
+          state = { columns };
+          save();
           render();
         }
       });
@@ -1240,6 +1158,7 @@
       }
 
       function openColsDialog() {
+        ensureColumns();
         stagedColumns = state.columns.map((col) => ({
           id: col.id,
           title: col.title,
@@ -1440,7 +1359,7 @@
         const snapshot = localStorage.getItem(STORAGE_KEY);
         try {
           // Start clean
-          state = { columns: JSON.parse(JSON.stringify(DEFAULT_COLUMNS)) };
+          state = createInitialState();
           save();
           render();
           log("start columns", state.columns.length);
