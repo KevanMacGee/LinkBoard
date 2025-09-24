@@ -1,3 +1,293 @@
+This file is a merged representation of a subset of the codebase, containing files not matching ignore patterns, combined into a single document by Repomix.
+
+<file_summary>
+This section contains a summary of this file.
+
+<purpose>
+This file contains a packed representation of a subset of the repository's contents that is considered the most important context.
+It is designed to be easily consumable by AI systems for analysis, code review,
+or other automated processes.
+</purpose>
+
+<file_format>
+The content is organized as follows:
+1. This summary section
+2. Repository information
+3. Directory structure
+4. Repository files (if enabled)
+5. Multiple file entries, each consisting of:
+  - File path as an attribute
+  - Full contents of the file
+</file_format>
+
+<usage_guidelines>
+- This file should be treated as read-only. Any changes should be made to the
+  original repository files, not this packed version.
+- When processing this file, use the file path to distinguish
+  between different files in the repository.
+- Be aware that this file may contain sensitive information. Handle it with
+  the same level of security as you would the original repository.
+</usage_guidelines>
+
+<notes>
+- Some files may have been excluded based on .gitignore rules and Repomix's configuration
+- Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
+- Files matching these patterns are excluded: .env, *.log
+- Files matching patterns in .gitignore are excluded
+- Files matching default ignore patterns are excluded
+- Files are sorted by Git change count (files with more changes are at the bottom)
+</notes>
+
+</file_summary>
+
+<directory_structure>
+CODE_INDEX.md
+index.html
+linkboardResetData.json
+</directory_structure>
+
+<files>
+This section contains the contents of the repository's files.
+
+<file path="CODE_INDEX.md">
+# LinkBoard Application Code Index
+
+## **Application Overview**
+
+LinkBoard is a single-page web application for managing bookmarks in a draggable column layout. It's built as a self-contained HTML file with inline CSS and JavaScript, requiring no build system or external dependencies beyond SortableJS for drag-and-drop functionality.
+
+## **1. HTML Structure Analysis**
+
+### **Main Document Structure:**
+- Single-page application (SPA) with all styles and scripts inline
+- Uses semantic HTML5 elements
+- Structured in distinct sections:
+
+### **Header Section** (lines 514-537):
+- Sticky navigation bar with branding
+- Central search input field
+- Action buttons: Add Link, Columns, Theme toggle
+
+### **Main Content** (lines 539-541):
+- Board container for draggable columns
+- Responsive grid layout
+
+### **Footer Actions** (lines 543-555):
+- Export/Import functionality
+- Bookmarklet generation
+- Reset button
+- Usage hints
+
+### **Modal Dialogs:**
+- Add/Edit Link Dialog (lines 557-588)
+- Bookmarklet Dialog (lines 590-606)
+- Column Management Dialog (lines 608-627)
+- Column Delete Confirmation Dialog (lines 629-647)
+
+## **2. CSS Structure and Theming**
+
+### **CSS Custom Properties (CSS Variables):**
+```css
+:root {
+  --bg, --panel, --panel-2, --muted, --text
+  --accent, --accent-2, --danger
+  --shadow, --radius
+}
+```
+
+### **Key CSS Classes:**
+- **Layout**: `.bar`, `.wrap`, `.board`, `.col`
+- **Components**: `.card`, `.list`, `.empty`
+- **UI Elements**: `.pill`, `.btn-icon`, `.actions`, `.search`
+- **Dialog System**: `dialog`, `.dlg-head`, `.dlg-body`, `.dlg-foot`
+- **Column Management**: `.cols-list`, `.colmgr-row`
+
+### **Responsive Design:**
+- 4-column layout (default)
+- 3-column (≤1280px)  
+- 2-column (≤900px)
+- 1-column (≤600px)
+
+### **Theme System:**
+- Light theme (default)
+- Dark theme with `[data-theme="dark"]` attribute
+- Complete dark mode implementation with neutral glass aesthetic
+
+## **3. JavaScript Functionality Mapping**
+
+### **Core Functions by Category:**
+
+#### **Theme Management (lines 655-679):**
+- `applyTheme(theme)` - Sets theme and updates button text
+- `initTheme()` - Initialize theme from localStorage or system preference
+
+#### **Data & Storage (lines 681-715):**
+- `load()`, `save()` - localStorage persistence
+- `createBlankColumns()`, `createInitialState()` - Default data structure
+- `migrateState()` - Data format migration
+
+#### **Utility Functions (lines 716-765):**
+- `uid()` - Generate unique IDs
+- `domainFrom(url)`, `normalizeUrl()` - URL processing
+- `favicon(url)` - Generate favicon URLs
+- `escapeHTML(str)` - XSS protection
+
+#### **Rendering System (lines 767-925):**
+- `render()` - Main render function, rebuilds entire DOM
+- `matches(card, query)` - Search filtering
+- `cardEl(card)` - Create card DOM elements
+- `makeSortable(listEl)` - Initialize drag-and-drop with SortableJS
+- `persistOrder()` - Save drag-and-drop changes
+
+#### **CRUD Operations (lines 927-983):**
+- `addCard()`, `updateCard()`, `removeCard()` - Card management
+- `deleteColumn()`, `swapColumns()` - Column operations
+- `findCardById()`, `findColIdByCard()` - Data lookup
+
+#### **Dialog Management (lines 984-1079):**
+- `openDialog()` - Add/edit card modal
+- `readDialogData()` - Form validation and data extraction
+
+#### **Column Management (lines 1139-1275):**
+- `openColsDialog()` - Column management modal
+- `renderColsManager()` - Dynamic column editor UI
+- Staging system for non-destructive editing
+
+### **External Integrations:**
+- **SortableJS** (CDN) - Drag and drop functionality
+- **DuckDuckGo Icons API** - Favicon service
+- **Bookmarklet generation** - Browser integration
+
+## **4. Data Flow and Storage Architecture**
+
+### **Storage Keys:**
+- `linkboard.v1` - Main application data
+- `linkboard.theme` - Theme preference
+
+### **Data Structure:**
+```javascript
+state = {
+  columns: [
+    {
+      id: string,        // unique identifier
+      title: string,     // column display name
+      cards: [
+        {
+          id: string,    // unique identifier
+          url: string,   // normalized HTTP(S) URL
+          title: string, // display title (optional)
+          note: string   // user note (optional)
+        }
+      ]
+    }
+  ]
+}
+```
+
+### **Data Flow Pattern:**
+1. **Load** → `load()` from localStorage
+2. **Migrate** → `migrateState()` for version compatibility
+3. **Modify** → CRUD operations update global `state`
+4. **Save** → `save()` to localStorage
+5. **Render** → `render()` rebuilds DOM from state
+
+### **State Management:**
+- Global mutable state object
+- Immediate persistence on changes
+- Complete DOM re-render on updates
+- Staging system for column management (non-destructive editing)
+
+## **5. Features and User Interactions**
+
+### **Core Features:**
+1. **Link Management**
+   - Add new links with URL, title, and notes
+   - Edit existing links
+   - Delete links with confirmation
+   - Automatic favicon fetching
+   - URL validation and normalization
+
+2. **Column System**
+   - Drag-and-drop between columns (SortableJS)
+   - Reorder columns (up/down arrows)
+   - Add/remove columns
+   - Rename columns
+   - Safe column deletion (move cards to destination)
+
+3. **Search & Filter**
+   - Real-time search across titles, URLs, and notes
+   - Case-insensitive matching
+   - Instant results
+
+4. **Data Management**
+   - Export to JSON file
+   - Import from JSON file
+   - Reset to clean state (preserves column structure)
+   - LocalStorage persistence
+
+5. **Browser Integration**
+   - Bookmarklet generation for quick adding
+   - URL parameter support (`?add=URL&title=TITLE`)
+
+### **Keyboard Shortcuts:**
+- `A` - Add new link
+- `/` - Focus search field
+
+### **Theme System:**
+- Light/Dark mode toggle
+- System preference detection
+- Persistent theme choice
+
+### **Testing Features:**
+- Built-in self-tests (`#selftest`)
+- Column operation tests (`#test-columns`)
+- Delete destination tests (`#test-dest-delete`)
+
+### **Accessibility:**
+- ARIA labels and roles
+- Semantic HTML structure
+- Keyboard navigation support
+- Focus management in dialogs
+
+## **Code Index Summary**
+
+### **File Structure:**
+- `index.html` (1,426 lines) - Complete SPA with inline CSS/JS
+- `linkboardResetData.json` (208 lines) - Default data with web dev tools
+
+### **Architecture:**
+- **Frontend**: Vanilla HTML/CSS/JavaScript
+- **Storage**: Browser localStorage
+- **Dependencies**: SortableJS (CDN)
+- **Pattern**: Component-based with global state
+
+### **Key Characteristics:**
+- Single-file application (portable)
+- No build system required
+- Complete offline functionality
+- Responsive design (mobile-first)
+- Comprehensive theming system
+- Extensive error handling and validation
+
+## **Performance Considerations**
+
+### **Current Implementation:**
+- Complete DOM re-render on state changes
+- Inline styles (large CSS block)
+- Real-time search without debouncing
+- Immediate localStorage writes
+
+### **Potential Optimization Areas:**
+- DOM diffing or virtual DOM for selective updates
+- CSS extraction and minification
+- Search input debouncing
+- Batch localStorage operations
+- Image lazy loading for favicons
+
+The application is well-structured for a single-file SPA, with clear separation of concerns within the inline code blocks, comprehensive feature set, and good attention to user experience details.
+</file>
+
+<file path="index.html">
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -55,7 +345,7 @@
         align-items: center;
       }
       h1 {
-        font-size: 24px;
+        font-size: 18px;
         margin: 0;
         letter-spacing: 0.2px;
         font-weight: 650;
@@ -151,13 +441,13 @@
         border-bottom: 1px solid #eef2f7;
       }
       .col h2 {
-        font-size: 18px;
+        font-size: 14px;
         margin: 0;
         padding: 10px 12px;
         letter-spacing: 0.2px;
-        color: var(--text);
-        font-weight: 650;
-        text-align: center;
+        color: #475569;
+        font-weight: 700;
+        text-transform: uppercase;
       }
       .list {
         list-style: none;
@@ -1424,3 +1714,217 @@
     </script>
   </body>
 </html>
+</file>
+
+<file path="linkboardResetData.json">
+{
+  "columns": [
+    {
+      "id": "cheats",
+      "title": "Cheat Sheets",
+      "cards": [
+        {
+          "id": "pe3m083",
+          "url": "https://devdocs.io/",
+          "title": "DevDocs",
+          "note": "Fast multi-docs viewer"
+        },
+        {
+          "id": "rsxnqmv",
+          "url": "https://getbootstrap.com/docs/5.3/",
+          "title": "Bootstrap 5 Docs",
+          "note": "Components, utilities, examples"
+        },
+        {
+          "id": "8pn9xc7",
+          "url": "https://developer.mozilla.org/en-US/docs/Web/HTML/Element",
+          "title": "MDN HTML Elements",
+          "note": "Authoritative reference"
+        },
+        {
+          "id": "ksh2r0c",
+          "url": "https://css-tricks.com/snippets/css/a-guide-to-flexbox/",
+          "title": "Flexbox Guide (CSS‑Tricks)",
+          "note": "Visual guide to flex"
+        },
+        {
+          "id": "vnn33vu",
+          "url": "https://css-tricks.com/snippets/css/complete-guide-grid/",
+          "title": "CSS Grid Guide (CSS‑Tricks)",
+          "note": "Layout reference"
+        }
+      ]
+    },
+    {
+      "id": "colors",
+      "title": "Colors & Gradients",
+      "cards": [
+        {
+          "id": "77ypg4s",
+          "url": "https://coolors.co",
+          "title": "Coolors",
+          "note": "Palette generator"
+        },
+        {
+          "id": "e62ycdu",
+          "url": "https://color.adobe.com",
+          "title": "Adobe Color",
+          "note": "Palettes & harmony rules"
+        },
+        {
+          "id": "pwmhfil",
+          "url": "https://cssgradient.io",
+          "title": "CSS Gradient",
+          "note": "Create CSS gradients"
+        },
+        {
+          "id": "pal6px1",
+          "url": "https://gradienthunt.com",
+          "title": "Gradient Hunt",
+          "note": "Curated gradients"
+        },
+        {
+          "id": "m9te5ki",
+          "url": "https://happyhues.co",
+          "title": "Happy Hues",
+          "note": "Palettes with live examples"
+        },
+        {
+          "id": "1r65yrg",
+          "url": "https://maketintsandshades.com",
+          "title": "Tints & Shades",
+          "note": "Shade scale generator"
+        }
+      ]
+    },
+    {
+      "id": "images",
+      "title": "Images & Icons",
+      "cards": [
+        {
+          "id": "1ibsqc6",
+          "url": "https://unsplash.com",
+          "title": "Unsplash",
+          "note": "Free photos"
+        },
+        {
+          "id": "lbteekz",
+          "url": "https://pixabay.com",
+          "title": "Pixabay",
+          "note": "Free images & vectors"
+        },
+        {
+          "id": "58d48fc",
+          "url": "https://svgrepo.com",
+          "title": "SVG Repo",
+          "note": "Free SVG icons"
+        },
+        {
+          "id": "omh37hy",
+          "url": "https://icons.getbootstrap.com",
+          "title": "Bootstrap Icons",
+          "note": "1,800+ icons"
+        },
+        {
+          "id": "0glwdtx",
+          "url": "https://fonts.google.com/icons",
+          "title": "Material Symbols",
+          "note": "Google icon set"
+        },
+        {
+          "id": "sa1iv3f",
+          "url": "https://www.pexels.com",
+          "title": "Pexels",
+          "note": "Free stock photos/videos"
+        },
+        {
+          "id": "pjoyyni",
+          "url": "https://favicon.io",
+          "title": "Favicon.io",
+          "note": "Generate favicons & logos"
+        }
+      ]
+    },
+    {
+      "id": "docs",
+      "title": "Guides & References",
+      "cards": [
+        {
+          "id": "mbsdcn7",
+          "url": "https://developer.mozilla.org",
+          "title": "MDN Web Docs",
+          "note": "Core web docs"
+        },
+        {
+          "id": "5vj0eco",
+          "url": "https://web.dev/learn/",
+          "title": "web.dev / Learn",
+          "note": "Google’s guided courses"
+        },
+        {
+          "id": "1kdp5re",
+          "url": "https://www.w3schools.com/bootstrap5/",
+          "title": "W3Schools Bootstrap 5 Tutorial",
+          "note": "Quick reference"
+        },
+        {
+          "id": "h387yus",
+          "url": "https://a11yproject.com/checklist/",
+          "title": "A11Y Project Checklist",
+          "note": "Accessibility checklist"
+        },
+        {
+          "id": "kzylzoy",
+          "url": "https://caniuse.com",
+          "title": "Can I use…",
+          "note": "Browser support tables"
+        }
+      ]
+    },
+    {
+      "id": "ui",
+      "title": "UI Kits & Components",
+      "cards": [
+        {
+          "id": "9acb94z",
+          "url": "https://getbootstrap.com/docs/5.3/examples/",
+          "title": "Bootstrap Examples",
+          "note": "Starter layouts"
+        },
+        {
+          "id": "ik8084m",
+          "url": "https://bootswatch.com",
+          "title": "Bootswatch",
+          "note": "Free Bootstrap themes"
+        },
+        {
+          "id": "smp6t79",
+          "url": "https://bootsnipp.com",
+          "title": "Bootsnipp",
+          "note": "Community Bootstrap snippets"
+        },
+        {
+          "id": "wsnpxfj",
+          "url": "https://loading.io/css/",
+          "title": "loading.io — CSS loaders",
+          "note": "Spinners & loaders"
+        },
+        {
+          "id": "8ia7iyz",
+          "url": "https://www.haikei.app",
+          "title": "Haikei",
+          "note": "Blob/wave/mesh SVG generators"
+        },
+        {
+          "id": "bt9sj7f",
+          "url": "https://heropatterns.com",
+          "title": "Hero Patterns",
+          "note": "SVG background patterns"
+        }
+      ]
+    }
+  ]
+}
+</file>
+
+</files>
