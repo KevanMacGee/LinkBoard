@@ -1,7 +1,24 @@
 ## LinkBoard
 
-LinkBoard (name is tentative) is an app to keep links on different topic areas. I created it primarily to have a quick reference to links I use when making web sites. Right now, you can drag the links from one category to another, but that feels like extra functionality and will likely be removed. The app automatically pulls the favicon from the site, but there is currently no fallback when it fails. 
+LinkBoard (name is tentative) is an app to create lists of often used bookmarks for specific niches or projects. It started as a quick and dirty vibe coded project superficially for coding and web development links, but I have started to clean it up for public use. Right now, you can drag the links from one category to another, but that feels like extra functionality and might be removed. 
 
-This started out as a vibe coded, quick and dirty project which is why the code is inline and it uses local storage. If I decide to put it online and allow users, those issues will be addressed.
+### Features
+
+- Bookmarks can be added and sorted into topic areas upon creation, but they are also drag-and-dropable.
+- The app automatically pulls the favicon for any link that is added. 
+- Data can be exported into a JSON file, and similarly imported from the same.
+
+### Issues
+
+- There are some design inconsistencies.
+- The the bookmarklet feature hasn't even been tested and may not work.
+- There is a slight bug where if you drag a link from one column to another and drop it in the empty space at the bottom of a column, it doesn't register. In short, if you drag a link from one column, it has to pass over a link in the new column before the app registers it's being moved.
+- Local storage can inherently be flaky, I plan to move to a proper database solution.
+- The code is currently inline and unwieldy, that is a relic of the app being vibe coded in the beginning.
+
+### Future Plans
+
+- Move from data being handled by local storage to a a database.
+- Clean the code from inline css and js to proper organization.
 
 ![App screenshot](https://raw.githubusercontent.com/KevanMacGee/LinkBoard/refs/heads/master/screenshots/Screenshot2025-09-26-192559.png)
