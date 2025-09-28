@@ -10,7 +10,7 @@ LinkBoard (name is tentative) is an app to create lists of often used bookmarks 
 
 ### Issues
 
-- There are some design inconsistencies.
+- There are some design and visual inconsistencies.
 - The the bookmarklet feature hasn't even been tested and may not work.
 - There is a slight bug where if you drag a link from one column to another and drop it in the empty space at the bottom of a column, it doesn't register. In short, if you drag a link from one column, it has to pass over a link in the new column before the app registers it's being moved.
 - Local storage can inherently be flaky, I plan to move to a proper database solution.
@@ -20,5 +20,6 @@ LinkBoard (name is tentative) is an app to create lists of often used bookmarks 
 
 - Move from data being handled by local storage to a a database.
 - Clean the code from inline css and js to proper organization.
+- Move the buttons to a collapsible sidebar.
 
 ![App screenshot](https://raw.githubusercontent.com/KevanMacGee/LinkBoard/refs/heads/master/screenshots/Screenshot2025-09-26-192559.png)

@@ -431,16 +431,18 @@
         );
         border-bottom: 1px solid var(--border);
       }
-      [data-theme="dark"] .col,
-      [data-theme="dark"] dialog {
+      [data-theme="dark"] .col {
         border-color: var(--border);
         background: linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.02));
         color: var(--text);
         box-shadow: var(--shadow);
       }
-      /* Ensure the modal surface is not too transparent in dark mode */
+      /* Dark theme - dialog with lighter colors to match column appearance */
       [data-theme="dark"] dialog {
-        background: linear-gradient(180deg, var(--panel), var(--panel-2));
+        background: linear-gradient(180deg, #2a2a2a, #282828);
+        border: 1px solid var(--border);
+        box-shadow: var(--shadow);
+        color: var(--text);
       }
       [data-theme="dark"] .col header {
         border-bottom: 1px solid var(--border);
@@ -507,6 +509,11 @@
       }
       [data-theme="dark"] .card .meta {
         color: var(--muted);
+      }
+      /* Modal header/footer dividers in dark mode */
+      [data-theme="dark"] .dlg-head,
+      [data-theme="dark"] .dlg-foot {
+        border-color: var(--border);
       }
     </style>
   </head>
