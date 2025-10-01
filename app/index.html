@@ -1117,12 +1117,54 @@
         const reader = new FileReader();
         reader.onload = () => {
           try {
-            state = JSON.parse(reader.result);
+            const imported = JSON.parse(reader.result);
+            
+            // Validate structure
+            if (!imported || typeof imported !== "object") {
+              throw new Error("Invalid data structure");
+            }
+            if (!Array.isArray(imported.columns)) {
+              throw new Error("Missing or invalid 'columns' array");
+            }
+            
+            // Validate each column
+            for (const col of imported.columns) {
+              if (!col || typeof col !== "object") {
+                throw new Error("Invalid column structure");
+              }
+              if (typeof col.id !== "string" && typeof col.id !== "number") {
+                throw new Error("Column missing valid 'id'");
+              }
+              if (typeof col.title !== "string") {
+                throw new Error("Column missing valid 'title'");
+              }
+              if (!Array.isArray(col.cards)) {
+                throw new Error("Column missing 'cards' array");
+              }
+              
+              // Validate each card
+              for (const card of col.cards) {
+                if (!card || typeof card !== "object") {
+                  throw new Error("Invalid card structure");
+                }
+                if (typeof card.id !== "string" && typeof card.id !== "number") {
+                  throw new Error("Card missing valid 'id'");
+                }
+                if (typeof card.url !== "string") {
+                  throw new Error("Card missing valid 'url'");
+                }
+                // title and note are optional
+              }
+            }
+            
+            // All validations passed, accept the import
+            state = imported;
             migrateState();
             save();
             render();
+            alert("Import successful!");
           } catch (err) {
-            alert("Invalid JSON");
+            alert("Import failed: " + (err.message || "Invalid JSON file"));
           }
         };
         reader.readAsText(file);
