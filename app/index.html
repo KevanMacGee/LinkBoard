@@ -655,6 +655,7 @@
           <button class="pill alt" value="cancel" aria-label="Close" formnovalidate>✕</button>
         </div>
         <div class="dlg-body">
+          <p id="delColInfo" style="margin: 0 0 16px 0; color: var(--text);"></p>
           <div class="row">
             <label for="delDest">Move its cards to:</label>
             <select id="delDest"></select>
@@ -662,7 +663,7 @@
         </div>
         <div class="dlg-foot">
           <button class="pill alt" value="cancel" formnovalidate>Cancel</button>
-          <button class="pill" value="default">Delete</button>
+          <button class="pill danger" value="default">Delete Column</button>
         </div>
       </form>
     </dialog>
@@ -803,7 +804,8 @@
           const list = colEl.querySelector(".list");
           const items = (col.cards || []).filter((card) => !q || matches(card, q));
           if (!items.length) {
-            list.insertAdjacentHTML("beforeend", `<li class="empty">No links yet</li>`);
+            const emptyMsg = q ? "No matching links" : "No links yet";
+            list.insertAdjacentHTML("beforeend", `<li class="empty">${emptyMsg}</li>`);
           } else {
             for (const card of items) {
               list.appendChild(cardEl(card));
@@ -1143,7 +1145,23 @@
       // ——— Search & Keyboard ———
       searchEl.addEventListener("input", render);
       document.addEventListener("keydown", (e) => {
-        if (e.key === "/" && document.activeElement !== searchEl) {
+        // Escape key closes any open dialog
+        if (e.key === "Escape") {
+          if (dlg.open) {
+            dlg.close("cancel");
+            e.preventDefault();
+          } else if (dlgCols.open) {
+            dlgCols.close("cancel");
+            e.preventDefault();
+          } else if (dlgColDel.open) {
+            dlgColDel.close("cancel");
+            e.preventDefault();
+          } else if (document.getElementById("dlgBm").open) {
+            document.getElementById("dlgBm").close();
+            e.preventDefault();
+          }
+        }
+        if (e.key === "/" && !dlg.open && document.activeElement !== searchEl) {
           e.preventDefault();
           searchEl.focus();
         }
@@ -1251,6 +1269,12 @@
               alert("At least one column is required.");
               return;
             }
+            // Show column info with card count
+            const cardCount = c.cards.length;
+            const cardText = cardCount === 1 ? "1 card" : `${cardCount} cards`;
+            const delColInfo = document.getElementById("delColInfo");
+            delColInfo.textContent = `Delete "${c.title}" with ${cardText}?`;
+            
             // Build dest options excluding this column
             delDest.innerHTML = columns
               .filter((x) => x.id !== c.id)
