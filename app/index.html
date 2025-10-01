@@ -94,11 +94,6 @@
       .actions label.btn:hover {
         outline: 2px solid rgba(37, 99, 235, 0.18);
       }
-      .actions button.danger {
-        background: linear-gradient(180deg, #ffe4e6, #fecaca);
-        color: #7f1d1d;
-        border-color: #fecaca;
-      }
       .search {
         width: 100%;
         padding: 10px 12px;
@@ -366,6 +361,9 @@
       .bottom-actions label.btn:hover {
         outline: 2px solid rgba(37, 99, 235, 0.18);
       }
+
+      /* Shared danger button styles */
+      .actions button.danger,
       .bottom-actions button.danger {
         background: linear-gradient(180deg, #ffe4e6, #fecaca);
         color: #7f1d1d;
@@ -495,11 +493,9 @@
         font-family: inherit;
         text-decoration: none;
       }
-      [data-theme="dark"] .pill.danger {
-        background: linear-gradient(180deg, rgba(255, 64, 64, 0.18), rgba(64, 0, 0, 0.08));
-        color: #ffdada;
-        border-color: #5a1d1d;
-      }
+      /* Shared danger styles in dark mode */
+      [data-theme="dark"] .pill.danger,
+      [data-theme="dark"] .actions button.danger,
       [data-theme="dark"] .bottom-actions button.danger {
         background: linear-gradient(180deg, rgba(255, 64, 64, 0.18), rgba(64, 0, 0, 0.08));
         color: #ffdada;
@@ -703,7 +699,7 @@
       // ——— Data & Storage ———
       const STORAGE_KEY = "linkboard.v1";
 
-      const INITIAL_COLUMN_COUNT = 3;
+      const INITIAL_COLUMN_COUNT = 4;
 
       function createBlankColumns(count = INITIAL_COLUMN_COUNT) {
         return Array.from({ length: count }, (_, idx) => ({
@@ -983,18 +979,35 @@
 
       // ——— Column operations (shared) ———
       function deleteColumn(colId, destId, { commit = true, columns = state.columns } = {}) {
-        if (!Array.isArray(columns) || columns.length <= 1) return false;
+        // Validation checks with specific error messages
+        if (!Array.isArray(columns)) {
+          return { success: false, error: "Invalid columns array" };
+        }
+        if (columns.length <= 1) {
+          return { success: false, error: "At least one column is required." };
+        }
+        
         const srcIdx = columns.findIndex((c) => c.id === colId);
+        if (srcIdx === -1) {
+          return { success: false, error: "Source column not found." };
+        }
+        
         const dest = columns.find((c) => c.id === destId && c.id !== colId) || columns.find((c) => c.id !== colId);
-        if (srcIdx === -1 || !dest) return false;
+        if (!dest) {
+          return { success: false, error: "Destination column not found." };
+        }
+        
+        // Perform deletion
         const src = columns[srcIdx];
         dest.cards.push(...(src.cards || []));
         columns.splice(srcIdx, 1);
+        
         if (commit) {
           save();
           render();
         }
-        return true;
+        
+        return { success: true };
       }
       function swapColumns(i, j, columns = state.columns) {
         if (!Array.isArray(columns)) return;
@@ -1307,10 +1320,13 @@
 
           // Delete with destination select dialog
           row.querySelector("[data-del]").addEventListener("click", () => {
-            if (columns.length <= 1) {
-              alert("At least one column is required.");
+            // Early validation check using deleteColumn for consistent error handling
+            const preCheck = deleteColumn(c.id, null, { commit: false, columns });
+            if (!preCheck.success) {
+              alert(preCheck.error);
               return;
             }
+            
             // Show column info with card count
             const cardCount = c.cards.length;
             const cardText = cardCount === 1 ? "1 card" : `${cardCount} cards`;
@@ -1330,9 +1346,9 @@
                 dlgColDel.removeEventListener("close", onClose);
                 if (dlgColDel.returnValue === "cancel") return;
                 const destId = delDest.value;
-                const ok = deleteColumn(c.id, destId, { commit: false, columns });
-                if (!ok) {
-                  alert("Could not delete column.");
+                const result = deleteColumn(c.id, destId, { commit: false, columns });
+                if (!result.success) {
+                  alert(result.error);
                   return;
                 }
                 renderColsManager();
@@ -1493,8 +1509,8 @@
           };
           save();
           render();
-          const ok = deleteColumn("A", "C");
-          if (!ok) throw new Error("deleteColumn returned false");
+          const result = deleteColumn("A", "C");
+          if (!result.success) throw new Error("deleteColumn failed: " + result.error);
           if (state.columns.find((c) => c.id === "A")) throw new Error("A not deleted");
           const c = state.columns.find((c) => c.id === "C");
           if (!c || c.cards.length !== 1) throw new Error("Cards not moved to C");
