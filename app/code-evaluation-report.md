@@ -40,9 +40,9 @@ if ((e.key === "a" || e.key === "A") && !dlg.open &&
 
 **Recommendation:** Add same active element check as above.
 
-### 3. Import Validation Missing (Lines 1114-1128)
-**Severity:** High  
-**Issue:** No validation of imported JSON structure beyond parse check.
+### 3. ~~Import Validation Missing (Lines 1114-1128)~~
+~~**Severity:** High  
+**Issue:** No validation of imported JSON structure beyond parse check.~~
 
 ```javascript
 try {
@@ -65,13 +65,16 @@ if (!imported || !Array.isArray(imported.columns)) {
 }
 ```
 
-### 4. LocalStorage Quota Exceeded Not Handled
-**Severity:** Medium  
-**Issue:** No try-catch around `localStorage.setItem()` in `save()` function (Line 734-736).
+### 4. Not needed, local storage will be removed.
 
-**Impact:** Silent failure when storage quota is exceeded. User loses data without notification.
+### ~~4. LocalStorage Quota Exceeded Not Handled~~
 
-**Recommendation:** Wrap in try-catch and notify user.
+~~**Severity:** Medium  
+**Issue:** No try-catch around `localStorage.setItem()` in `save()` function (Line 734-736).~~
+
+~~**Impact:** Silent failure when storage quota is exceeded. User loses data without notification.~~
+
+~~**Recommendation:** Wrap in try-catch and notify user.~~
 
 ---
 
@@ -97,9 +100,12 @@ The dialog expects either `null` (for add mode) or an existing card (for edit mo
 
 **Recommendation:** Add optional parameter to skip confirmation for tests.
 
-### 7. Silent Sortable.js Failure (Lines 906-909)
-**Severity:** Medium  
-**Issue:** If CDN is blocked, drag-and-drop silently fails with no user notification.
+### 7. This will not be addressed right now since it is a very low probability of happening.
+
+### ~~7. Silent Sortable.js Failure (Lines 906-909)~~
+
+~~**Severity:** Medium  
+**Issue:** If CDN is blocked, drag-and-drop silently fails with no user notification.~~
 
 ```javascript
 if (typeof Sortable === "undefined") {
@@ -107,17 +113,17 @@ if (typeof Sortable === "undefined") {
 }
 ```
 
-**Impact:** Core feature doesn't work but user isn't informed.
+~~**Impact:** Core feature doesn't work but user isn't informed.~~
 
-**Recommendation:** Display warning banner when Sortable.js fails to load.
+~~**Recommendation:** Display warning banner when Sortable.js fails to load.~~
 
-### 8. Column Deletion Logic Duplication
-**Severity:** Low  
-**Issue:** Line 986 checks `columns.length <= 1`, and line 1268 checks the same. Inconsistent error handling (one returns false silently, one alerts).
+### ~~8. Column Deletion Logic Duplication~~
+~~**Severity:** Low  
+**Issue:** Line 986 checks `columns.length <= 1`, and line 1268 checks the same. Inconsistent error handling (one returns false silently, one alerts).~~
 
-**Impact:** Potential confusion in code maintenance.
+~~**Impact:** Potential confusion in code maintenance.~~
 
-**Recommendation:** Consolidate validation logic.
+~~**Recommendation:** Consolidate validation logic.~~
 
 ### 9. Double URI Decoding Risk (Line 1338)
 **Severity:** Low  
@@ -143,19 +149,19 @@ if (typeof Sortable === "undefined") {
 
 **Recommendation:** Standardize on SVG icons or consistent text labels. If keeping emoji, ensure fallback for screen readers.
 
-### 11. Duplicate CSS Rules
-**Issue:** Lines 97-101 duplicate lines 369-373 (`.danger` button styles).
+### ~~11. Duplicate CSS Rules~~
+~~**Issue:** Lines 97-101 duplicate lines 369-373 (`.danger` button styles).~~
 
-**Impact:** Maintenance burden; could diverge over time.
+~~**Impact:** Maintenance burden; could diverge over time.~~
 
-**Recommendation:** Consolidate into single rule or use CSS custom properties.
+~~**Recommendation:** Consolidate into single rule or use CSS custom properties.~~
 
-### 12. Initial Column Count Mismatch
-**Issue:** Grid is set to 4 columns (line 119) but initial state creates 3 columns (line 706).
+### ~~12. Initial Column Count Mismatch~~
+~~**Issue:** Grid is set to 4 columns (line 119) but initial state creates 3 columns (line 706).~~
 
-**Impact:** Visual imbalance on first load; empty space in grid.
+~~**Impact:** Visual imbalance on first load; empty space in grid.~~
 
-**Recommendation:** Match initial column count to grid max (4) or adjust grid to 3 default.
+~~**Recommendation:** Match initial column count to grid max (4) or adjust grid to 3 default.~~
 
 ### 13. Theme Color Philosophy Mismatch
 **Issue:** Light mode uses blue accents (`--accent: #2563eb`), but dark mode uses neutral grays (`--accent: #f3f3f3`).
@@ -178,12 +184,15 @@ if (typeof Sortable === "undefined") {
 
 **Recommendation:** Use `word-wrap: break-word` or `overflow-wrap: break-word` instead.
 
-### 16. Search Behavior Not Indicated
-**Issue:** Search is case-insensitive (line 796) but there's no UI indication.
+### ❌16: Disagreed with and not needed
 
-**Impact:** Users might not expect this behavior.
+### *~~16. Search Behavior Not Indicated~~*
 
-**Recommendation:** Add hint text "Case-insensitive search" or icon.
+*~~**Issue:** Search is case-insensitive (line 796) but there's no UI indication.~~*
+
+*~~**Impact:** Users might not expect this behavior.~~*
+
+*~~**Recommendation:** Add hint text "Case-insensitive search" or icon.~~*
 
 ### 17. Button Label Redundancy
 **Issue:** Line 555 shows `+ Add Link (A)` - mixing visual instruction with keyboard hint in button label.
@@ -203,12 +212,15 @@ if (typeof Sortable === "undefined") {
 
 **Recommendation:** Consolidate validation into single function with consistent messaging.
 
-### 19. Favicon Dependency on Third-Party API (Lines 766-769)
-**Issue:** Uses DuckDuckGo API for favicons without fallback.
+### ❌19: Disagree, generic icon the browser produces naturally works fine.
 
-**Impact:** Broken images if API changes or is unavailable.
+### ~~*19. Favicon Dependency on Third-Party API (Lines 766-769)*~~
 
-**Recommendation:** Add image error handler with fallback to generic icon.
+~~***Issue:** Uses DuckDuckGo API for favicons without fallback.*~~
+
+~~***Impact:** Broken images if API changes or is unavailable.*~~
+
+~~***Recommendation:** Add image error handler with fallback to generic icon.*~~
 
 ### 20. Event Listener Memory Management
 **Issue:** Event listeners added in dialog open functions (lines 1052, 1082, 1210, 1285) use `{ once: true }` but also manually remove - redundant.
