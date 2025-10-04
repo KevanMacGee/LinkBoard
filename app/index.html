@@ -1345,10 +1345,9 @@
 
           // Delete with destination select dialog
           row.querySelector("[data-del]").addEventListener("click", () => {
-            // Early validation check using deleteColumn for consistent error handling
-            const preCheck = deleteColumn(c.id, null, { commit: false, columns });
-            if (!preCheck.success) {
-              alert(preCheck.error);
+            // Simple validation check
+            if (columns.length <= 1) {
+              alert("At least one column is required.");
               return;
             }
             
