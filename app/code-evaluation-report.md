@@ -92,13 +92,16 @@ The dialog expects either `null` (for add mode) or an existing card (for edit mo
 
 **Recommendation:** Refactor to support a third mode or pre-populate form fields differently.
 
-### 6. Self-Test Blocks on Confirmation (Line 1370)
-**Severity:** Low  
-**Issue:** `removeCard()` calls `confirm()` which blocks automated testing.
+### 6 Self tests removed, change not needed
 
-**Impact:** Self-tests cannot run fully automated.
+### ~~6. Self-Test Blocks on Confirmation (Line 1370)~~
 
-**Recommendation:** Add optional parameter to skip confirmation for tests.
+~~**Severity:** Low  
+**Issue:** `removeCard()` calls `confirm()` which blocks automated testing.~~
+
+~~**Impact:** Self-tests cannot run fully automated.~~
+
+~~**Recommendation:** Add optional parameter to skip confirmation for tests.~~
 
 ### 7. This will not be addressed right now since it is a very low probability of happening.
 
@@ -170,12 +173,12 @@ if (typeof Sortable === "undefined") {
 
 **Recommendation:** Maintain consistent accent color philosophy across themes, or document this as intentional "warm light / cool dark" design.
 
-### 14. Mixed Modal UX Patterns
-**Issue:** Line 1307 uses `prompt()` for new column name, but everywhere else uses proper modal dialogs.
+### ~~14. Mixed Modal UX Patterns~~
+~~**Issue:** Line 1307 uses `prompt()` for new column name, but everywhere else uses proper modal dialogs.~~
 
-**Impact:** Inconsistent user experience; `prompt()` looks dated and breaks visual flow.
+~~**Impact:** Inconsistent user experience; `prompt()` looks dated and breaks visual flow.~~
 
-**Recommendation:** Create proper "Add Column" dialog matching existing design system.
+~~**Recommendation:** Create proper "Add Column" dialog matching existing design system.~~
 
 ### 15. Word Breaking in Bookmarklet Link
 **Issue:** Line 620 uses `word-break: break-all` which breaks mid-word.
