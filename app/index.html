@@ -855,6 +855,7 @@
           const img = document.createElement("img");
           img.src = favicon(normalizedUrl);
           img.alt = "";
+          img.setAttribute('role', 'presentation');
           iconDiv.appendChild(img);
         }
 
