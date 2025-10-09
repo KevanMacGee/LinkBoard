@@ -1220,6 +1220,9 @@
       // ——— Search & Keyboard ———
       searchEl.addEventListener("input", render);
       document.addEventListener("keydown", (e) => {
+        // Check if user is typing in an input field
+        const inInputField = ['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName);
+        
         // Escape key closes any open dialog
         if (e.key === "Escape") {
           if (dlg.open) {
@@ -1239,11 +1242,15 @@
             e.preventDefault();
           }
         }
-        if (e.key === "/" && !dlg.open && document.activeElement !== searchEl) {
+        
+        // "/" focuses search (unless typing in an input field or dialog is open)
+        if (e.key === "/" && !dlg.open && !inInputField) {
           e.preventDefault();
           searchEl.focus();
         }
-        if ((e.key === "a" || e.key === "A") && !dlg.open) {
+        
+        // "A" opens add dialog (unless typing in an input field or dialog is open)
+        if ((e.key === "a" || e.key === "A") && !dlg.open && !inInputField) {
           e.preventDefault();
           openDialog();
         }
