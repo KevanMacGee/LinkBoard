@@ -15,12 +15,14 @@ This evaluation reviews the current state of LinkBoard after recent fixes and im
 
 ## High Priority Issues 🔴
 
-### 1. Keyboard Shortcut Still Triggers in Input Fields (Lines 1242-1249)
+1. Fixed
 
-**Severity:** High  
-**Status:** PARTIAL FIX - "/" key was fixed, but "A" key was not  
+### ~~1. Keyboard Shortcut Still Triggers in Input Fields (Lines 1242-1249)~~
 
-**Issue:** The "A" key shortcut fires even when typing in input fields or textareas outside of dialogs.
+~~**Severity:** High  
+**Status:** PARTIAL FIX - "/" key was fixed, but "A" key was not  ~~
+
+~~**Issue:** The "A" key shortcut fires even when typing in input fields or textareas outside of dialogs.~~
 
 ```javascript
 if ((e.key === "a" || e.key === "A") && !dlg.open) {
@@ -29,11 +31,11 @@ if ((e.key === "a" || e.key === "A") && !dlg.open) {
 }
 ```
 
-**Impact:** Users cannot type the letter "a" in the search box or other input fields when no dialog is open.
+~~**Impact:** Users cannot type the letter "a" in the search box or other input fields when no dialog is open.~~
 
-**Example:** Try typing "React" in the search box - it will open the Add Link dialog when you press "a".
+~~**Example:** Try typing "React" in the search box - it will open the Add Link dialog when you press "a".~~
 
-**Recommendation:** Add check for input/textarea/select elements:
+~~**Recommendation:** Add check for input/textarea/select elements:~~
 
 ```javascript
 const inInputField = ['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName);
