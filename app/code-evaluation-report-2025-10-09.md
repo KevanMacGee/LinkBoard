@@ -45,20 +45,20 @@ if ((e.key === "a" || e.key === "A") && !dlg.open && !inInputField) {
 }
 ```
 
-### 2. "/" Shortcut Missing Input Field Check (Line 1242)
+### ~~2. "/" Shortcut Missing Input Field Check (Line 1242)~~
 
-**Severity:** Medium  
-**Status:** PARTIAL FIX - checks dialog state but not input fields  
+~~**Severity:** Medium  
+**Status:** PARTIAL FIX - checks dialog state but not input fields~~  
 
-**Issue:** The "/" key only checks if dialog is open, but doesn't check if user is typing in an input field.
+~~**Issue:** The "/" key only checks if dialog is open, but doesn't check if user is typing in an input field.~~
 
 ```javascript
 if (e.key === "/" && !dlg.open && document.activeElement !== searchEl) {
 ```
 
-**Impact:** If user is typing in any input field OTHER than the search box, pressing "/" will unexpectedly move focus.
+~~**Impact:** If user is typing in any input field OTHER than the search box, pressing "/" will unexpectedly move focus.~~
 
-**Recommendation:** Add input field check consistent with #1:
+~~**Recommendation:** Add input field check consistent with #1:~~
 
 ```javascript
 const inInputField = ['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName);
@@ -139,24 +139,26 @@ dlg.addEventListener("close", function onClose() {
 }, { once: true });
 ```
 
-### 6. Button Label Inconsistency (Lines 549-551)
+~~6 Button label consistency partially fixed. Patterns are now consistent~~. There is a need to show keyboard shortcuts better, both visually and fro proper accessibility standards.
 
-**Severity:** Low (UX Polish)  
-**Issue:** Button labels mix different patterns:
+### ~~6. Button Label Inconsistency (Lines 549-551)~~
 
-- `+ Add Link (A)` - symbol + text + keyboard hint in button
-- `Columns` - plain text
-- `🌙 Dark` - emoji + text
+~~**Severity:** Low (UX Polish)  
+**Issue:** Button labels mix different patterns:~~
 
-**Impact:** Cluttered appearance; keyboard hint in button text is unusual.
+- ~~`+ Add Link (A)` - symbol + text + keyboard hint in button~~
+- ~~`Columns` - plain text~~
+- ~~`🌙 Dark` - emoji + text~~
 
-**Recommendation:** Move keyboard hints to tooltips or help text:
+~~**Impact:** Cluttered appearance; keyboard hint in button text is unusual.~~
+
+~~**Recommendation:** Move keyboard hints to tooltips or help text:~~
 
 ```html
 <button id="btnAdd" title="Keyboard shortcut: A">+ Add Link</button>
 ```
 
-Then update the hint text below to list all shortcuts.
+~~Then update the hint text below to list all shortcuts.~~
 
 ### 7. Dark Mode Accent Color Philosophy (Lines 10-17, 406-416)
 
@@ -203,14 +205,16 @@ if (!normalizedUrl) {
 
 **Recommendation:** Consolidate into clearer, single validation with consistent messaging.
 
-### 9. Missing Alt Text for Favicon Images (Line 857)
+9. Favicon marked as decorative since it is adjacent the the actual URL and reading it out loud just before that would be duplicate information.
 
-**Severity:** Low (Accessibility)  
-**Issue:** Favicon images have empty alt text: `img.alt = ""`.
+### ~~9. Missing Alt Text for Favicon Images (Line 857)~~
 
-**Impact:** Screen readers skip these images entirely; could use domain name for context.
+~~**Severity:** Low (Accessibility)  
+**Issue:** Favicon images have empty alt text: `img.alt = ""`.~~
 
-**Recommendation:**
+~~**Impact:** Screen readers skip these images entirely; could use domain name for context.~~
+
+~~**Recommendation:**~~
 
 ```javascript
 img.alt = `${domainFrom(normalizedUrl)} icon`;

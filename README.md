@@ -12,12 +12,12 @@ LinkBoard is an app to create lists of often used bookmarks for specific niches 
 ![App screenshot](https://raw.githubusercontent.com/KevanMacGee/LinkBoard/refs/heads/master/screenshots/Screenshot2025-09-26-192559.png)
 
 ###  Features
-- Bookmarks can be added and sorted into topic areas upon creation, but they are also drag-and-dropable.
+- Bookmarks can be added and sorted into topic areas upon creation, but they are also drag-and-dropable later.
 - The app automatically pulls the favicon for any link that is added.
 - Data can be exported into a JSON file, and similarly imported from the same.
 
 ###  Issues
-- There are some design and visual inconsistencies.
+- There are some design and visual inconsistencies. (Update: Many have been addressed and it's getting down to the last several personal nick-picky visual issues.)
 - The the bookmarklet feature hasn't even been tested and may not work.
 - There is a slight bug where if you drag a link from one column to another and drop it in the empty space at the bottom of a column, it doesn't register. In short, if you drag a link from one column, it has to pass over a link in the new column before the app registers it's being moved.
 - Local storage can inherently be flaky, I plan to move to a proper database solution.
