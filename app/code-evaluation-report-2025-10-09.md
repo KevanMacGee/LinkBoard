@@ -222,14 +222,14 @@ img.alt = `${domainFrom(normalizedUrl)} icon`;
 img.setAttribute('role', 'presentation');
 ```
 
-### 10. No Visible Loading State
+### ~~10. No Visible Loading State~~
 
-**Severity:** Low (UX)  
-**Issue:** When app first loads, there's no indication that it's loading/initializing.
+~~**Severity:** Low (UX)  
+**Issue:** When app first loads, there's no indication that it's loading/initializing.~~
 
-**Impact:** On slower devices, users might see blank screen briefly.
+~~**Impact:** On slower devices, users might see blank screen briefly.~~
 
-**Recommendation:** Consider adding a minimal loading indicator or ensure render() happens quickly enough that it's not noticeable. (May already be fast enough - test on slower devices.)
+~~**Recommendation:** Consider adding a minimal loading indicator or ensure render() happens quickly enough that it's not noticeable. (May already be fast enough - test on slower devices.)~~
 
 ---
 
