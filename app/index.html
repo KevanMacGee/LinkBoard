@@ -1128,7 +1128,6 @@
           dlg.addEventListener(
             "close",
             function onClose() {
-              dlg.removeEventListener("close", onClose);
               if (dlg.returnValue === "delete") {
                 removeCard(card.id);
                 return;
@@ -1158,7 +1157,6 @@
           dlg.addEventListener(
             "close",
             function onClose() {
-              dlg.removeEventListener("close", onClose);
               if (dlg.returnValue === "cancel") return;
               const data = readDialogData();
               if (!data) {
@@ -1340,7 +1338,6 @@
         dlgCols.addEventListener(
           "close",
           function onClose() {
-            dlgCols.removeEventListener("close", onClose);
             if (dlgCols.returnValue === "cancel") {
               stagedColumns = null;
               return;
@@ -1417,7 +1414,6 @@
             dlgColDel.addEventListener(
               "close",
               function onClose() {
-                dlgColDel.removeEventListener("close", onClose);
                 if (dlgColDel.returnValue === "cancel") return;
                 const destId = delDest.value;
                 const result = deleteColumn(c.id, destId, { commit: false, columns });
@@ -1444,7 +1440,6 @@
         dlgAddCol.addEventListener(
           "close",
           function onClose() {
-            dlgAddCol.removeEventListener("close", onClose);
             if (dlgAddCol.returnValue === "cancel") return;
             
             const title = newColName.value.trim();
