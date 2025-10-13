@@ -68,23 +68,23 @@ if (e.key === "/" && !dlg.open && !inInputField) {
 }
 ```
 
-### 3. Dialog Focus Timing Uses Arbitrary Delay (Lines 1099, 1125, 1134, 1392, 1406)
+### 3. ~~Dialog Focus Timing Uses Arbitrary Delay (Lines 1099, 1125, 1134, 1392, 1406)~~
 
-**Severity:** Medium  
-**Issue:** Multiple uses of `setTimeout(() => element.focus(), 50)` with magic number delay.
+~~**Severity:** Medium  
+**Issue:** Multiple uses of `setTimeout(() => element.focus(), 50)` with magic number delay.~~
 
-**Impact:** 
+~~**Impact:**~~ 
 
-- Race conditions on slower devices
-- Inconsistent behavior
-- No guarantee focus will work
+- ~~Race conditions on slower devices~~
+- ~~Inconsistent behavior~~
+- ~~No guarantee focus will work~~
 
-**Locations:**
+~~**Locations:**~~
 
-- Line 1099, 1125, 1134: URL input focus in Add/Edit dialog
-- Line 1392, 1406: Column name input focus in Add Column dialog
+- ~~Line 1099, 1125, 1134: URL input focus in Add/Edit dialog~~
+- ~~Line 1392, 1406: Column name input focus in Add Column dialog~~
 
-**Recommendation:** Use the dialog's native events or `requestAnimationFrame`:
+~~**Recommendation:** Use the dialog's native events or `requestAnimationFrame`:~~
 
 ```javascript
 // Option 1: Use dialog open event
@@ -119,8 +119,8 @@ requestAnimationFrame(() => fUrl.focus());
 
 ### 5. Inconsistent Dialog Event Listener Cleanup (Lines 1085, 1115, 1290, 1367, 1394)
 
-**Severity:** Low  
-**Issue:** Dialog close handlers use both manual `removeEventListener` AND `{ once: true }` - redundant.
+~~**Severity:** Low  
+**Issue:** Dialog close handlers use both manual `removeEventListener` AND `{ once: true }` - redundant.~~
 
 ```javascript
 dlg.addEventListener("close", function onClose() {
@@ -129,9 +129,9 @@ dlg.addEventListener("close", function onClose() {
 }, { once: true });
 ```
 
-**Impact:** Minor code cleanliness; not a functional bug.
+~~**Impact:** Minor code cleanliness; not a functional bug.~~
 
-**Recommendation:** Remove manual cleanup, rely on `{ once: true }`:
+~~**Recommendation:** Remove manual cleanup, rely on `{ once: true }`:~~
 
 ```javascript
 dlg.addEventListener("close", function onClose() {
