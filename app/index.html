@@ -1139,7 +1139,7 @@
                 dlg.returnValue = "";
                 dlg.showModal();
                 dlg.addEventListener("close", onClose, { once: true });
-                setTimeout(() => fUrl.focus(), 50);
+                requestAnimationFrame(() => fUrl.focus());
                 return;
               }
               updateCard(card.id, data, fCol.value);
@@ -1165,7 +1165,7 @@
                 dlg.returnValue = "";
                 dlg.showModal();
                 dlg.addEventListener("close", onClose, { once: true });
-                setTimeout(() => fUrl.focus(), 50);
+                requestAnimationFrame(() => fUrl.focus());
                 return;
               }
               if (!data.title) data.title = domainFrom(data.url);
@@ -1174,7 +1174,7 @@
             { once: true }
           );
         }
-        setTimeout(() => fUrl.focus(), 50);
+        requestAnimationFrame(() => fUrl.focus());
       }
 
       // ——— Export/Import/Reset ———
@@ -1439,7 +1439,7 @@
         newColName.value = "";
         dlgAddCol.returnValue = "";
         dlgAddCol.showModal();
-        setTimeout(() => newColName.focus(), 50);
+        requestAnimationFrame(() => newColName.focus());
         
         dlgAddCol.addEventListener(
           "close",
@@ -1453,7 +1453,7 @@
               dlgAddCol.returnValue = "";
               dlgAddCol.showModal();
               dlgAddCol.addEventListener("close", onClose, { once: true });
-              setTimeout(() => newColName.focus(), 50);
+              requestAnimationFrame(() => newColName.focus());
               return;
             }
             
