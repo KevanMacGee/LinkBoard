@@ -695,7 +695,7 @@
         <div class="dlg-body">
           <p id="delColInfo" style="margin: 0 0 16px 0; color: var(--text);"></p>
           <div class="row">
-            <label for="delDest">Move its cards to:</label>
+            <label for="delDest" style="font-size: 15px; color: var(--text);">Choose where its cards will be moved to:</label>
             <select id="delDest"></select>
           </div>
         </div>
@@ -1447,7 +1447,7 @@
             const cardCount = c.cards.length;
             const cardText = cardCount === 1 ? "1 card" : `${cardCount} cards`;
             const delColInfo = document.getElementById("delColInfo");
-            delColInfo.textContent = `Delete "${c.title}" with ${cardText}?`;
+            delColInfo.textContent = `⚠️ Are you sure you want to delete column "${c.title}"? It contains ${cardText}.`;
             
             // Build dest options excluding this column
             delDest.innerHTML = columns
