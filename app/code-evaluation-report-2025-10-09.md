@@ -117,7 +117,7 @@ requestAnimationFrame(() => fUrl.focus());
 
 ## Significant Issues 🟡
 
-### 5. Inconsistent Dialog Event Listener Cleanup (Lines 1085, 1115, 1290, 1367, 1394)
+### ~~5. Inconsistent Dialog Event Listener Cleanup (Lines 1085, 1115, 1290, 1367, 1394)~~
 
 ~~**Severity:** Low  
 **Issue:** Dialog close handlers use both manual `removeEventListener` AND `{ once: true }` - redundant.~~
@@ -160,14 +160,14 @@ dlg.addEventListener("close", function onClose() {
 
 ~~Then update the hint text below to list all shortcuts.~~
 
-### 7. Dark Mode Accent Color Philosophy (Lines 10-17, 406-416)
+### ~~7. Dark Mode Accent Color Philosophy (Lines 10-17, 406-416)~~
 
-**Severity:** Low (Design Consistency)  
-**Issue:** Light mode uses blue (`--accent: #2563eb`), dark mode uses neutral gray (`--accent: #f3f3f3`).
+~~**Severity:** Low (Design Consistency)  
+**Issue:** Light mode uses blue (`--accent: #2563eb`), dark mode uses neutral gray (`--accent: #f3f3f3`).~~
 
-**Impact:** Different visual identity between themes; feels like two different apps.
+~~**Impact:** Different visual identity between themes; feels like two different apps.~~
 
-**Current:**
+~~**Current:**~~
 
 ```css
 :root {
@@ -178,11 +178,11 @@ dlg.addEventListener("close", function onClose() {
 }
 ```
 
-**Recommendation:** 
+~~**Recommendation:**~~ 
 
-- **Option A:** Keep consistent blue in dark mode (muted: `#60a5fa` or similar)
-- **Option B:** Document this as intentional design choice
-- Your choice based on design vision
+- ~~**Option A:** Keep consistent blue in dark mode (muted: `#60a5fa` or similar)~~
+- ~~**Option B:** Document this as intentional design choice~~
+- ~~Your choice based on design vision~~
 
 ### 8. URL Validation Error Messages Not Consistent (Lines 1050-1063)
 

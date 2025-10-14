@@ -1476,7 +1476,8 @@
       const bmDlg = document.getElementById("dlgBm");
       document.getElementById("btnBookmarklet").addEventListener("click", () => {
         const here = location.href.split("#")[0];
-        const js = `javascript:((()=>{const u=encodeURIComponent(location.href),t=encodeURIComponent(document.title);window.open('${here}?add='+u+'&title='+t,'_blank');})())`;
+        // Build the bookmarklet JavaScript code carefully to avoid URL encoding issues
+        const js = `javascript:(function(){var u=encodeURIComponent(location.href),t=encodeURIComponent(document.title);window.open("${here}?add="+u+"&title="+t,"_blank");})();`;
         const link = document.getElementById("bmLink");
         link.textContent = "Add to LinkBoard";
         link.href = js;
