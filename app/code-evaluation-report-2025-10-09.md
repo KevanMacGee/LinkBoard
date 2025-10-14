@@ -357,41 +357,41 @@ let stagedColumns = null;
 
 ## Bookmarklet-Specific Issues 📌
 
-*Lower priority as requested - feature may be removed*
+~~*Lower priority as requested - feature may be removed*~~ Update: Feature will stay but its importance and use in the app will be redefined.
 
-### B1. Double URI Decoding Risk (Lines 1442-1443)
+### ~~B1. Double URI Decoding Risk (Lines 1442-1443)~~
 
-**Severity:** Low  
-**Issue:** `decodeURIComponent(p.get("add"))` and `decodeURIComponent(p.get("title"))` - URLSearchParams already decodes once.
+~~**Severity:** Low  
+**Issue:** `decodeURIComponent(p.get("add"))` and `decodeURIComponent(p.get("title"))` - URLSearchParams already decodes once.~~
 
 ```javascript
 const title = decodeURIComponent(p.get("title") || "");
 openDialog({ id: uid(), url: decodeURIComponent(add), title, note: "" });
 ```
 
-**Impact:** URLs with special characters might be double-decoded, causing issues with characters like `%`.
+~~**Impact:** URLs with special characters might be double-decoded, causing issues with characters like `%`.~~
 
-**Test Case:** Try bookmarklet with URL containing `%20` or `%2F`.
+~~**Test Case:** Try bookmarklet with URL containing `%20` or `%2F`.~~
 
-**Recommendation:** Remove explicit `decodeURIComponent()`:
+~~**Recommendation:** Remove explicit `decodeURIComponent()`:~~
 
 ```javascript
 const title = p.get("title") || "";
 openDialog({ id: uid(), url: add, title, note: "" });
 ```
 
-### B2. Bookmarklet Parameter Handling Creates Fake Card Object (Line 1443)
+### ~~B2. Bookmarklet Parameter Handling Creates Fake Card Object (Line 1443)~~
 
-**Severity:** Low  
-**Issue:** Passes a fake card object to `openDialog()` which expects `null` (add mode) or existing card (edit mode):
+~~**Severity:** Low  
+**Issue:** Passes a fake card object to `openDialog()` which expects `null` (add mode) or existing card (edit mode):~~
 
 ```javascript
 openDialog({ id: uid(), url: decodeURIComponent(add), title, note: "" });
 ```
 
-**Impact:** Works by accident - the function doesn't validate the card, so it works in "edit mode" logic path but creates a new card.
+~~**Impact:** Works by accident - the function doesn't validate the card, so it works in "edit mode" logic path but creates a new card.~~
 
-**Recommendation:** Refactor to explicitly support bookmarklet mode:
+~~**Recommendation:** Refactor to explicitly support bookmarklet mode:~~
 
 ```javascript
 // Option 1: Add third parameter
@@ -405,27 +405,27 @@ function openDialog(card = null, colId = null, prefillData = null) {
 // Keep as-is but add comment explaining the pattern
 ```
 
-### B3. Bookmarklet Word-Break Style (Line 616)
+### ~~B3. Bookmarklet Word-Break Style (Line 616)~~
 
-**Severity:** Low (UX)  
-**Issue:** Uses `word-break: break-all` which breaks mid-word.
+~~**Severity:** Low (UX)  
+**Issue:** Uses `word-break: break-all` which breaks mid-word.~~
 
-**Impact:** Bookmarklet code is less readable.
+~~**Impact:** Bookmarklet code is less readable.~~
 
-**Recommendation:**
+~~**Recommendation:**~~
 
 ```html
 <p><a id="bmLink" href="#" style="overflow-wrap: break-word">Add to LinkBoard</a></p>
 ```
 
-### B4. No Error Handling for Bookmarklet Parameters
+### ~~B4. No Error Handling for Bookmarklet Parameters~~
 
-**Severity:** Low  
-**Issue:** `initFromParams()` doesn't validate URL parameters before using them.
+~~**Severity:** Low  
+**Issue:** `initFromParams()` doesn't validate URL parameters before using them.~~
 
-**Impact:** Malformed URL parameters could cause issues.
+~~**Impact:** Malformed URL parameters could cause issues.~~
 
-**Recommendation:** Add validation:
+~~**Recommendation:** Add validation:~~
 
 ```javascript
 if (add) {
