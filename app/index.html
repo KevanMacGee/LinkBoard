@@ -1111,11 +1111,56 @@
         };
       }
 
-      function openDialog(card = null, colId = null) {
-        ensureColumns();
+      // Helper to populate column dropdown with "Create New" option
+      function populateColDropdown() {
         fCol.innerHTML = state.columns
           .map((c, i) => `<option value="${c.id}">${i + 1}. ${escapeHTML(c.title)}</option>`)
-          .join("");
+          .join("") + `<option value="__new__">➕ Create New Column...</option>`;
+      }
+
+      function openDialog(card = null, colId = null) {
+        ensureColumns();
+        populateColDropdown();
+        
+        // Handle "Create New Column" selection
+        const handleColChange = () => {
+          if (fCol.value === "__new__") {
+            // Open the Add Column dialog
+            newColName.value = "";
+            dlgAddCol.returnValue = "";
+            dlgAddCol.showModal();
+            requestAnimationFrame(() => newColName.focus());
+            
+            dlgAddCol.addEventListener("close", function onNewColClose() {
+              if (dlgAddCol.returnValue === "cancel") {
+                // User cancelled - reset to first column
+                fCol.value = state.columns[0]?.id || "";
+                return;
+              }
+              
+              const title = newColName.value.trim();
+              if (!title) {
+                fCol.value = state.columns[0]?.id || "";
+                return;
+              }
+              
+              // Create the new column
+              const newCol = { id: uid(), title: title, cards: [] };
+              state.columns.push(newCol);
+              save();
+              render(); // Update the main board
+              
+              // Refresh dropdown and select new column
+              populateColDropdown();
+              fCol.value = newCol.id; // Auto-select the newly created column
+            }, { once: true });
+          }
+        };
+        
+        // Remove old listener if exists and add new one
+        fCol.removeEventListener("change", handleColChange);
+        fCol.addEventListener("change", handleColChange);
+        
         if (card) {
           dlgTitle.textContent = "Edit Link";
           fUrl.value = card.url;
