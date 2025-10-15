@@ -1518,8 +1518,8 @@
       const bmDlg = document.getElementById("dlgBm");
       document.getElementById("btnBookmarklet").addEventListener("click", () => {
         const here = location.href.split("#")[0];
-        // Build the bookmarklet JavaScript code carefully to avoid URL encoding issues
-        const js = `javascript:(function(){var u=encodeURIComponent(location.href),t=encodeURIComponent(document.title);window.open("${here}?add="+u+"&title="+t,"_blank");})();`;
+        // Build the bookmarklet JavaScript code - uses location.href to avoid popup blockers
+        const js = `javascript:(function(){var u=encodeURIComponent(location.href),t=encodeURIComponent(document.title);location.href="${here}?add="+u+"&title="+t;})();`;
         const link = document.getElementById("bmLink");
         link.textContent = "Add to LinkBoard";
         link.href = js;
@@ -1537,15 +1537,12 @@
           // Validate the URL before processing
           const normalizedUrl = normalizeUrl(add);
           if (normalizedUrl) {
-            // NOTE: This intentionally passes a fake card object to openDialog().
-            // While openDialog() expects null (add mode) or existing card (edit mode),
-            // passing a fake card with id/url/title works because:
-            // 1. The function detects it as "edit mode" due to truthy card parameter
-            // 2. But since this card doesn't exist in state, it effectively creates a new card
-            // 3. The edit dialog pre-fills the form with the provided data
-            // This is a deliberate pattern that leverages existing logic rather than
-            // adding bookmarklet-specific code paths.
-            openDialog({ id: uid(), url: normalizedUrl, title, note: "" });
+            // Open dialog in add mode and pre-populate fields
+            openDialog(null, null);
+            requestAnimationFrame(() => {
+              fUrl.value = normalizedUrl;
+              fTitle.value = title;
+            });
             history.replaceState({}, "", location.pathname); // clean URL
           } else {
             alert("Invalid URL from bookmarklet: " + add);
