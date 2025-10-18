@@ -88,9 +88,12 @@
         box-shadow: var(--shadow);
         font-family: inherit;
         text-decoration: none;
+        outline: none;
       }
       .actions button:hover,
-      .actions label.btn:hover {
+      .actions label.btn:hover,
+      .actions button:focus,
+      .actions label.btn:focus {
         outline: 2px solid rgba(37, 99, 235, 0.18);
       }
       .search {
@@ -100,6 +103,10 @@
         border: 1px solid #e5e7eb;
         background: #ffffff;
         color: var(--text);
+        outline: none;
+      }
+      .search:focus {
+        outline: 2px solid rgba(37, 99, 235, 0.18);
       }
 
       /* Board */
@@ -209,10 +216,13 @@
         display: grid;
         place-items: center;
         cursor: pointer;
+        outline: none;
       }
-      .btn-icon:hover {
+      .btn-icon:hover,
+      .btn-icon:focus {
         color: var(--text);
         border-color: #cbd5e1;
+        outline: 2px solid rgba(37, 99, 235, 0.18);
       }
 
       .empty {
@@ -272,6 +282,12 @@
         border: 1px solid #e5e7eb;
         background: #ffffff;
         color: var(--text);
+        outline: none;
+      }
+      input[type="text"]:focus,
+      select:focus,
+      textarea:focus {
+        outline: 2px solid rgba(37, 99, 235, 0.18);
       }
       textarea {
         min-height: 80px;
@@ -291,6 +307,11 @@
         color: var(--text);
         border: 1px solid #dbeafe;
         cursor: pointer;
+        outline: none;
+      }
+      .pill:hover,
+      .pill:focus {
+        outline: 2px solid rgba(37, 99, 235, 0.18);
       }
       .pill.alt {
         background: #f8fafc;
@@ -337,9 +358,12 @@
         box-shadow: var(--shadow);
         font-family: inherit;
         text-decoration: none;
+        outline: none;
       }
       .bottom-actions button:hover,
-      .bottom-actions label.btn:hover {
+      .bottom-actions label.btn:hover,
+      .bottom-actions button:focus,
+      .bottom-actions label.btn:focus {
         outline: 2px solid rgba(37, 99, 235, 0.18);
       }
 
@@ -374,6 +398,10 @@
         border: 1px solid #e5e7eb;
         background: #ffffff;
         color: var(--text);
+        outline: none;
+      }
+      .colmgr-row input[type="text"]:focus {
+        outline: 2px solid rgba(37, 99, 235, 0.18);
       }
       .colmgr-actions {
         display: flex;
@@ -444,8 +472,7 @@
       }
       /* Better focus state for select in dark mode */
       [data-theme="dark"] select:focus {
-        outline: 2px solid rgba(255, 255, 255, 0.1);
-        outline-offset: -1px;
+        outline: 2px solid rgba(37, 99, 235, 0.18);
       }
       [data-theme="dark"] .card .icon {
         background: #181818;
@@ -588,7 +615,7 @@
     <p class="hint" style="margin-top: 8px; text-align: center">
       Drag cards between columns. Everything saves to <strong>localStorage</strong>. Use
       <span class="kbd">Export</span> to back up. Export often, don't reply on local storage alone. Keyboard hints: <span class="kbd">A</span> add,
-      <span class="kbd">/</span> search.
+      <span class="kbd">/</span> filter.
     </p>
 
     <!-- Add/Edit Dialog -->
