@@ -322,6 +322,11 @@
         color: #7f1d1d;
         border: 1px solid #fecaca;
       }
+      .pill:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        pointer-events: auto;
+      }
 
       .hint {
         color: var(--muted);
@@ -505,6 +510,10 @@
         background: linear-gradient(180deg, rgba(255, 64, 64, 0.18), rgba(64, 0, 0, 0.08));
         color: #ffdada;
         border-color: #5a1d1d;
+      }
+      [data-theme="dark"] .pill:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
       }
       [data-theme="dark"] .search {
         background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
@@ -717,7 +726,7 @@
         </div>
         <div class="dlg-foot">
           <button class="pill alt" value="cancel" formnovalidate>Cancel</button>
-          <button class="pill danger" value="default">Delete Column</button>
+          <button id="btnDelColConfirm" class="pill danger" value="default">Delete Column</button>
         </div>
       </form>
     </dialog>
@@ -1477,10 +1486,11 @@
               .map((x, i) => `<option value="${x.id}">${i + 1}. ${escapeHTML(x.title)}</option>`)
               .join("");
             
-            // Get radio buttons and destination row
+            // Get radio buttons, destination row, and delete button
             const radioDelete = dlgColDel.querySelector('input[name="delAction"][value="delete"]');
             const radioMove = dlgColDel.querySelector('input[name="delAction"][value="move"]');
             const delDestRow = document.getElementById("delDestRow");
+            const btnDelColConfirm = document.getElementById("btnDelColConfirm");
             
             // Setup function to initialize dialog state
             const setupDialog = () => {
@@ -1488,16 +1498,30 @@
               radioDelete.checked = false;
               radioMove.checked = false;
               delDestRow.style.display = "none";
+              
+              // Disable delete button and add tooltip
+              btnDelColConfirm.disabled = true;
+              btnDelColConfirm.title = "Please select an option first";
             };
             
-            // Add event listeners to show/hide destination dropdown
+            // Add event listeners to show/hide destination dropdown and enable/disable button
             const handleRadioChange = () => {
               // Use setTimeout to ensure checked state is updated
               setTimeout(() => {
+                // Show/hide destination dropdown
                 if (radioMove.checked) {
                   delDestRow.style.display = "grid";
                 } else {
                   delDestRow.style.display = "none";
+                }
+                
+                // Enable/disable delete button and update tooltip
+                if (radioDelete.checked || radioMove.checked) {
+                  btnDelColConfirm.disabled = false;
+                  btnDelColConfirm.title = "";
+                } else {
+                  btnDelColConfirm.disabled = true;
+                  btnDelColConfirm.title = "Please select an option first";
                 }
               }, 0);
             };
@@ -1526,17 +1550,7 @@
               function onClose() {
                 if (dlgColDel.returnValue === "cancel") return;
                 
-                // Validate that user made a selection
-                if (!radioDelete.checked && !radioMove.checked) {
-                  alert("Please select an option before continuing.");
-                  // Re-setup and re-open the dialog
-                  setupDialog();
-                  dlgColDel.returnValue = "";
-                  dlgColDel.showModal();
-                  dlgColDel.addEventListener("close", onClose, { once: true });
-                  return;
-                }
-                
+                // No need to validate - button is disabled if no selection
                 // Check which action was selected
                 const shouldDeleteCards = radioDelete.checked;
                 const destId = delDest.value;
