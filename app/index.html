@@ -1149,9 +1149,18 @@
           .join("") + `<option value="__new__">➕ Create New Column...</option>`;
       }
 
+      // Store the change handler reference globally so we can properly remove it
+      let currentColChangeHandler = null;
+      
       function openDialog(card = null, colId = null) {
         ensureColumns();
         populateColDropdown();
+        
+        // Remove any existing change handler before adding a new one
+        if (currentColChangeHandler) {
+          fCol.removeEventListener("change", currentColChangeHandler);
+          currentColChangeHandler = null;
+        }
         
         // Handle "Create New Column" selection
         const handleColChange = () => {
@@ -1188,8 +1197,8 @@
           }
         };
         
-        // Remove old listener if exists and add new one
-        fCol.removeEventListener("change", handleColChange);
+        // Store reference and add the listener
+        currentColChangeHandler = handleColChange;
         fCol.addEventListener("change", handleColChange);
         
         if (card) {
