@@ -702,7 +702,7 @@
           <div class="row" style="gap: 12px;">
             <label style="font-size: 14px; color: var(--text); font-weight: 600;">What would you like to do?</label>
             <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
-              <input type="radio" name="delAction" value="delete" checked style="cursor: pointer;" />
+              <input type="radio" name="delAction" value="delete" style="cursor: pointer;" />
               <span>Delete column and all its cards</span>
             </label>
             <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
@@ -1482,33 +1482,60 @@
             const radioMove = dlgColDel.querySelector('input[name="delAction"][value="move"]');
             const delDestRow = document.getElementById("delDestRow");
             
-            // Reset to default state (delete cards)
-            radioDelete.checked = true;
-            radioMove.checked = false;
-            delDestRow.style.display = "none";
+            // Setup function to initialize dialog state
+            const setupDialog = () => {
+              // Reset to default state (no selection)
+              radioDelete.checked = false;
+              radioMove.checked = false;
+              delDestRow.style.display = "none";
+            };
             
             // Add event listeners to show/hide destination dropdown
             const handleRadioChange = () => {
-              if (radioMove.checked) {
-                delDestRow.style.display = "grid";
-              } else {
-                delDestRow.style.display = "none";
-              }
+              // Use setTimeout to ensure checked state is updated
+              setTimeout(() => {
+                if (radioMove.checked) {
+                  delDestRow.style.display = "grid";
+                } else {
+                  delDestRow.style.display = "none";
+                }
+              }, 0);
             };
             
+            // Remove any existing listeners to avoid duplicates
+            radioDelete.removeEventListener("change", handleRadioChange);
+            radioMove.removeEventListener("change", handleRadioChange);
+            radioDelete.removeEventListener("click", handleRadioChange);
+            radioMove.removeEventListener("click", handleRadioChange);
+            radioDelete.removeEventListener("input", handleRadioChange);
+            radioMove.removeEventListener("input", handleRadioChange);
+            
+            // Add fresh event listeners (change, click, and input for maximum reliability)
             radioDelete.addEventListener("change", handleRadioChange);
             radioMove.addEventListener("change", handleRadioChange);
+            radioDelete.addEventListener("click", handleRadioChange);
+            radioMove.addEventListener("click", handleRadioChange);
+            radioDelete.addEventListener("input", handleRadioChange);
+            radioMove.addEventListener("input", handleRadioChange);
             
+            setupDialog();
             dlgColDel.returnValue = "";
             dlgColDel.showModal();
             dlgColDel.addEventListener(
               "close",
               function onClose() {
-                // Clean up event listeners
-                radioDelete.removeEventListener("change", handleRadioChange);
-                radioMove.removeEventListener("change", handleRadioChange);
-                
                 if (dlgColDel.returnValue === "cancel") return;
+                
+                // Validate that user made a selection
+                if (!radioDelete.checked && !radioMove.checked) {
+                  alert("Please select an option before continuing.");
+                  // Re-setup and re-open the dialog
+                  setupDialog();
+                  dlgColDel.returnValue = "";
+                  dlgColDel.showModal();
+                  dlgColDel.addEventListener("close", onClose, { once: true });
+                  return;
+                }
                 
                 // Check which action was selected
                 const shouldDeleteCards = radioDelete.checked;
