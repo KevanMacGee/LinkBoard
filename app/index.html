@@ -699,8 +699,19 @@
         </div>
         <div class="dlg-body">
           <p id="delColInfo" style="margin: 0 0 16px 0; color: var(--text);"></p>
-          <div class="row">
-            <label for="delDest" style="font-size: 15px; color: var(--text);">Choose where its cards will be moved to:</label>
+          <div class="row" style="gap: 12px;">
+            <label style="font-size: 14px; color: var(--text); font-weight: 600;">What would you like to do?</label>
+            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+              <input type="radio" name="delAction" value="delete" checked style="cursor: pointer;" />
+              <span>Delete column and all its cards</span>
+            </label>
+            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+              <input type="radio" name="delAction" value="move" style="cursor: pointer;" />
+              <span>Delete column but move cards to another column</span>
+            </label>
+          </div>
+          <div class="row" id="delDestRow" style="display: none;">
+            <label for="delDest" style="font-size: 14px; color: var(--text);">Choose destination column:</label>
             <select id="delDest"></select>
           </div>
         </div>
@@ -1046,7 +1057,7 @@
       }
 
       // ——— Column operations (shared) ———
-      function deleteColumn(colId, destId, { commit = true, columns = state.columns } = {}) {
+      function deleteColumn(colId, destId, { commit = true, columns = state.columns, deleteCards = false } = {}) {
         // Validation checks with specific error messages
         if (!Array.isArray(columns)) {
           return { success: false, error: "Invalid columns array" };
@@ -1060,14 +1071,20 @@
           return { success: false, error: "Source column not found." };
         }
         
-        const dest = columns.find((c) => c.id === destId && c.id !== colId) || columns.find((c) => c.id !== colId);
-        if (!dest) {
-          return { success: false, error: "Destination column not found." };
+        // If not deleting cards, we need a valid destination
+        if (!deleteCards) {
+          const dest = columns.find((c) => c.id === destId && c.id !== colId) || columns.find((c) => c.id !== colId);
+          if (!dest) {
+            return { success: false, error: "Destination column not found." };
+          }
+          
+          // Move cards to destination
+          const src = columns[srcIdx];
+          dest.cards.push(...(src.cards || []));
         }
+        // If deleteCards is true, we just don't move the cards - they're deleted with the column
         
-        // Perform deletion
-        const src = columns[srcIdx];
-        dest.cards.push(...(src.cards || []));
+        // Delete the column
         columns.splice(srcIdx, 1);
         
         if (commit) {
@@ -1459,14 +1476,50 @@
               .filter((x) => x.id !== c.id)
               .map((x, i) => `<option value="${x.id}">${i + 1}. ${escapeHTML(x.title)}</option>`)
               .join("");
+            
+            // Get radio buttons and destination row
+            const radioDelete = dlgColDel.querySelector('input[name="delAction"][value="delete"]');
+            const radioMove = dlgColDel.querySelector('input[name="delAction"][value="move"]');
+            const delDestRow = document.getElementById("delDestRow");
+            
+            // Reset to default state (delete cards)
+            radioDelete.checked = true;
+            radioMove.checked = false;
+            delDestRow.style.display = "none";
+            
+            // Add event listeners to show/hide destination dropdown
+            const handleRadioChange = () => {
+              if (radioMove.checked) {
+                delDestRow.style.display = "grid";
+              } else {
+                delDestRow.style.display = "none";
+              }
+            };
+            
+            radioDelete.addEventListener("change", handleRadioChange);
+            radioMove.addEventListener("change", handleRadioChange);
+            
             dlgColDel.returnValue = "";
             dlgColDel.showModal();
             dlgColDel.addEventListener(
               "close",
               function onClose() {
+                // Clean up event listeners
+                radioDelete.removeEventListener("change", handleRadioChange);
+                radioMove.removeEventListener("change", handleRadioChange);
+                
                 if (dlgColDel.returnValue === "cancel") return;
+                
+                // Check which action was selected
+                const shouldDeleteCards = radioDelete.checked;
                 const destId = delDest.value;
-                const result = deleteColumn(c.id, destId, { commit: false, columns });
+                
+                const result = deleteColumn(c.id, destId, { 
+                  commit: false, 
+                  columns,
+                  deleteCards: shouldDeleteCards
+                });
+                
                 if (!result.success) {
                   alert(result.error);
                   return;
