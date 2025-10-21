@@ -862,9 +862,14 @@
           return;
         }
         state.columns = state.columns.map((c) => ({
-          id: c.id || uid(),
+          id: sanitizeId(c.id || uid()),
           title: c.title || "Untitled",
-          cards: Array.isArray(c.cards) ? c.cards : [],
+          cards: Array.isArray(c.cards) 
+            ? c.cards.map(card => ({
+                ...card,
+                id: sanitizeId(card.id || uid())
+              }))
+            : [],
         }));
         ensureColumns();
       }
@@ -882,7 +887,7 @@
           colEl.className = "col";
           colEl.dataset.colId = col.id;
           colEl.innerHTML = `<header><h2>${escapeHTML(col.title)}</h2></header><ul class="list" id="list-${
-            col.id
+            escapeAttr(col.id)
           }"></ul>`;
           const list = colEl.querySelector(".list");
           const items = (col.cards || []).filter((card) => !q || matches(card, q));
@@ -1145,8 +1150,8 @@
       // Helper to populate column dropdown with "Create New" option
       function populateColDropdown() {
         fCol.innerHTML = state.columns
-          .map((c, i) => `<option value="${c.id}">${i + 1}. ${escapeHTML(c.title)}</option>`)
-          .join("") + `<option value="__new__">➕ Create New Column...</option>`;
+          .map((c, i) => `<option value="${escapeAttr(c.id)}">${i + 1}. ${escapeHTML(c.title)}</option>`)
+          .join("") + `<option value="__new__">➥ Create New Column...</option>`;
       }
 
       // Store the change handler reference globally so we can properly remove it
@@ -1451,12 +1456,12 @@
           row.className = "colmgr-row";
           row.innerHTML = `
         <div class="order">
-          <button type="button" class="btn-icon" title="Move up" data-up="${idx}">↑</button>
-          <button type="button" class="btn-icon" title="Move down" data-down="${idx}">↓</button>
+          <button type="button" class="btn-icon" title="Move up" data-up="${escapeAttr(idx)}">↑</button>
+          <button type="button" class="btn-icon" title="Move down" data-down="${escapeAttr(idx)}">↓</button>
         </div>
-        <input type="text" data-col-id="${c.id}" value="${escapeHTML(c.title)}" />
+        <input type="text" data-col-id="${escapeAttr(c.id)}" value="${escapeAttr(c.title)}" />
         <div class="colmgr-actions">
-          <button type="button" class="btn-icon" title="Delete" data-del="${c.id}">🗑</button>
+          <button type="button" class="btn-icon" title="Delete" data-del="${escapeAttr(c.id)}">🗑</button>
         </div>`;
 
           // Up/Down reorder
@@ -1492,7 +1497,7 @@
             // Build dest options excluding this column
             delDest.innerHTML = columns
               .filter((x) => x.id !== c.id)
-              .map((x, i) => `<option value="${x.id}">${i + 1}. ${escapeHTML(x.title)}</option>`)
+              .map((x, i) => `<option value="${escapeAttr(x.id)}">${i + 1}. ${escapeHTML(x.title)}</option>`)
               .join("");
             
             // Get radio buttons, destination row, and delete button
@@ -1676,6 +1681,21 @@
           /[&<>"']/g,
           (s) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[s])
         );
+      }
+      function sanitizeId(value) {
+        // Convert to string, limit length, allow only safe characters
+        return String(value ?? '')
+          .slice(0, 128)
+          .replace(/[^a-zA-Z0-9_-]/g, '_');
+      }
+      function escapeAttr(value) {
+        // Escape for HTML attribute context
+        return String(value ?? '')
+          .replace(/&/g, '&amp;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;');
       }
 
     </script>

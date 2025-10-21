@@ -22,7 +22,7 @@ Strengths
 
 ## Critical Issues (must fix)
 
-1) HTML injection via unsanitized IDs embedded with innerHTML
+1) #### HTML injection via unsanitized IDs embedded with innerHTML
 - Several places interpolate untrusted column IDs into HTML attribute contexts without escaping, enabling attribute injection/XSS via a crafted import file.
 
 Real instances
@@ -85,7 +85,7 @@ state.columns = state.columns.map(c => ({
 }));
 ```
 
-2) ID type inconsistency breaks reordering/moves (string vs number)
+2) #### ID type inconsistency breaks reordering/moves (string vs number)
 - Imported IDs may be numbers; DOM dataset yields strings. Strict equality fails and cards/columns may not be found during reordering or move operations.
 
 Real instances
@@ -130,7 +130,7 @@ const target = state.columns.find((cc) => String(cc.id) === String(newColId)) ||
 
 ## High Priority
 
-3) Persist and UI operations assume localStorage always works
+3) #### Persist and UI operations assume localStorage always works
 - `save()` doesn’t handle quota/full/private-mode failures.
 ```js path=C:\Users\User\Development\linkboard\app\index.html start=817
 function save() {
@@ -153,7 +153,7 @@ function save() {
 }
 ```
 
-4) Attribute-context escaping missing in multiple templating sites
+4) #### Attribute-context escaping missing in multiple templating sites
 - Even if IDs are normalized, future values (e.g., titles in attributes) require attribute escaping when using `innerHTML`.
 
 Recommendation
@@ -168,7 +168,7 @@ function escapeAttr(s){
 
 ## Medium Priority
 
-5) Import validation permits unsafe IDs
+5) #### Import validation permits unsafe IDs
 - Current checks allow any string/number for `id`, which can be unsafe when later injected.
 
 Recommendation
@@ -178,7 +178,7 @@ const ID_RE = /^[A-Za-z0-9_.:\-]{1,128}$/;
 if (!ID_RE.test(String(col.id))) throw new Error("Column 'id' contains invalid characters");
 ```
 
-6) Inconsistent URL validation messages
+6) #### Inconsistent URL validation messages
 - Three separate alerts for similar URL validation failures; UX can feel arbitrary.
 ```js path=C:\Users\User\Development\linkboard\app\index.html start=1123
 // Multiple branches emitting different messages
@@ -186,17 +186,17 @@ if (!ID_RE.test(String(col.id))) throw new Error("Column 'id' contains invalid c
 Recommendation
 - Consolidate into a single validator returning one consistent, actionable error message.
 
-7) Accessibility: missing aria-labels on icon-only controls
+7) #### Accessibility: missing aria-labels on icon-only controls
 - Column manager up/down/delete rely on `title` only.
 Recommendation
 - Add `aria-label` mirroring the title for better AT support.
 
-8) Inline HTML templating for Column Manager
+8) #### Inline HTML templating for Column Manager
 - `row.innerHTML = ...` mixes structure and data, making injection mistakes more likely.
 Recommendation
 - Build DOM nodes programmatically as in Critical issue #1.
 
-9) CSP and security headers (when deploying)
+9) #### CSP and security headers (when deploying)
 - No CSP meta or headers; inline scripts make strong CSP harder.
 Recommendation
 - When hosting behind a server, move JS/CSS to separate files, add CSP with SRI, and disallow `javascript:` URLs. Consider keeping bookmarklet documented but not rendered as a `javascript:` href in CSP-restricted builds.
