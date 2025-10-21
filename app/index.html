@@ -777,7 +777,11 @@
         if (btn) {
           btn.addEventListener("click", () => {
             const cur = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
-            localStorage.setItem(THEME_KEY, cur);
+            try {
+              localStorage.setItem(THEME_KEY, cur);
+            } catch (e) {
+              console.warn('Theme preference could not be saved:', e);
+            }
             applyTheme(cur);
           });
         }
@@ -815,7 +819,12 @@
         }
       }
       function save() {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        } catch (e) {
+          console.error('Save failed:', e);
+          alert('⚠️ Save failed (storage full or blocked). Please Export your data immediately to avoid losing changes.');
+        }
       }
 
       // ——— Utils ———
