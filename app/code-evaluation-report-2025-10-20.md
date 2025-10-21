@@ -20,12 +20,14 @@ Strengths
 
 ---
 
+# UPDATE! Since this document was created, issues #1 - #3 have been fixed. That is why they are crossed out. At this time, a new report should be created.
+
 ## Critical Issues (must fix)
 
-1) #### HTML injection via unsanitized IDs embedded with innerHTML
-- Several places interpolate untrusted column IDs into HTML attribute contexts without escaping, enabling attribute injection/XSS via a crafted import file.
+1) #### ~~HTML injection via unsanitized IDs embedded with innerHTML~~
+- ~~Several places interpolate untrusted column IDs into HTML attribute contexts without escaping, enabling attribute injection/XSS via a crafted import file.~~
 
-Real instances
+~~Real instances~~
 ```html path=C:\Users\User\Development\linkboard\app\index.html start=884
 colEl.innerHTML = `<header><h2>${escapeHTML(col.title)}</h2></header><ul class="list" id="list-${col.id}"></ul>`;
 ```
@@ -51,14 +53,14 @@ row.innerHTML = `
     <button type="button" class="btn-icon" title="Delete" data-del="${c.id}">🗑</button>
   </div>`;
 ```
-Impact
-- If a user imports JSON with a column `id` containing quotes/spaces and an event attribute payload, it can break markup or execute script (e.g., onmouseover) when the affected element is rendered.
+~~Impact~~
+- ~~If a user imports JSON with a column `id` containing quotes/spaces and an event attribute payload, it can break markup or execute script (e.g., onmouseover) when the affected element is rendered.~~
 
-Recommendations
-- Never interpolate untrusted values into HTML strings. Prefer createElement/setAttribute.
-- If HTML templating is unavoidable, escape for attribute context, not just text. Or sanitize imported IDs.
+~~Recommendations~~
+- ~~Never interpolate untrusted values into HTML strings. Prefer createElement/setAttribute.~~
+- ~~If HTML templating is unavoidable, escape for attribute context, not just text. Or sanitize imported IDs.~~
 
-Safer pattern
+~~Safer pattern~~
 ```js path=null start=null
 // Example: build the <ul id="list-..."> without string templating
 const colEl = document.createElement('section');
@@ -73,7 +75,7 @@ list.className = 'list';
 list.id = 'list-' + String(col.id).replace(/[^-_.:\w]/g, '_'); // normalize
 colEl.append(header, list);
 ```
-Additionally, enforce safe IDs on import/migration
+~~Additionally, enforce safe IDs on import/migration~~
 ```js path=null start=null
 // During migrateState(): coerce to strings and normalize to a safe subset
 function toId(x) { return String(x ?? '').slice(0,128); }
@@ -85,10 +87,10 @@ state.columns = state.columns.map(c => ({
 }));
 ```
 
-2) #### ID type inconsistency breaks reordering/moves (string vs number)
-- Imported IDs may be numbers; DOM dataset yields strings. Strict equality fails and cards/columns may not be found during reordering or move operations.
+2) #### ~~ID type inconsistency breaks reordering/moves (string vs number)~~
+- ~~Imported IDs may be numbers; DOM dataset yields strings. Strict equality fails and cards/columns may not be found during reordering or move operations.~~
 
-Real instances
+~~Real instances~~
 ```js path=C:\Users\User\Development\linkboard\app\index.html start=1010
 const ids = Array.from(listEl.querySelectorAll(".card")).map((li) => li.dataset.cardId);
 const newCards = ids.map((id) => findCardById(id)).filter(Boolean);
@@ -105,15 +107,16 @@ function findCardById(id) {
 ```js path=C:\Users\User\Development\linkboard\app\index.html start=1041
 const target = state.columns.find((cc) => cc.id === newColId) || c; // fCol.value is string
 ```
-Impact
-- Reorder can silently drop cards with numeric IDs.
-- Moving a card to a selected column may fail if that column has numeric ID.
+~~Impact~~
+- ~~Reorder can silently drop cards with numeric IDs.~~
+- ~~Moving a card to a selected column may fail if that column has numeric ID.~~
 
-Recommendations
-- Normalize all IDs to strings in migration (columns and cards).
-- When reading IDs from DOM (dataset, select.value), compare with String(...) on the model side.
+~~Recommendations~~
+- ~~Normalize all IDs to strings in migration (columns and cards).~~
+- ~~When reading IDs from DOM (dataset, select.value), compare with String(...) on the model side.~~
 
-Patch example (migration + comparisons)
+~~Patch example (migration + comparisons)~~
+
 ```js path=null start=null
 // In migrateState(): convert every id to String(...)
 card.id = String(card.id ?? uid());
@@ -130,18 +133,18 @@ const target = state.columns.find((cc) => String(cc.id) === String(newColId)) ||
 
 ## High Priority
 
-3) #### Persist and UI operations assume localStorage always works
-- `save()` doesn’t handle quota/full/private-mode failures.
+3) #### ~~Persist and UI operations assume localStorage always works~~
+- ~~`save()` doesn’t handle quota/full/private-mode failures.~~
 ```js path=C:\Users\User\Development\linkboard\app\index.html start=817
 function save() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
 }
 ```
-Impact
-- Throws can break the app and lose state changes without user feedback.
+~~Impact~~
+- ~~Throws can break the app and lose state changes without user feedback.~~
 
-Recommendation
-- Wrap in try/catch with user-visible error and non-blocking fallback.
+~~Recommendation~~
+- ~~Wrap in try/catch with user-visible error and non-blocking fallback.~~
 ```js path=null start=null
 function save() {
   try {
