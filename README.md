@@ -1,7 +1,7 @@
 ## 🔗 LinkBoard  (name is tentative) 
 #### 🚨🚧 This project is currently in a "late stage prototype" status. Some features are broken, there are code conflicts and a lot of clean-up to be done. Considerate it a late Alpha or early Beta. 🚧
 
-LinkBoard is an app to create lists of often used bookmarks for specific niches or projects. It started as a quick and dirty vibe coded project superficially for coding and web development links, but I have started to clean it up for public use. Right now, you can drag the links from one category to another, but that feels like extra functionality and might be removed.
+LinkBoard is an app to create lists of often used bookmarks for specific niches or projects. It started as a quick and dirty vibe coded project, specifically for coding and web development links, but I have started to clean it up for public use. Right now, you can drag the links from one category to another, but that feels like extra functionality and might be removed.
 
 ###  Table of Contents
 - [ Features](#-features)
