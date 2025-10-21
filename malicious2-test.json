@@ -1,2 +1,0 @@
-console.log(JSON.parse(localStorage.getItem('linkboard.v1')).columns[0].id);
-// Should NOT contain quotes or event handlers

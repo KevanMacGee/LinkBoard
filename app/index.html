@@ -986,8 +986,9 @@
 
       function findColIdByCard(id) {
         ensureColumns();
+        const idStr = String(id);
         for (const c of state.columns) {
-          if (c.cards.some((x) => x.id === id)) return c.id;
+          if (c.cards.some((x) => String(x.id) === idStr)) return c.id;
         }
         return state.columns[0]?.id || null;
       }
@@ -1029,8 +1030,9 @@
       }
 
       function findCardById(id) {
+        const idStr = String(id);
         for (const c of state.columns) {
-          const f = c.cards.find((x) => x.id === id);
+          const f = c.cards.find((x) => String(x.id) === idStr);
           if (f) return f;
         }
         return null;
@@ -1038,18 +1040,21 @@
 
       // ——— CRUD ———
       function addCard(card, colId) {
-        const col = state.columns.find((c) => c.id === colId) || state.columns[0];
+        const colIdStr = String(colId);
+        const col = state.columns.find((c) => String(c.id) === colIdStr) || state.columns[0];
         col.cards.unshift({ id: uid(), ...card });
         save();
         render();
       }
       function updateCard(id, updates, newColId) {
+        const idStr = String(id);
+        const newColIdStr = String(newColId);
         for (const c of state.columns) {
-          const idx = c.cards.findIndex((x) => x.id === id);
+          const idx = c.cards.findIndex((x) => String(x.id) === idStr);
           if (idx > -1) {
             const [card] = c.cards.splice(idx, 1);
             const merged = { ...card, ...updates };
-            const target = state.columns.find((cc) => cc.id === newColId) || c;
+            const target = state.columns.find((cc) => String(cc.id) === newColIdStr) || c;
             target.cards.splice(0, 0, merged);
             save();
             render();
@@ -1059,8 +1064,9 @@
       }
       function removeCard(id) {
         if (!confirm("Delete this link?")) return;
+        const idStr = String(id);
         for (const c of state.columns) {
-          const idx = c.cards.findIndex((x) => x.id === id);
+          const idx = c.cards.findIndex((x) => String(x.id) === idStr);
           if (idx > -1) {
             c.cards.splice(idx, 1);
             save();
@@ -1080,14 +1086,16 @@
           return { success: false, error: "At least one column is required." };
         }
         
-        const srcIdx = columns.findIndex((c) => c.id === colId);
+        const colIdStr = String(colId);
+        const destIdStr = String(destId);
+        const srcIdx = columns.findIndex((c) => String(c.id) === colIdStr);
         if (srcIdx === -1) {
           return { success: false, error: "Source column not found." };
         }
         
         // If not deleting cards, we need a valid destination
         if (!deleteCards) {
-          const dest = columns.find((c) => c.id === destId && c.id !== colId) || columns.find((c) => c.id !== colId);
+          const dest = columns.find((c) => String(c.id) === destIdStr && String(c.id) !== colIdStr) || columns.find((c) => String(c.id) !== colIdStr);
           if (!dest) {
             return { success: false, error: "Destination column not found." };
           }
@@ -1407,7 +1415,8 @@
       function syncColsInputs() {
         if (!stagedColumns) return;
         colsList.querySelectorAll("input[data-col-id]").forEach((inp) => {
-          const col = stagedColumns.find((c) => c.id === inp.dataset.colId);
+          const colIdStr = String(inp.dataset.colId);
+          const col = stagedColumns.find((c) => String(c.id) === colIdStr);
           if (col) {
             col.title = inp.value;
           }
@@ -1496,7 +1505,7 @@
             
             // Build dest options excluding this column
             delDest.innerHTML = columns
-              .filter((x) => x.id !== c.id)
+              .filter((x) => String(x.id) !== String(c.id))
               .map((x, i) => `<option value="${escapeAttr(x.id)}">${i + 1}. ${escapeHTML(x.title)}</option>`)
               .join("");
             
