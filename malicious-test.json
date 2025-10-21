@@ -1,0 +1,20 @@
+{
+  "columns": [
+    {
+      "id": "test__onmouseover__alert__XSS1____data-evil__",
+      "title": "Malicious Column 1",
+      "cards": [
+        {
+          "id": "card__onmouseover__alert__XSS2____x__",
+          "url": "https://example.com",
+          "title": "Test Card"
+        }
+      ]
+    },
+    {
+      "id": "normal-id",
+      "title": "Normal Column",
+      "cards": []
+    }
+  ]
+}
