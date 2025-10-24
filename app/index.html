@@ -1482,15 +1482,56 @@
         columns.forEach((c, idx) => {
           const row = document.createElement("div");
           row.className = "colmgr-row";
-          row.innerHTML = `
-        <div class="order">
-          <button type="button" class="btn-icon" title="Move up" data-up="${escapeAttr(idx)}">↑</button>
-          <button type="button" class="btn-icon" title="Move down" data-down="${escapeAttr(idx)}">↓</button>
-        </div>
-        <input type="text" data-col-id="${escapeAttr(c.id)}" value="${escapeAttr(c.title)}" />
-        <div class="colmgr-actions">
-          <button type="button" class="btn-icon" title="Delete" data-del="${escapeAttr(c.id)}">🗑</button>
-        </div>`;
+          
+          // OLD (pattern replaced for security - Issue 4):
+          // row.innerHTML = `
+          //   <div class="order">
+          //     <button type="button" class="btn-icon" title="Move up" data-up="${escapeAttr(idx)}">↑</button>
+          //     <button type="button" class="btn-icon" title="Move down" data-down="${escapeAttr(idx)}">↓</button>
+          //   </div>
+          //   <input type="text" data-col-id="${escapeAttr(c.id)}" value="${escapeAttr(c.title)}" />
+          //   <div class="colmgr-actions">
+          //     <button type="button" class="btn-icon" title="Delete" data-del="${escapeAttr(c.id)}">🗑</button>
+          //   </div>`;
+          
+          // NEW (safe DOM-API version):
+          const orderDiv = document.createElement('div');
+          orderDiv.className = 'order';
+
+          const upBtn = document.createElement('button');
+          upBtn.type = 'button';
+          upBtn.className = 'btn-icon';
+          upBtn.title = 'Move up';
+          upBtn.setAttribute('data-up', String(idx));
+          upBtn.textContent = '↑';
+
+          const downBtn = document.createElement('button');
+          downBtn.type = 'button';
+          downBtn.className = 'btn-icon';
+          downBtn.title = 'Move down';
+          downBtn.setAttribute('data-down', String(idx));
+          downBtn.textContent = '↓';
+
+          orderDiv.append(upBtn, downBtn);
+
+          const input = document.createElement('input');
+          input.type = 'text';
+          input.setAttribute('data-col-id', sanitizeId(c.id));
+          input.value = c.title;
+
+          const actionsDiv = document.createElement('div');
+          actionsDiv.className = 'colmgr-actions';
+
+          const delBtn = document.createElement('button');
+          delBtn.type = 'button';
+          delBtn.className = 'btn-icon';
+          delBtn.title = 'Delete';
+          delBtn.setAttribute('data-del', sanitizeId(c.id));
+          delBtn.textContent = '🗑';
+
+          actionsDiv.appendChild(delBtn);
+
+          row.replaceChildren(orderDiv, input, actionsDiv);
 
           // Up/Down reorder
           row.querySelector("[data-up]").addEventListener("click", (e) => {
@@ -1523,10 +1564,22 @@
             delColInfo.textContent = `⚠️ Are you sure you want to delete column "${c.title}"? It contains ${cardText}.`;
             
             // Build dest options excluding this column
-            delDest.innerHTML = columns
+            // OLD (pattern replaced for security - Issue 5):
+            // delDest.innerHTML = columns
+            //   .filter((x) => String(x.id) !== String(c.id))
+            //   .map((x, i) => `<option value="${escapeAttr(x.id)}">${i + 1}. ${escapeHTML(x.title)}</option>`)
+            //   .join("");
+            
+            // NEW (safe DOM-API version):
+            delDest.replaceChildren(); // Clear existing options safely
+            columns
               .filter((x) => String(x.id) !== String(c.id))
-              .map((x, i) => `<option value="${escapeAttr(x.id)}">${i + 1}. ${escapeHTML(x.title)}</option>`)
-              .join("");
+              .forEach((x, i) => {
+                const opt = document.createElement('option');
+                opt.value = sanitizeId(x.id);
+                opt.textContent = `${i + 1}. ${x.title}`;
+                delDest.appendChild(opt);
+              });
             
             // Get radio buttons, destination row, and delete button
             const radioDelete = dlgColDel.querySelector('input[name="delAction"][value="delete"]');

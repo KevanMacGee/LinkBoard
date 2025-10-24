@@ -9,14 +9,15 @@
 ## ISSUE-1
 
 **Issue identified and documented:** October 23, 2025 19:17 UTC  
-**Issues resolution:**
+**Issues resolution:** Oct 24, 2025, 3:23am EST
+**Commit:** https://github.com/KevanMacGee/LinkBoard/commit/cf01580e072397423decbe749a56b4c0e1728b80
 
-**Category:** Security  
+~~**Category:** Security  
 **File:** index.html  
-**Lines:** 898-900
+**Lines:** 898-900~~
 
-**Problem:**  
-Potential XSS vulnerability via `innerHTML` with user-controlled column ID. While `escapeAttr()` is used for the attribute, the ID is interpolated directly into an HTML string that's assigned to `innerHTML`. If a malicious column ID bypasses sanitization, it could inject script tags.
+~~**Problem:**  
+Potential XSS vulnerability via `innerHTML` with user-controlled column ID. While `escapeAttr()` is used for the attribute, the ID is interpolated directly into an HTML string that's assigned to `innerHTML`. If a malicious column ID bypasses sanitization, it could inject script tags.~~
 
 ```javascript
 colEl.innerHTML = `<header><h2>${escapeHTML(col.title)}</h2></header><ul class="list" id="list-${
@@ -24,11 +25,11 @@ colEl.innerHTML = `<header><h2>${escapeHTML(col.title)}</h2></header><ul class="
 }\"></ul>`;
 ```
 
-**Rationale:**  
-Although `sanitizeId()` exists (line 1703-1708), it's only called during `migrateState()`. Direct manipulation or state corruption could bypass this. Defense-in-depth requires multiple layers.
+~~**Rationale:**  
+Although `sanitizeId()` exists (line 1703-1708), it's only called during `migrateState()`. Direct manipulation or state corruption could bypass this. Defense-in-depth requires multiple layers.~~
 
-**Fix Plan:**  
-Use `createElement` pattern instead of `innerHTML` for safer DOM construction:
+~~**Fix Plan:**  
+Use `createElement` pattern instead of `innerHTML` for safer DOM construction:~~
 
 ```javascript
 // Replace lines 898-900
@@ -45,10 +46,10 @@ colEl.appendChild(header);
 colEl.appendChild(list);
 ```
 
-**Tests:**  
-- Import JSON with malicious column IDs containing `<script>` tags
-- Verify no script execution occurs
-- Test with IDs containing HTML entities and special characters
+~~**Tests:**~~  
+- ~~Import JSON with malicious column IDs containing `<script>` tags~~
+- ~~Verify no script execution occurs~~
+- ~~Test with IDs containing HTML entities and special characters~~
 
 ---
 
