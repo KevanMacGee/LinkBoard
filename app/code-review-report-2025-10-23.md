@@ -11,6 +11,7 @@
 **Issue identified and documented:** October 23, 2025 19:17 UTC  
 **Issues resolution:** Oct 24, 2025, 3:23am EST
 **Commit:** https://github.com/KevanMacGee/LinkBoard/commit/cf01580e072397423decbe749a56b4c0e1728b80
+**Prompt:** https://chatgpt.com/g/g-p-68cad7f970008191a0cb4375470c0b63-linkboard/c/68facfdb-e0ac-8323-ba72-7033fbc659ec
 
 ~~**Category:** Security  
 **File:** index.html  
@@ -153,17 +154,19 @@ function render() {
 
 ---
 
-## ISSUE-4
+## ~~ISSUE-4~~
 
-**Issue identified and documented:** October 23, 2025 19:17 UTC  
-**Issues resolution:**
+~~**Issue identified and documented:** October 23, 2025 19:17 UTC  
+**Issues resolution:**~~  Oct 24, 2025. 4:10am
+~~**Commit:** https://github.com/KevanMacGee/LinkBoard/commit/90ee95d228ceacef407cb49e18208584418ff9b9~~
+~~**Prompt:** https://chatgpt.com/g/g-p-68cad7f970008191a0cb4375470c0b63-linkboard/c/68facfdb-e0ac-8323-ba72-7033fbc659ec~~
 
-**Category:** Security  
+~~**Category:** Security  
 **File:** index.html  
-**Lines:** 1475-1483
+**Lines:** 1475-1483~~
 
-**Problem:**  
-HTML injection vulnerability in column manager UI. Column titles and IDs are inserted via `innerHTML` without proper escaping in the template literal. Although `escapeAttr()` is used, complex injection vectors could exploit parser context switching.
+~~**Problem:**  
+HTML injection vulnerability in column manager UI. Column titles and IDs are inserted via `innerHTML` without proper escaping in the template literal. Although `escapeAttr()` is used, complex injection vectors could exploit parser context switching.~~
 
 ```javascript
 row.innerHTML = `
@@ -177,11 +180,11 @@ row.innerHTML = `
   </div>`;
 ```
 
-**Rationale:**  
-While `escapeAttr()` provides some protection, using `createElement` is safer and eliminates parser context ambiguity.
+~~**Rationale:**  
+While `escapeAttr()` provides some protection, using `createElement` is safer and eliminates parser context ambiguity.~~
 
-**Fix Plan:**  
-Rewrite using DOM APIs:
+~~**Fix Plan:**  
+Rewrite using DOM APIs:~~
 
 ```javascript
 // Replace innerHTML assignment
@@ -224,24 +227,26 @@ actionsDiv.appendChild(delBtn);
 row.append(orderDiv, input, actionsDiv);
 ```
 
-**Tests:**  
-- Import column with title: `" onload="alert('xss')`
-- Verify no script execution
-- Test with various quote and bracket combinations
+~~**Tests:**~~  
+- ~~Import column with title: `" onload="alert('xss')`~~
+- ~~Verify no script execution~~
+- ~~Test with various quote and bracket combinations~~
 
 ---
 
-## ISSUE-5
+## ~~ISSUE-5~~
 
-**Issue identified and documented:** October 23, 2025 19:17 UTC  
-**Issues resolution:**
+~~**Issue identified and documented:** October 23, 2025 19:17 UTC  
+**Issues resolution:** Oct 24, 2025. 4:10am~~
+~~**Commit:** https://github.com/KevanMacGee/LinkBoard/commit/90ee95d228ceacef407cb49e18208584418ff9b9~~
+~~**Prompt:** https://chatgpt.com/g/g-p-68cad7f970008191a0cb4375470c0b63-linkboard/c/68facfdb-e0ac-8323-ba72-7033fbc659ec~~
 
-**Category:** Bug  
+~~**Category:** Bug  
 **File:** index.html  
-**Lines:** 1515-1519
+**Lines:** 1515-1519~~
 
-**Problem:**  
-Incorrect escaping in delete column dialog. Uses `escapeHTML()` for text content but then inserts via `innerHTML` in string interpolation context, creating potential for DOM clobbering.
+~~**Problem:**  
+Incorrect escaping in delete column dialog. Uses `escapeHTML()` for text content but then inserts via `innerHTML` in string interpolation context, creating potential for DOM clobbering.~~
 
 ```javascript
 delDest.innerHTML = columns
@@ -250,11 +255,11 @@ delDest.innerHTML = columns
   .join("");
 ```
 
-**Rationale:**  
-Even with escaping, using `innerHTML` for option elements is unnecessary and risky. Direct DOM construction is clearer.
+~~**Rationale:**  
+Even with escaping, using `innerHTML` for option elements is unnecessary and risky. Direct DOM construction is clearer.~~
 
-**Fix Plan:**  
-Use DOM APIs:
+~~**Fix Plan:**  
+Use DOM APIs:~~
 
 ```javascript
 // Replace lines 1515-1519
@@ -269,10 +274,10 @@ columns
   });
 ```
 
-**Tests:**  
-- Create column with title containing HTML entities
-- Verify display is correct in destination dropdown
-- Test deletion flow completes successfully
+~~**Tests:**~~  
+- ~~Create column with title containing HTML entities~~
+- ~~Verify display is correct in destination dropdown~~
+- ~~Test deletion flow completes successfully~~
 
 ---
 
