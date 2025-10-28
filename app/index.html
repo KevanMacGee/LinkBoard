@@ -828,8 +828,18 @@
       }
 
       // ——— Utils ———
-      function uid() {
-        return Math.random().toString(36).slice(2, 9);
+      function uid(prefix = "") {
+        const randomId = Math.random().toString(36).slice(2, 9);
+        return prefix ? `${prefix}_${randomId}` : randomId;
+      }
+      function ensureUniqueId(rawId, seen, prefix) {
+        let sanitized = sanitizeId(rawId);
+        if (!sanitized) sanitized = uid(prefix);
+        while (seen.has(sanitized)) {
+          sanitized = uid(prefix);
+        }
+        seen.add(sanitized);
+        return sanitized;
       }
       function domainFrom(url) {
         try {
@@ -870,13 +880,16 @@
           state = createInitialState();
           return;
         }
+        const seenColumnIds = new Set();
+        const seenCardIds = new Set();
+        
         state.columns = state.columns.map((c) => ({
-          id: sanitizeId(c.id || uid()),
+          id: ensureUniqueId(c.id, seenColumnIds, "col"),
           title: c.title || "Untitled",
           cards: Array.isArray(c.cards) 
             ? c.cards.map(card => ({
                 ...card,
-                id: sanitizeId(card.id || uid())
+                id: ensureUniqueId(card.id, seenCardIds, "card")
               }))
             : [],
         }));
