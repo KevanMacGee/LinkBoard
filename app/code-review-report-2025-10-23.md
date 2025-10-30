@@ -57,7 +57,7 @@ colEl.appendChild(list);
 ## ISSUE-2
 
 **Issue identified and documented:** October 23, 2025 19:17 UTC  
-**Issues resolution:**
+**Issues resolution:** 
 
 **Category:** Bug  
 **File:** index.html  
@@ -93,23 +93,25 @@ dlgAddCol.addEventListener("close", addColCloseHandler, { once: true });
 
 ---
 
-## ISSUE-3
+## ~~ISSUE-3~~
 
 **Issue identified and documented:** October 23, 2025 19:17 UTC  
-**Issues resolution:**
+**Issues resolution:** October 29, 2025. Ignored. 
+This is not a bug. If a person tries to drag a card while the search is active and it just snaps back, they will take that as an indication of dragging not being available. Maybe in the future we'll add a little popup saying "Cards can't be dragged when filtering is active" later, but it's fine for now.
+To help alleviate this, I added an "X" at the right side of the search box to clear the filtering. This makes it easier and faster to clear the search and get back to a state where users can drag cards.
 
-**Category:** Bug  
+~~**Category:** Bug  
 **File:** index.html  
-**Lines:** 1020-1038
+**Lines:** 1020-1038~~
 
-**Problem:**  
-`persistOrder()` has incorrect behavior when search is active. When a search filter is applied and user drags cards, the function calls `render()` immediately and returns, but the drag operation completes, leading to visual inconsistency. The actual state isn't updated, but the DOM temporarily shows the moved card before re-rendering.
+~~**Problem:**  
+`persistOrder()` has incorrect behavior when search is active. When a search filter is applied and user drags cards, the function calls `render()` immediately and returns, but the drag operation completes, leading to visual inconsistency. The actual state isn't updated, but the DOM temporarily shows the moved card before re-rendering.~~
 
-**Rationale:**  
-During search, cards should not be draggable (or dragging should be prevented). Currently, SortableJS allows dragging even during search, leading to confusing UX where cards appear to move but changes aren't persisted.
+~~**Rationale:**  
+During search, cards should not be draggable (or dragging should be prevented). Currently, SortableJS allows dragging even during search, leading to confusing UX where cards appear to move but changes aren't persisted.~~
 
-**Fix Plan:**  
-Disable dragging when search is active:
+~~**Fix Plan:**  
+Disable dragging when search is active:~~
 
 ```javascript
 // Modify makeSortable function (lines 1005-1018)
@@ -147,10 +149,11 @@ function render() {
 }
 ```
 
-**Tests:**  
-- Enter search term, attempt to drag cards - should be disabled
-- Clear search, verify dragging works again
-- Drag during search and verify state isn't corrupted
+~~**Tests:**~~  
+
+- ~~Enter search term, attempt to drag cards - should be disabled~~
+- ~~Clear search, verify dragging works again~~
+- ~~Drag during search and verify state isn't corrupted~~
 
 ---
 

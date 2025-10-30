@@ -108,6 +108,38 @@
       .search:focus {
         outline: 2px solid rgba(37, 99, 235, 0.18);
       }
+      .search-wrap {
+        position: relative;
+        width: 100%;
+      }
+      .search-clear {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: transparent;
+        border: none;
+        color: #6b7280;
+        padding: 4px;
+        border-radius: 6px;
+        cursor: pointer;
+        line-height: 1;
+      }
+      .search-clear:hover,
+      .search-clear:focus {
+        background: rgba(37, 99, 235, 0.08);
+        outline: none;
+      }
+      .search.has-clear {
+        padding-right: 36px;
+      }
+      [data-theme="dark"] .search-clear {
+        color: #a1a1aa;
+      }
+      [data-theme="dark"] .search-clear:hover,
+      [data-theme="dark"] .search-clear:focus {
+        background: rgba(255, 255, 255, 0.06);
+      }
 
       /* Board */
       .wrap {
@@ -592,14 +624,16 @@
           </h1>
         </div>
         <div style="display: flex; align-items: center; justify-content: center; gap: 12px">
-          <input
-            id="q"
-            class="search"
-            type="text"
-            placeholder="Filter title, domain, or note…  (press / to focus)"
-            aria-label="Search"
-            style="max-width: 600px"
-          />
+          <div class="search-wrap" style="width: 100%; max-width: 600px">
+            <input
+              id="q"
+              class="search"
+              type="text"
+              placeholder="Filter title, domain, or note…  (press / to focus)"
+              aria-label="Search"
+            />
+            <button id="qClear" type="button" class="search-clear" aria-label="Clear search" title="Clear" hidden>✕</button>
+          </div>
         </div>
         <div class="actions" style="justify-content: flex-end">
           <button id="btnAdd">Add a Link</button>
@@ -899,11 +933,20 @@
       // ——— Rendering ———
       const boardEl = document.getElementById("board");
       const searchEl = document.getElementById("q");
+      const searchClearEl = document.getElementById("qClear");
 
       function render() {
         ensureColumns();
         boardEl.innerHTML = "";
         const q = searchEl.value.trim().toLowerCase();
+        if (searchClearEl) {
+          searchClearEl.hidden = !q;
+        }
+        if (q) {
+          searchEl.classList.add("has-clear");
+        } else {
+          searchEl.classList.remove("has-clear");
+        }
         for (const col of state.columns) {
           const colEl = document.createElement("section");
           colEl.className = "col";
@@ -1390,6 +1433,13 @@
 
       // ——— Search & Keyboard ———
       searchEl.addEventListener("input", render);
+      if (searchClearEl) {
+        searchClearEl.addEventListener("click", () => {
+          searchEl.value = "";
+          searchEl.focus();
+          render();
+        });
+      }
       document.addEventListener("keydown", (e) => {
         // Check if user is typing in an input field
         const inInputField = ['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName);
