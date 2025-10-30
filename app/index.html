@@ -108,6 +108,18 @@
       .search:focus {
         outline: 2px solid rgba(37, 99, 235, 0.18);
       }
+      .search-hint {
+        min-height: 18px; /* reserve space to avoid layout shift */
+        text-align: center;
+        font-size: 12px;
+        padding-top: 6px;
+        color: var(--accent);
+        opacity: 0;
+        transition: opacity 120ms ease;
+      }
+      .search-hint.visible {
+        opacity: 0.9;
+      }
       .search-wrap {
         position: relative;
         width: 100%;
@@ -642,6 +654,7 @@
         </div>
       </div>
     </header>
+    <div id="searchHint" class="search-hint" aria-live="polite" aria-atomic="true"></div>
 
     <div class="wrap">
       <div id="board" class="board" role="list" aria-label="Link columns"></div>
@@ -657,7 +670,7 @@
 
     <p class="hint" style="margin-top: 8px; text-align: center">
       Drag cards between columns. Everything saves to <strong>localStorage</strong>. Use
-      <span class="kbd">Export</span> to back up. Export often, don't reply on local storage alone. Keyboard hints: <span class="kbd">A</span> add,
+      <span class="kbd">Export</span> to back up. Export often, don't rely on local storage alone. Keyboard hints: <span class="kbd">A</span> add,
       <span class="kbd">/</span> filter.
     </p>
 
@@ -934,11 +947,21 @@
       const boardEl = document.getElementById("board");
       const searchEl = document.getElementById("q");
       const searchClearEl = document.getElementById("qClear");
+      const searchHintEl = document.getElementById("searchHint");
 
       function render() {
         ensureColumns();
         boardEl.innerHTML = "";
         const q = searchEl.value.trim().toLowerCase();
+        if (searchHintEl) {
+          if (q) {
+            searchHintEl.textContent = "Card dragging is disabled while search is active";
+            searchHintEl.classList.add("visible");
+          } else {
+            searchHintEl.textContent = "";
+            searchHintEl.classList.remove("visible");
+          }
+        }
         if (searchClearEl) {
           searchClearEl.hidden = !q;
         }

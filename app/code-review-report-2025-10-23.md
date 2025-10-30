@@ -99,6 +99,8 @@ dlgAddCol.addEventListener("close", addColCloseHandler, { once: true });
 **Issues resolution:** October 29, 2025. Ignored. 
 This is not a bug. If a person tries to drag a card while the search is active and it just snaps back, they will take that as an indication of dragging not being available. Maybe in the future we'll add a little popup saying "Cards can't be dragged when filtering is active" later, but it's fine for now.
 To help alleviate this, I added an "X" at the right side of the search box to clear the filtering. This makes it easier and faster to clear the search and get back to a state where users can drag cards.
+**Commit:** https://github.com/KevanMacGee/LinkBoard/commit/0ac845947fe8e895b66081d1d96d164f50096ea2
+**Prompt:** None
 
 ~~**Category:** Bug  
 **File:** index.html  
