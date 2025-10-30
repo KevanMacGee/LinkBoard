@@ -1,0 +1,379 @@
+{
+  "columns": [
+    {
+      "id": "cheats",
+      "title": "Cheat Sheets",
+      "cards": [
+        {
+          "id": "pe3m083",
+          "url": "https://devdocs.io/",
+          "title": "DevDocs",
+          "note": "Fast multi-docs viewer"
+        },
+        {
+          "id": "rsxnqmv",
+          "url": "https://getbootstrap.com/docs/5.3/",
+          "title": "Bootstrap 5 Docs",
+          "note": "Components, utilities, examples"
+        },
+        {
+          "id": "8pn9xc7",
+          "url": "https://developer.mozilla.org/en-US/docs/Web/HTML/Element",
+          "title": "MDN HTML Elements",
+          "note": "Authoritative reference"
+        },
+        {
+          "id": "ksh2r0c",
+          "url": "https://css-tricks.com/snippets/css/a-guide-to-flexbox/",
+          "title": "Flexbox Guide (CSS-Tricks)",
+          "note": "Visual guide to flex"
+        },
+        {
+          "id": "vnn33vu",
+          "url": "https://css-tricks.com/snippets/css/complete-guide-grid/",
+          "title": "CSS Grid Guide (CSS-Tricks)",
+          "note": "Layout reference"
+        },
+
+        { "id": "fill-cheats-01", "url": "https://example.com/flex-cheats", "title": "Flexbox Quick Ref", "note": "Justify / align cheat" },
+        { "id": "fill-cheats-02", "url": "https://example.com/grid-areas", "title": "Grid Template Areas", "note": "Grid naming patterns" },
+        { "id": "fill-cheats-03", "url": "https://example.com/js-array-notes", "title": "JS Array Ops", "note": "map / filter / reduce" },
+        { "id": "fill-cheats-04", "url": "https://example.com/css-variables", "title": "CSS Vars Cheat Sheet", "note": "Theming with :root" },
+        { "id": "fill-cheats-05", "url": "https://example.com/responsive-breakpoints", "title": "Common Breakpoints", "note": "xs / sm / md / lg / xl" },
+        { "id": "fill-cheats-06", "url": "https://example.com/aria-roles", "title": "ARIA Roles", "note": "a11y role reference" }
+      ]
+    },
+    {
+      "id": "colors",
+      "title": "Colors & Gradients",
+      "cards": [
+        {
+          "id": "77ypg4s",
+          "url": "https://coolors.co",
+          "title": "Coolors",
+          "note": "Palette generator"
+        },
+        {
+          "id": "e62ycdu",
+          "url": "https://color.adobe.com",
+          "title": "Adobe Color",
+          "note": "Palettes & harmony rules"
+        },
+        {
+          "id": "pwmhfil",
+          "url": "https://cssgradient.io",
+          "title": "CSS Gradient",
+          "note": "Create CSS gradients"
+        },
+        {
+          "id": "pal6px1",
+          "url": "https://gradienthunt.com",
+          "title": "Gradient Hunt",
+          "note": "Curated gradients"
+        },
+        {
+          "id": "m9te5ki",
+          "url": "https://happyhues.co",
+          "title": "Happy Hues",
+          "note": "Palettes with live examples"
+        },
+        {
+          "id": "1r65yrg",
+          "url": "https://maketintsandshades.com",
+          "title": "Tints & Shades",
+          "note": "Shade scale generator"
+        },
+
+        { "id": "fill-colors-01", "url": "https://example.com/palette-sunset", "title": "Sunset Palette", "note": "Warm orange / pink set" },
+        { "id": "fill-colors-02", "url": "https://example.com/palette-ocean", "title": "Ocean Blues", "note": "Cool blue / teal set" },
+        { "id": "fill-colors-03", "url": "https://example.com/glass-ui", "title": "Glassmorphism Vars", "note": "Frosted bg rgba()" },
+        { "id": "fill-colors-04", "url": "https://example.com/gradients-pack", "title": "Hero Gradients", "note": "Landing page headers" },
+        { "id": "fill-colors-05", "url": "https://example.com/color-contrast", "title": "Contrast Checker", "note": "AA vs AAA notes" }
+      ]
+    },
+    {
+      "id": "images",
+      "title": "Images & Icons",
+      "cards": [
+        {
+          "id": "1ibsqc6",
+          "url": "https://unsplash.com",
+          "title": "Unsplash",
+          "note": "Free photos"
+        },
+        {
+          "id": "lbteekz",
+          "url": "https://pixabay.com",
+          "title": "Pixabay",
+          "note": "Free images & vectors"
+        },
+        {
+          "id": "58d48fc",
+          "url": "https://svgrepo.com",
+          "title": "SVG Repo",
+          "note": "Free SVG icons"
+        },
+        {
+          "id": "omh37hy",
+          "url": "https://icons.getbootstrap.com",
+          "title": "Bootstrap Icons",
+          "note": "1,800+ icons"
+        },
+        {
+          "id": "0glwdtx",
+          "url": "https://fonts.google.com/icons",
+          "title": "Material Symbols",
+          "note": "Google icon set"
+        },
+        {
+          "id": "sa1iv3f",
+          "url": "https://www.pexels.com",
+          "title": "Pexels",
+          "note": "Free stock photos/videos"
+        },
+        {
+          "id": "pjoyyni",
+          "url": "https://favicon.io",
+          "title": "Favicon.io",
+          "note": "Generate favicons & logos"
+        },
+
+        { "id": "fill-img-01", "url": "https://example.com/hero-blob", "title": "Abstract Blob SVG", "note": "Landing page bg art" },
+        { "id": "fill-img-02", "url": "https://example.com/placeholder-card", "title": "Card Placeholder Img", "note": "Grey box mock imgs" },
+        { "id": "fill-img-03", "url": "https://example.com/app-icons", "title": "App Icon Set", "note": "16x16 / 32x32 / 64x64" },
+        { "id": "fill-img-04", "url": "https://example.com/emoji-pack", "title": "UI Emoji Pack", "note": "Friendly UI emojis" }
+      ]
+    },
+    {
+      "id": "docs",
+      "title": "Guides & References",
+      "cards": [
+        {
+          "id": "mbsdcn7",
+          "url": "https://developer.mozilla.org",
+          "title": "MDN Web Docs",
+          "note": "Core web docs"
+        },
+        {
+          "id": "5vj0eco",
+          "url": "https://web.dev/learn/",
+          "title": "web.dev / Learn",
+          "note": "Google’s guided courses"
+        },
+        {
+          "id": "1kdp5re",
+          "url": "https://www.w3schools.com/bootstrap5/",
+          "title": "W3Schools Bootstrap 5 Tutorial",
+          "note": "Quick reference"
+        },
+        {
+          "id": "h387yus",
+          "url": "https://a11yproject.com/checklist/",
+          "title": "A11Y Project Checklist",
+          "note": "Accessibility checklist"
+        },
+        {
+          "id": "kzylzoy",
+          "url": "https://caniuse.com",
+          "title": "Can I use…",
+          "note": "Browser support tables"
+        },
+
+        { "id": "fill-docs-01", "url": "https://example.com/html-semantics", "title": "Semantic HTML", "note": "header / main / footer" },
+        { "id": "fill-docs-02", "url": "https://example.com/perf-budget", "title": "Perf Budget Notes", "note": "Target 100kb CSS/JS" },
+        { "id": "fill-docs-03", "url": "https://example.com/localstorage-api", "title": "localStorage API", "note": "getItem / setItem / JSON" },
+        { "id": "fill-docs-04", "url": "https://example.com/drag-drop-dnd", "title": "Drag & Drop Flow", "note": "mousedown → dragover → drop" },
+        { "id": "fill-docs-05", "url": "https://example.com/debounce", "title": "Debounce vs Throttle", "note": "Input handler patterns" }
+      ]
+    },
+    {
+      "id": "ui",
+      "title": "UI Kits & Components",
+      "cards": [
+        {
+          "id": "9acb94z",
+          "url": "https://getbootstrap.com/docs/5.3/examples/",
+          "title": "Bootstrap Examples",
+          "note": "Starter layouts"
+        },
+        {
+          "id": "ik8084m",
+          "url": "https://bootswatch.com",
+          "title": "Bootswatch",
+          "note": "Free Bootstrap themes"
+        },
+        {
+          "id": "smp6t79",
+          "url": "https://bootsnipp.com",
+          "title": "Bootsnipp",
+          "note": "Community Bootstrap snippets"
+        },
+        {
+          "id": "wsnpxfj",
+          "url": "https://loading.io/css/",
+          "title": "loading.io — CSS loaders",
+          "note": "Spinners & loaders"
+        },
+        {
+          "id": "8ia7iyz",
+          "url": "https://www.haikei.app",
+          "title": "Haikei",
+          "note": "Blob/wave/mesh SVG generators"
+        },
+        {
+          "id": "bt9sj7f",
+          "url": "https://heropatterns.com",
+          "title": "Hero Patterns",
+          "note": "SVG background patterns"
+        },
+
+        { "id": "fill-ui-01", "url": "https://example.com/modal-styles", "title": "Modal Style Notes", "note": "Overlay blur / radius" },
+        { "id": "fill-ui-02", "url": "https://example.com/toast-component", "title": "Toast Component", "note": "Success / error snackbars" },
+        { "id": "fill-ui-03", "url": "https://example.com/card-hover", "title": "Card Hover States", "note": "Shadow/scale on hover" },
+        { "id": "fill-ui-04", "url": "https://example.com/darkmode-toggle", "title": "Dark Mode Toggle", "note": "data-theme=\"dark\"" }
+      ]
+    },
+
+    {
+      "id": "col06",
+      "title": "Performance & Testing",
+      "cards": [
+        { "id": "fill-06-01", "url": "https://example.com/fps-metrics", "title": "FPS Metrics", "note": "Frame stability notes" },
+        { "id": "fill-06-02", "url": "https://example.com/repaint-cost", "title": "Repaint Cost", "note": "What triggers layout thrash" },
+        { "id": "fill-06-03", "url": "https://example.com/throttle-scroll", "title": "Scroll Throttle", "note": "Scroll listener perf tips" },
+        { "id": "fill-06-04", "url": "https://example.com/memory-usage", "title": "Memory Footprint", "note": "DOM node count notes" },
+        { "id": "fill-06-05", "url": "https://example.com/lighthouse-report", "title": "Lighthouse Notes", "note": "What to ignore in dev" },
+        { "id": "fill-06-06", "url": "https://example.com/test-plan", "title": "Manual Test Plan", "note": "Drag/drop, add, delete" },
+        { "id": "fill-06-07", "url": "https://example.com/storage-limit", "title": "localStorage Limit", "note": "~5MB rough cap" }
+      ]
+    },
+    {
+      "id": "col07",
+      "title": "Ideas / Scratch",
+      "cards": [
+        { "id": "fill-07-01", "url": "https://example.com/feature-inline-edit", "title": "Inline Edit Cards", "note": "Click title to edit?" },
+        { "id": "fill-07-02", "url": "https://example.com/feature-pin-col", "title": "Pin Column", "note": "Freeze far-left column" },
+        { "id": "fill-07-03", "url": "https://example.com/feature-export", "title": "Export .json", "note": "Manual backup / restore" },
+        { "id": "fill-07-04", "url": "https://example.com/feature-search-global", "title": "Global Search", "note": "Filter across all cols" },
+        { "id": "fill-07-05", "url": "https://example.com/feature-tags", "title": "Tagging", "note": "Add labels to cards" },
+        { "id": "fill-07-06", "url": "https://example.com/feature-mobile", "title": "Mobile Layout", "note": "Stack cols vertically" }
+      ]
+    },
+    {
+      "id": "col08",
+      "title": "Content Buckets",
+      "cards": [
+        { "id": "fill-08-01", "url": "https://example.com/article-1", "title": "Article Placeholder 1", "note": "Read later" },
+        { "id": "fill-08-02", "url": "https://example.com/article-2", "title": "Article Placeholder 2", "note": "Skim headers" },
+        { "id": "fill-08-03", "url": "https://example.com/article-3", "title": "Article Placeholder 3", "note": "Save quotes" },
+        { "id": "fill-08-04", "url": "https://example.com/article-4", "title": "Article Placeholder 4", "note": "UI teardown" },
+        { "id": "fill-08-05", "url": "https://example.com/article-5", "title": "Article Placeholder 5", "note": "Marketing idea" },
+        { "id": "fill-08-06", "url": "https://example.com/article-6", "title": "Article Placeholder 6", "note": "SEO angle" },
+        { "id": "fill-08-07", "url": "https://example.com/article-7", "title": "Article Placeholder 7", "note": "Copy tone" },
+        { "id": "fill-08-08", "url": "https://example.com/article-8", "title": "Article Placeholder 8", "note": "Competitor swipe" }
+      ]
+    },
+    {
+      "id": "col09",
+      "title": "Tasks / Fixes",
+      "cards": [
+        { "id": "fill-09-01", "url": "https://example.com/fix-drag-ghost", "title": "Drag Ghost Image", "note": "Custom ghost preview" },
+        { "id": "fill-09-02", "url": "https://example.com/fix-keyboard-nav", "title": "Keyboard Nav", "note": "Tab through cards" },
+        { "id": "fill-09-03", "url": "https://example.com/fix-modal-focus", "title": "Modal Focus Trap", "note": "Keep focus inside modal" },
+        { "id": "fill-09-04", "url": "https://example.com/fix-overflow", "title": "Overflow Scroll", "note": "Column scroll behavior" },
+        { "id": "fill-09-05", "url": "https://example.com/fix-touch", "title": "Touch Support", "note": "Drag on mobile touch" }
+      ]
+    },
+    {
+      "id": "col10",
+      "title": "Nice-To-Have",
+      "cards": [
+        { "id": "fill-10-01", "url": "https://example.com/feature-color-labels", "title": "Color Labels", "note": "Little swatches per card" },
+        { "id": "fill-10-02", "url": "https://example.com/feature-archive", "title": "Archive Column", "note": "Hide not-delete" },
+        { "id": "fill-10-03", "url": "https://example.com/feature-stats", "title": "Stats / Count", "note": "# cards per column" },
+        { "id": "fill-10-04", "url": "https://example.com/feature-import", "title": "Bulk Import", "note": "Paste newline URLs" },
+        { "id": "fill-10-05", "url": "https://example.com/feature-undo", "title": "Undo Delete", "note": "Grace period snackbar" },
+        { "id": "fill-10-06", "url": "https://example.com/feature-sort-alpha", "title": "Sort A→Z", "note": "Sort cards by title" },
+        { "id": "fill-10-07", "url": "https://example.com/feature-collapse", "title": "Collapse Column", "note": "Minimize width" }
+      ]
+    },
+    {
+      "id": "col11",
+      "title": "UX Polish",
+      "cards": [
+        { "id": "fill-11-01", "url": "https://example.com/shadow-tokens", "title": "Shadow Tokens", "note": "xs/sm/md/lg drop" },
+        { "id": "fill-11-02", "url": "https://example.com/radius-scale", "title": "Radius Scale", "note": "4 / 8 / 12 / 16 px" },
+        { "id": "fill-11-03", "url": "https://example.com/spacing-scale", "title": "Spacing Scale", "note": "4px step grid" },
+        { "id": "fill-11-04", "url": "https://example.com/hover-delay", "title": "Hover Delay", "note": "Tooltips timing" },
+        { "id": "fill-11-05", "url": "https://example.com/scrollbars", "title": "Custom Scrollbars", "note": "Thin dark mode track" },
+        { "id": "fill-11-06", "url": "https://example.com/focus-ring", "title": "Focus Ring Style", "note": "Outline vs glow" }
+      ]
+    },
+    {
+      "id": "col12",
+      "title": "Accessibility / a11y",
+      "cards": [
+        { "id": "fill-12-01", "url": "https://example.com/aria-dragdrop", "title": "Drag ARIA", "note": "aria-grabbed, droppable" },
+        { "id": "fill-12-02", "url": "https://example.com/skip-links", "title": "Skip Links", "note": "Jump to main content" },
+        { "id": "fill-12-03", "url": "https://example.com/high-contrast", "title": "High Contrast Mode", "note": "Meets WCAG AAA" },
+        { "id": "fill-12-04", "url": "https://example.com/reduced-motion", "title": "Prefers-Reduced-Motion", "note": "Limit animation" },
+        { "id": "fill-12-05", "url": "https://example.com/aria-live", "title": "aria-live Regions", "note": "Announce updates" },
+        { "id": "fill-12-06", "url": "https://example.com/focus-order", "title": "Logical Focus Order", "note": "Tab sequence sanity" },
+        { "id": "fill-12-07", "url": "https://example.com/alt-text", "title": "Alt Text Rules", "note": "Describe intent, not style" },
+        { "id": "fill-12-08", "url": "https://example.com/color-blind", "title": "Colorblind Sim Notes", "note": "Don't rely on hue only" }
+      ]
+    },
+    {
+      "id": "col13",
+      "title": "Storage / Sync",
+      "cards": [
+        { "id": "fill-13-01", "url": "https://example.com/localstorage-sync", "title": "Sync Model", "note": "localStorage vs cloud" },
+        { "id": "fill-13-02", "url": "https://example.com/conflict-merge", "title": "Conflict Merge", "note": "What if 2 tabs edit?" },
+        { "id": "fill-13-03", "url": "https://example.com/versioning", "title": "Versioning Notes", "note": "Schema bump plan" },
+        { "id": "fill-13-04", "url": "https://example.com/backup-strategy", "title": "Backup Strategy", "note": "Daily export idea" },
+        { "id": "fill-13-05", "url": "https://example.com/import-clean", "title": "Import Sanitizer", "note": "Strip weird chars" },
+        { "id": "fill-13-06", "url": "https://example.com/offline-mode", "title": "Offline Mode", "note": "No network fallback" }
+      ]
+    },
+    {
+      "id": "col14",
+      "title": "UI Copy / Text",
+      "cards": [
+        { "id": "fill-14-01", "url": "https://example.com/empty-state", "title": "Empty State Copy", "note": "\"Nothing here yet\"" },
+        { "id": "fill-14-02", "url": "https://example.com/onboarding-hints", "title": "Onboarding Hints", "note": "\"Drag cards between...\"" },
+        { "id": "fill-14-03", "url": "https://example.com/cta-buttons", "title": "CTA Button Text", "note": "Short verbs > labels" },
+        { "id": "fill-14-04", "url": "https://example.com/error-messages", "title": "Error Tone", "note": "Plain, not scary" },
+        { "id": "fill-14-05", "url": "https://example.com/microcopy", "title": "Microcopy Notes", "note": "Keep human voice" },
+        { "id": "fill-14-06", "url": "https://example.com/tooltips", "title": "Tooltip Rules", "note": "When to explain vs hide" }
+      ]
+    },
+    {
+      "id": "col15",
+      "title": "Visual Experiments",
+      "cards": [
+        { "id": "fill-15-01", "url": "https://example.com/glow-outline", "title": "Glow Outline", "note": "Neon hover ring" },
+        { "id": "fill-15-02", "url": "https://example.com/noise-overlay", "title": "Noise Overlay", "note": "Subtle film grain bg" },
+        { "id": "fill-15-03", "url": "https://example.com/card-glass", "title": "Glass Card Variant", "note": "backdrop-filter blur()" },
+        { "id": "fill-15-04", "url": "https://example.com/raycast-style", "title": "Raycast Style Notes", "note": "Soft dark gradients" },
+        { "id": "fill-15-05", "url": "https://example.com/rounded-xl", "title": "Rounded Corners XL", "note": "24px radius" },
+        { "id": "fill-15-06", "url": "https://example.com/shadow-lg", "title": "Shadow Large", "note": "High depth hover" },
+        { "id": "fill-15-07", "url": "https://example.com/surface-tokens", "title": "Surface Tokens", "note": "bg-raised vs bg-flat" }
+      ]
+    },
+    {
+      "id": "col16",
+      "title": "Random / Filler",
+      "cards": [
+        { "id": "fill-16-01", "url": "https://example.com/random-1", "title": "Filler Link 1", "note": "Perf load only" },
+        { "id": "fill-16-02", "url": "https://example.com/random-2", "title": "Filler Link 2", "note": "Scrolling stress" },
+        { "id": "fill-16-03", "url": "https://example.com/random-3", "title": "Filler Link 3", "note": "DOM size test" },
+        { "id": "fill-16-04", "url": "https://example.com/random-4", "title": "Filler Link 4", "note": "Drag test" },
+        { "id": "fill-16-05", "url": "https://example.com/random-5", "title": "Filler Link 5", "note": "Keyboard nav test" },
+        { "id": "fill-16-06", "url": "https://example.com/random-6", "title": "Filler Link 6", "note": "Delete/undo test" },
+        { "id": "fill-16-07", "url": "https://example.com/random-7", "title": "Filler Link 7", "note": "Column move test" },
+        { "id": "fill-16-08", "url": "https://example.com/random-8", "title": "Filler Link 8", "note": "Overflow wrap" },
+        { "id": "fill-16-09", "url": "https://example.com/random-9", "title": "Filler Link 9", "note": "Search filter test" }
+      ]
+    }
+  ]
+}

@@ -54,23 +54,23 @@ colEl.appendChild(list);
 
 ---
 
-## ISSUE-2
+## ~~ISSUE-2~~
 
-**Issue identified and documented:** October 23, 2025 19:17 UTC  
-**Issues resolution:** 
+~~**Issue identified and documented:** October 23, 2025 19:17 UTC~~  
+**Issues resolution:** Ignored. There is no leak. Other models didn't think this was a big deal and didn't think it should be addressed. I opened/closed the new link dialog dozens of times and it was fine. Close without addressing.
 
-**Category:** Bug  
+~~**Category:** Bug  
 **File:** index.html  
-**Lines:** 1175-1224
+**Lines:** 1175-1224~~
 
-**Problem:**  
-Event listener memory leak in `openDialog()`. The `currentColChangeHandler` is removed from `fCol`, but the nested handler inside the `dlgAddCol.addEventListener("close", ...)` (lines 1196-1218) is added with `{ once: true }` but never explicitly removed if the user opens/closes the dialog multiple times without completing the flow.
+~~**Problem:**  
+Event listener memory leak in `openDialog()`. The `currentColChangeHandler` is removed from `fCol`, but the nested handler inside the `dlgAddCol.addEventListener("close", ...)` (lines 1196-1218) is added with `{ once: true }` but never explicitly removed if the user opens/closes the dialog multiple times without completing the flow.~~
 
-**Rationale:**  
-Each time `openDialog()` is called while the "Create New Column" flow is active, a new "close" listener is attached to `dlgAddCol`. While `{ once: true }` should auto-remove, rapid dialog opening could accumulate listeners before cleanup occurs.
+~~**Rationale:**  
+Each time `openDialog()` is called while the "Create New Column" flow is active, a new "close" listener is attached to `dlgAddCol`. While `{ once: true }` should auto-remove, rapid dialog opening could accumulate listeners before cleanup occurs.~~
 
-**Fix Plan:**  
-Store reference to the close handler and clean it up explicitly:
+~~**Fix Plan:**  
+Store reference to the close handler and clean it up explicitly:~~
 
 ```javascript
 // At top of openDialog function, add:
@@ -86,21 +86,19 @@ addColCloseHandler = function onNewColClose() { /* existing code */ };
 dlgAddCol.addEventListener("close", addColCloseHandler, { once: true });
 ```
 
-**Tests:**  
-- Open/close add link dialog 50+ times rapidly
-- Monitor browser memory usage for leaks
-- Use Chrome DevTools Memory profiler to verify listener cleanup
+~~**Tests:**~~  
+- ~~Open/close add link dialog 50+ times rapidly~~
+- ~~Monitor browser memory usage for leaks~~
+- ~~Use Chrome DevTools Memory profiler to verify listener cleanup~~
 
 ---
 
 ## ~~ISSUE-3~~
 
-**Issue identified and documented:** October 23, 2025 19:17 UTC  
-**Issues resolution:** October 29, 2025. Ignored. 
-This is not a bug. If a person tries to drag a card while the search is active and it just snaps back, they will take that as an indication of dragging not being available. Maybe in the future we'll add a little popup saying "Cards can't be dragged when filtering is active" later, but it's fine for now.
-To help alleviate this, I added an "X" at the right side of the search box to clear the filtering. This makes it easier and faster to clear the search and get back to a state where users can drag cards.
-**Commit:** https://github.com/KevanMacGee/LinkBoard/commit/0ac845947fe8e895b66081d1d96d164f50096ea2
-**Prompt:** None
+~~**Issue identified and documented:** October 23, 2025 19:17 UTC~~  
+**Issues resolution:** October 29, 2025. Didn't change the behavior much, but added alerts. When there is text in the search/filter box, a small alert pops up that says dragging is not allowed while search is active. If they try to drag a card anyway, that alert wiggle for added visibility
+**Commit:** https://github.com/KevanMacGee/LinkBoard/commit/0ac845947fe8e895b66081d1d96d164f50096ea2 (And next two commits)
+**Prompt:** C:\Users\User\Development\linkboard\\.specstory\history\2025-10-29_23-58Z-fix-dragging-issue-during-search-filter.md
 
 ~~**Category:** Bug  
 **File:** index.html  
