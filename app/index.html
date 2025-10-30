@@ -116,9 +116,25 @@
         color: var(--accent);
         opacity: 0;
         transition: opacity 120ms ease;
+        overflow: hidden; /* clip wiggle to avoid horizontal scrollbar */
       }
       .search-hint.visible {
         opacity: 0.9;
+      }
+      .search-hint-inner {
+        display: inline-block;
+        will-change: transform;
+      }
+      @keyframes searchHintWiggle {
+        0% { transform: translateX(0); }
+        20% { transform: translateX(-4px); }
+        40% { transform: translateX(4px); }
+        60% { transform: translateX(-3px); }
+        80% { transform: translateX(3px); }
+        100% { transform: translateX(0); }
+      }
+      .search-hint-inner.wiggle {
+        animation: searchHintWiggle 280ms ease;
       }
       .search-wrap {
         position: relative;
@@ -948,17 +964,31 @@
       const searchEl = document.getElementById("q");
       const searchClearEl = document.getElementById("qClear");
       const searchHintEl = document.getElementById("searchHint");
+      function wiggleSearchHint() {
+        if (!searchHintEl) return;
+        const inner = searchHintEl.querySelector('.search-hint-inner');
+        if (!inner) return;
+        inner.classList.remove("wiggle");
+        void inner.offsetWidth; // restart animation
+        inner.classList.add("wiggle");
+      }
 
       function render() {
         ensureColumns();
         boardEl.innerHTML = "";
         const q = searchEl.value.trim().toLowerCase();
         if (searchHintEl) {
+          let inner = searchHintEl.querySelector('.search-hint-inner');
+          if (!inner) {
+            inner = document.createElement('span');
+            inner.className = 'search-hint-inner';
+            searchHintEl.replaceChildren(inner);
+          }
           if (q) {
-            searchHintEl.textContent = "Card dragging is disabled while search is active";
+            inner.textContent = "Card dragging is disabled while search is active";
             searchHintEl.classList.add("visible");
           } else {
-            searchHintEl.textContent = "";
+            inner.textContent = "";
             searchHintEl.classList.remove("visible");
           }
         }
@@ -1100,6 +1130,11 @@
           animation: 150,
           emptyInsertThreshold: 10,
           draggable: ".card",
+          onStart() {
+            if (searchEl.value.trim()) {
+              wiggleSearchHint();
+            }
+          },
           onEnd() {
             persistOrder();
           },
