@@ -1175,7 +1175,7 @@
       function addCard(card, colId) {
         const colIdStr = String(colId);
         const col = state.columns.find((c) => String(c.id) === colIdStr) || state.columns[0];
-        col.cards.unshift({ id: uid(), ...card });
+        col.cards.push({ id: uid(), ...card });
         save();
         render();
       }
@@ -1188,7 +1188,7 @@
             const [card] = c.cards.splice(idx, 1);
             const merged = { ...card, ...updates };
             const target = state.columns.find((cc) => String(cc.id) === newColIdStr) || c;
-            target.cards.splice(0, 0, merged);
+            target.cards.push(merged);
             save();
             render();
             return;
