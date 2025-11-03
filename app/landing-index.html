@@ -38,9 +38,12 @@
         object-position: left center; /* keep the left edge of screenshot aligned */
         border-radius: var(--radius);
         border: 1px solid var(--border, #e5e7eb);
-        box-shadow: var(--shadow);
+        box-shadow: var(--shadow), 0 32px 96px rgba(0, 0, 0, 0.24), 0 6px 18px rgba(0, 0, 0, 0.10);
         background: #ffffff;
         display: block;
+      }
+      [data-theme="dark"] .hero-right img {
+        box-shadow: var(--shadow), 0 32px 96px rgba(0, 0, 0, 0.60), 0 6px 18px rgba(0, 0, 0, 0.30);
       }
       @media (max-width: 900px) {
         .hero {
@@ -711,8 +714,8 @@
             Keep your bookmarks organized. Drag to arrange, filter instantly, <br>and store everything locally. Export anytime.
           </p>
           <div class="actions">
-            <a class="pill" href="index.html">Open the app</a>
-            <a class="pill alt" href="#learn">Learn more →</a>
+            <button type="button" onclick="location.href='index.html'">Open the app</button>
+            <button type="button" onclick="location.href='#learn'">Learn more →</button>
           </div>
         </div>
         <div class="hero-right">
