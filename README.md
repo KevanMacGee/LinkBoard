@@ -28,6 +28,6 @@ LinkBoard is an app to create lists of often used bookmarks for specific niches 
 
 ###  Future Plans
 - Clean the code from inline css and js to proper organization.
-- Move the buttons to a collapsible sidebar.
+- Move some of the buttons to a collapsible sidebar. (This may actually just end up being a modal.)
 - Move from data being handled by local storage to a a database.
-- (Maybe) Replace the "bookmarklet" feature with a full browser extension. The bookmarklet feature works just fine if you copy the app and host it somewhere online or serve it from a local server on your machine. I personally prefer to use this app as a static, non-hosted copy on my machine. I have to figure out if other users will prefer to
+- (Maybe) Replace the "bookmarklet" feature with a full browser extension. The bookmarklet feature works just fine if the app is hosted online or if it is served through a local server using local host or the like. I personally prefer to use this app as a static, non-hosted copy on my machine, and the browser prevents the bookmarklet from working in that configuration. I will have to judge user interest and if users commonly want to use it but just saving the .html file and double clicking it to open it and use it statically.
