@@ -6,6 +6,47 @@
     <title>LinkBoard — Landing</title>
     <link rel="icon" href="data:," />
     <style>
+      /* ============================================================= */
+      /* ===================== HERO-ONLY CSS START ==================== */
+      /* ============================================================= */
+      .hero {
+        display: grid;
+        grid-template-columns: 1fr 1.35fr; /* give more space to image */
+        gap: 24px;
+        align-items: center;
+        min-height: 72vh; /* taller hero */
+      }
+      .hero-left h1 {
+        font-size: 64px; /* larger headline */
+        line-height: 1.08;
+        margin: 10px 0 12px;
+      }
+      .hero-right {
+        height: 100%;
+      }
+      .hero-right img {
+        width: 100%;
+        height: 100%; /* fill column height */
+        object-fit: cover; /* make screenshot feel immersive */
+        border-radius: var(--radius);
+        border: 1px solid var(--border, #e5e7eb);
+        box-shadow: var(--shadow);
+        background: #ffffff;
+        display: block;
+      }
+      @media (max-width: 900px) {
+        .hero {
+          grid-template-columns: 1fr;
+          min-height: auto;
+          gap: 18px;
+        }
+        .hero-left h1 { font-size: 36px; }
+        .hero-right { height: auto; }
+        .hero-right img { height: auto; }
+      }
+      /* ============================================================= */
+      /* ====================== HERO-ONLY CSS END ===================== */
+      /* ============================================================= */
       :root {
         --bg: #f6f8fb;
         --panel: #ffffff;
@@ -654,7 +695,24 @@
       </div>
     </header>
 
-    <main class="wrap"></main>
+    <main class="wrap">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-left">
+          <h1 id="hero-title">Organize your web‑dev links with confidence</h1>
+          <p class="hint">
+            Keep tools, docs, and resources in one place. Drag to arrange, filter fast,
+            and save everything locally. Export anytime.
+          </p>
+          <div class="actions">
+            <a class="pill" href="index.html">Open the app</a>
+            <a class="pill alt" href="#learn">Learn more →</a>
+          </div>
+        </div>
+        <div class="hero-right">
+          <img alt="LinkBoard preview" src="../screenshots/Screenshot%202025-11-02%20233701.png" />
+        </div>
+      </section>
+    </main>
 
     <script>
       // ——— Theme ———
