@@ -11,23 +11,27 @@
       /* ============================================================= */
       .hero {
         display: grid;
-        grid-template-columns: 1fr 1.35fr; /* give more space to image */
+        grid-template-columns: 1.15fr 1fr; /* balance to roughly half + text room */
         gap: 24px;
         align-items: center;
-        min-height: 72vh; /* taller hero */
+        min-height: 72vh; /* not as tall */
       }
       .hero-left h1 {
-        font-size: 64px; /* larger headline */
+        font-size: 56px; /* back to previous size */
         line-height: 1.08;
         margin: 10px 0 12px;
       }
       .hero-right {
         height: 100%;
+        /* Full-bleed to the right edge while keeping about half the page width */
+        width: 50vw;
+        margin-right: calc(50% - 50vw);
       }
       .hero-right img {
         width: 100%;
         height: 100%; /* fill column height */
         object-fit: cover; /* make screenshot feel immersive */
+        object-position: left center; /* keep the left edge of screenshot aligned */
         border-radius: var(--radius);
         border: 1px solid var(--border, #e5e7eb);
         box-shadow: var(--shadow);
@@ -41,7 +45,7 @@
           gap: 18px;
         }
         .hero-left h1 { font-size: 36px; }
-        .hero-right { height: auto; }
+        .hero-right { height: auto; margin-right: 0; width: auto; }
         .hero-right img { height: auto; }
       }
       /* ============================================================= */
