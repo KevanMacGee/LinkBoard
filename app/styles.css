@@ -215,6 +215,8 @@ h1 .dot {
   display: grid;
   gap: 10px;
   min-height: 80px;
+    /* Fix "dragging a card to open column area" bug, stretch list to fill the column */
+    flex: 1 1 auto;
 }
 
 .card {
