@@ -767,7 +767,7 @@ function openColsDialog() {
       });
       state.columns = stagedColumns.map((col) => ({ id: col.id, title: col.title, cards: [...col.cards] }));
       stagedColumns = null;
-      save();
+      LinkBoardStorage.saveState(state);
       render();
     },
     { once: true }

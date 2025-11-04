@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>LinkBoard</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <!-- Loading indicator -->
+    <div id="loading">
+      <div class="loading-spinner"></div>
+    </div>
+    <header>
+      <div class="bar">
+        <div style="display: flex; align-items: center; gap: 12px">
+          <h1>
+            <span class="dot"></span> LinkBoard
+          </h1>
+        </div>
+        <div style="display: flex; align-items: center; justify-content: center; gap: 12px">
+          <div class="search-wrap" style="width: 100%; max-width: 600px">
+            <input
+              id="q"
+              class="search"
+              type="text"
+              placeholder="Filter title, domain, or note…  (press / to focus)"
+              aria-label="Search"
+            />
+            <button id="qClear" type="button" class="search-clear" aria-label="Clear search" title="Clear" hidden>✕</button>
+          </div>
+        </div>
+        <div class="actions" style="justify-content: flex-end">
+          <button id="btnAdd">Add a Link</button>
+          <button id="btnCols">Manage Columns</button>
+          <button id="btnTheme" title="Toggle dark/light">🌙 Dark</button>
+        </div>
+      </div>
+    </header>
+    <div id="searchHint" class="search-hint" aria-live="polite" aria-atomic="true"></div>
+
+    <div class="wrap">
+      <div id="board" class="board" role="list" aria-label="Link columns"></div>
+    </div>
+
+    <div class="bottom-actions">
+      <button id="btnExport">Export</button>
+      <label class="btn" for="importFile">Import</label>
+      <input id="importFile" type="file" accept="application/json" hidden />
+      <button id="btnBookmarklet">Bookmarklet</button>
+      <button id="btnReset" class="danger" title="Clear all data">Reset</button>
+    </div>
+
+    <p class="hint" style="margin-top: 8px; text-align: center">
+      Drag cards between columns. Everything saves to <strong>localStorage</strong>. Use
+      <span class="kbd">Export</span> to back up. Export often, don't rely on local storage alone. Keyboard hints: <span class="kbd">A</span> add,
+      <span class="kbd">/</span> filter.
+    </p>
+
+    <!-- Add/Edit Dialog -->
+    <dialog id="dialog">
+      <form method="dialog">
+        <div class="dlg-head">
+          <h3 id="dlgTitle">Add Link</h3>
+          <button class="pill alt" value="cancel" aria-label="Close" formnovalidate>✕</button>
+        </div>
+        <div class="dlg-body">
+          <div class="row">
+            <label for="fUrl">URL</label>
+            <input id="fUrl" type="text" placeholder="https://example.com/tool" required />
+          </div>
+          <div class="row">
+            <label for="fTitle">Title (optional — will default to domain)</label>
+            <input id="fTitle" type="text" />
+          </div>
+          <div class="row">
+            <label for="fNote">Note (optional)</label>
+            <textarea id="fNote" placeholder="Why this is useful / what to use it for…"></textarea>
+          </div>
+          <div class="row">
+            <label for="fCol">Column</label>
+            <select id="fCol"></select>
+          </div>
+        </div>
+        <div class="dlg-foot">
+          <button class="pill alt" value="cancel" formnovalidate>Cancel</button>
+          <button id="dlgDelete" class="pill danger" value="delete" style="display: none">Delete</button>
+          <button id="dlgSave" class="pill" value="default">Save</button>
+        </div>
+      </form>
+    </dialog>
+
+    <!-- Bookmarklet Dialog -->
+    <dialog id="dlgBm">
+      <div class="dlg-head">
+        <h3>Add‑to‑LinkBoard Bookmarklet</h3>
+        <form method="dialog"><button class="pill alt">✕</button></form>
+      </div>
+      <div class="dlg-body">
+        <div class="row">
+          <label>Drag this to your bookmarks bar:</label>
+          <p><a id="bmLink" href="#" style="overflow-wrap: break-word">Add to LinkBoard</a></p>
+          <p class="hint">
+            When clicked on any page, it opens LinkBoard (this file) and pre‑fills the link using URL parameters.
+            LinkBoard will add it to the selected column.
+          </p>
+        </div>
+      </div>
+    </dialog>
+
+    <!-- Manage Columns Dialog -->
+    <dialog id="dlgCols">
+      <form method="dialog">
+        <div class="dlg-head">
+          <h3>Manage Columns</h3>
+          <button class="pill alt" value="cancel" aria-label="Close" formnovalidate>✕</button>
+        </div>
+        <div class="dlg-body">
+          <div id="colsList" class="cols-list"></div>
+          <div style="display: flex; gap: 8px; justify-content: flex-start; margin-top: 6px">
+            <button type="button" class="pill" id="btnAddCol">+ Add Column</button>
+          </div>
+          <p class="hint colmgr-hint">Deleting a column moves its cards to a destination of your choice.</p>
+        </div>
+        <div class="dlg-foot">
+          <button class="pill alt" value="cancel">Close</button>
+          <button id="btnColsSave" class="pill" value="default">Save Changes</button>
+        </div>
+      </form>
+    </dialog>
+
+    <!-- Delete Column Destination Dialog -->
+    <dialog id="dlgColDel">
+      <form method="dialog">
+        <div class="dlg-head">
+          <h3>Delete Column</h3>
+          <button class="pill alt" value="cancel" aria-label="Close" formnovalidate>✕</button>
+        </div>
+        <div class="dlg-body">
+          <p id="delColInfo" style="margin: 0 0 16px 0; color: var(--text);"></p>
+          <div class="row" style="gap: 12px;">
+            <label style="font-size: 14px; color: var(--text); font-weight: 600;">What would you like to do?</label>
+            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+              <input type="radio" name="delAction" value="delete" style="cursor: pointer;" />
+              <span>Delete column and all its cards</span>
+            </label>
+            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+              <input type="radio" name="delAction" value="move" style="cursor: pointer;" />
+              <span>Delete column but move cards to another column</span>
+            </label>
+          </div>
+          <div class="row" id="delDestRow" style="display: none;">
+            <label for="delDest" style="font-size: 14px; color: var(--text);">Choose destination column:</label>
+            <select id="delDest"></select>
+          </div>
+        </div>
+        <div class="dlg-foot">
+          <button class="pill alt" value="cancel" formnovalidate>Cancel</button>
+          <button id="btnDelColConfirm" class="pill danger" value="default">Delete Column</button>
+        </div>
+      </form>
+    </dialog>
+
+    <!-- Add Column Dialog -->
+    <dialog id="dlgAddCol">
+      <form method="dialog">
+        <div class="dlg-head">
+          <h3>Add Column</h3>
+          <button class="pill alt" value="cancel" aria-label="Close" formnovalidate>✕</button>
+        </div>
+        <div class="dlg-body">
+          <div class="row">
+            <label for="newColName">Column Name</label>
+            <input id="newColName" type="text" placeholder="e.g., Design Tools" required />
+          </div>
+        </div>
+        <div class="dlg-foot">
+          <button class="pill alt" value="cancel" formnovalidate>Cancel</button>
+          <button class="pill" value="default">Add Column</button>
+        </div>
+      </form>
+    </dialog>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"
+      integrity="sha256-ymhDBwPE9ZYOkHNYZ8bpTSm1o943EH2BAOWjAQB+nm4="
+      crossorigin="anonymous"
+    ></script>
+    <script src="storage.local.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
+
