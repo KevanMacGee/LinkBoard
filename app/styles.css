@@ -212,11 +212,18 @@ h1 .dot {
   list-style: none;
   margin: 0;
   padding: 10px;
-  display: grid;
+
+  /* Fix bug that stretches cards to fill the column */
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  
   gap: 10px;
   min-height: 80px;
     /* Fix "dragging a card to open column area" bug, stretch list to fill the column */
-    flex: 1 1 auto;
+  flex: 1 1 auto;
+
+
 }
 
 .card {
