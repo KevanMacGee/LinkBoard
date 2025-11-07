@@ -1,3 +1,8 @@
+/* Prevent horizontal scroll on landing page */
+html {
+    overflow-x: hidden;
+}
+
 .hero {
     display: grid;
     grid-template-columns: 1.15fr 1fr; /* balance to roughly half + text room */
