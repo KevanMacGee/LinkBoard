@@ -1022,24 +1022,48 @@ document.getElementById("btnBookmarklet").addEventListener("click", () => {
 (function initFromParams() {
   const p = new URLSearchParams(location.search);
   const add = p.get("add");
-  if (add) {
-    // URLSearchParams.get() already decodes URI components, so no need for decodeURIComponent()
-    const title = p.get("title") || "";
-    
-    // Validate the URL before processing
-    const normalizedUrl = normalizeUrl(add);
-    if (normalizedUrl) {
-      // Open dialog in add mode and pre-populate fields
-      openDialog(null, null);
-      requestAnimationFrame(() => {
-        fUrl.value = normalizedUrl;
-        fTitle.value = title;
-      });
-      history.replaceState({}, "", location.pathname); // clean URL
-    } else {
-      alert("Invalid URL from bookmarklet: " + add);
-    }
+  if (!add) return;
+
+  // URLSearchParams.get() already decodes URI components, so no need for decodeURIComponent()
+  const rawTitle = (p.get("title") || "").trim();
+
+  // Validate the URL before processing
+  const normalizedUrl = normalizeUrl(add);
+  if (!normalizedUrl) {
+    alert("Invalid URL from bookmarklet: " + add);
+    return;
   }
+
+  let finalTitle = rawTitle;
+  let finalNote = "";
+
+  try {
+    const host = new URL(normalizedUrl).hostname.replace(/^www\./, "").toLowerCase();
+    const isTweetHost =
+      host === "x.com" ||
+      host === "twitter.com" ||
+      host === "mobile.twitter.com";
+
+    if (isTweetHost && rawTitle) {
+      const text = rawTitle;
+      finalTitle = text.slice(0, 64);
+      finalNote = text.slice(0, 300);
+    }
+  } catch {
+    // If URL parsing fails, just fall back to rawTitle
+  }
+
+  // Open dialog in add mode and pre-populate fields
+  openDialog(null, null);
+  requestAnimationFrame(() => {
+    fUrl.value = normalizedUrl;
+    fTitle.value = finalTitle;
+    if (finalNote && typeof fNote !== "undefined" && fNote) {
+      fNote.value = finalNote;
+    }
+  });
+
+  history.replaceState({}, "", location.pathname); // clean URL
 })();
 
 // ——— Bootstrap ———
