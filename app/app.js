@@ -1046,8 +1046,8 @@ document.getElementById("btnBookmarklet").addEventListener("click", () => {
 
     if (isTweetHost && rawTitle) {
       const text = rawTitle;
-      finalTitle = text.slice(0, 64);
-      finalNote = text.slice(0, 300);
+      finalTitle = text.length > 80 ? `${text.slice(0, 80)}...` : text;
+      finalNote = text.slice(0, 340);
     }
   } catch {
     // If URL parsing fails, just fall back to rawTitle
