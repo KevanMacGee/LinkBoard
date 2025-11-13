@@ -7,6 +7,9 @@ const SRC_CSS = path.join(ROOT_DIR, 'styles.css');
 const SRC_JS = path.join(ROOT_DIR, 'app.js');
 
 const FALLBACK_APP_DIR = path.join(ROOT_DIR, 'app');
+const FALLBACK_HTML = path.join(FALLBACK_APP_DIR, 'index.html');
+const FALLBACK_CSS = path.join(FALLBACK_APP_DIR, 'styles.css');
+const FALLBACK_JS = path.join(FALLBACK_APP_DIR, 'app.js');
 
 const OUT_DIR = path.join(ROOT_DIR, 'dist');
 const OUT_FILE = path.join(OUT_DIR, 'linkboard-inline.html');
@@ -14,13 +17,26 @@ const OUT_FILE = path.join(OUT_DIR, 'linkboard-inline.html');
 const STYLE_TAG_REGEX = /<link\s+rel=["']stylesheet["']\s+href=["']styles\.css["']\s*(?:\/>|>)/i;
 const SCRIPT_TAG_REGEX = /<script\s+src=["']app\.js["']\s*>\s*<\/script>/i;
 
-function resolveSourcePath(primaryPath, fileName) {
-  if (fs.existsSync(primaryPath)) {
+function resolveSource(primaryPath, fallbackPath) {
+  const primaryExists = fs.existsSync(primaryPath);
+  const fallbackExists = fs.existsSync(fallbackPath);
+
+  if (primaryExists && fallbackExists) {
+    try {
+      const primaryStat = fs.statSync(primaryPath);
+      const fallbackStat = fs.statSync(fallbackPath);
+      return primaryStat.mtimeMs >= fallbackStat.mtimeMs ? primaryPath : fallbackPath;
+    } catch (err) {
+      console.error('Failed to stat source files:', err);
+      return primaryPath;
+    }
+  }
+
+  if (primaryExists) {
     return primaryPath;
   }
 
-  const fallbackPath = path.join(FALLBACK_APP_DIR, fileName);
-  if (fs.existsSync(fallbackPath)) {
+  if (fallbackExists) {
     return fallbackPath;
   }
 
@@ -40,15 +56,15 @@ function readFileIfExists(filePath) {
 
 function buildOnce() {
   process.exitCode = 0;
-  const htmlPath = resolveSourcePath(SRC_HTML, 'index.html');
+  const htmlPath = resolveSource(SRC_HTML, FALLBACK_HTML);
   if (!fs.existsSync(htmlPath)) {
     console.error(`Source HTML not found at ${htmlPath}`);
     process.exitCode = 1;
     return;
   }
 
-  const cssPath = resolveSourcePath(SRC_CSS, 'styles.css');
-  const jsPath = resolveSourcePath(SRC_JS, 'app.js');
+  const cssPath = resolveSource(SRC_CSS, FALLBACK_CSS);
+  const jsPath = resolveSource(SRC_JS, FALLBACK_JS);
 
   const html = fs.readFileSync(htmlPath, 'utf8');
   const css = readFileIfExists(cssPath);
@@ -81,10 +97,13 @@ let watchTimer = null;
 
 function watch() {
   console.log('Watching for changes... (Ctrl+C to stop)');
-  buildOnce();
+  try {
+    buildOnce();
+  } catch (err) {
+    console.error(err);
+  }
 
-  const targets = new Set(['index.html', 'styles.css', 'app.js']);
-
+  const targetNames = new Set(['index.html', 'styles.css', 'app.js']);
   const directoriesToWatch = new Set([ROOT_DIR]);
   if (fs.existsSync(FALLBACK_APP_DIR)) {
     directoriesToWatch.add(FALLBACK_APP_DIR);
@@ -96,7 +115,7 @@ function watch() {
         return;
       }
 
-      if (!targets.has(filename.toString())) {
+      if (!targetNames.has(filename.toString())) {
         return;
       }
 
