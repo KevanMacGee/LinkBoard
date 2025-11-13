@@ -1,0 +1,15 @@
+{
+  "name": "linkboard",
+  "version": "1.0.0",
+  "description": "LinkBoard is an app to create lists of often used bookmarks for specific niches or projects. It started as a quick and dirty vibe coded project, specifically for coding and web development links, but I have started to clean it up for public use. Right now, you can drag the links from one category to another, but that feels like extra functionality and might be removed.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:inline": "node ./scripts/inline-builder.js",
+    "watch:inline": "node ./scripts/inline-builder.js --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}
