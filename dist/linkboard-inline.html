@@ -1980,12 +1980,14 @@ document.getElementById("btnBookmarklet").addEventListener("click", () => {
     const isTweetHost =
       host === "x.com" ||
       host === "twitter.com" ||
-      host === "mobile.twitter.com";
+      host === "mobile.twitter.com" ||
+      host.endsWith(".x.com") ||
+      host.endsWith(".twitter.com");
 
     if (isTweetHost && rawTitle) {
       const text = rawTitle;
       finalTitle = text.length > 80 ? `${text.slice(0, 80)}...` : text;
-      finalNote = text.slice(0, 340);
+      finalNote = text.length > 340 ? text.slice(0, 340) : text;
     }
   } catch {
     // If URL parsing fails, just fall back to rawTitle
