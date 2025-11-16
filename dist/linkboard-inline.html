@@ -1591,17 +1591,19 @@ document.getElementById("importFile").addEventListener("change", (e) => {
   reader.readAsText(file);
 });
 document.getElementById("btnReset").addEventListener("click", () => {
-  if (confirm("Clear all LinkBoard data?")) {
-    const columns = Array.isArray(state.columns) && state.columns.length
-      ? state.columns.map((col, idx) => ({
-          id: col.id || uid(),
-          title: (col.title || "").trim() || `Column ${idx + 1}`,
-          cards: [],
-        }))
-      : createBlankColumns();
-    state = { columns };
-    save();
-    render();
+  if (confirm("Clear all LinkBoard data? This will delete ALL your bookmarks.")) {
+    if (confirm("This is permanent. Are you sure?")) {
+      const columns = Array.isArray(state.columns) && state.columns.length
+        ? state.columns.map((col, idx) => ({
+            id: col.id || uid(),
+            title: (col.title || "").trim() || `Column ${idx + 1}`,
+            cards: [],
+          }))
+        : createBlankColumns();
+      state = { columns };
+      save();
+      render();
+    }
   }
 });
 
