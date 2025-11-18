@@ -641,8 +641,8 @@ document.getElementById("importFile").addEventListener("change", (e) => {
       }
       
       // All validations passed, accept the import
-      if (confirm("Importing will replace your current board. Are you sure?")) {
-        if (confirm("This will permanently overwrite your existing data. Proceed?")) {
+      if (confirm("Importing will permanently overwrite your existing data. Are you sure?")) {
+        if (confirm("Your data cannot be recovered if overwritten. Proceed?")) {
           state = imported;
           migrateState();
           save();
