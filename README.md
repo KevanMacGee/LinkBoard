@@ -13,14 +13,14 @@ LinkBoard is an app to create lists of often used bookmarks for specific niches 
 
 ###  Features
 - Bookmarks can be added and sorted into topic areas upon creation, but they are also "drag-and-dropable" later.
-- The app automatically pulls the favicon for any link that is added. 
-- Data can be exported into a JSON file, and similarly imported from the same.
-- Columns can be created, deleted and reordered by clicking the Manage Columns button.
 - Cards (they hold the bookmarks) can be edited and deleted by clicking the pen icon on them.
+- The app automatically pulls the favicon for any link that is added. 
+- Columns can be created, deleted and reordered by clicking the Manage Columns button.
+- Data can be exported into a JSON file, and similarly imported from the same.
 
 ###  Issues
 - There are some design and visual inconsistencies. (Update: Many have been addressed and it's getting down to the last several personal nick-picky visual issues.)
-- Due to browser restrictions, the bookmarklet feature does not work if you use a local copy of the app from your computer's disk drive. To use the bookmarklet, you would have to deploy it to something like Cloudflare or a traditional web server. 
+- Due to browser restrictions, the bookmarklet feature does not work if you use a local copy of the app from your computer's disk drive. To use the bookmarklet, you would have to deploy it to something like Cloudflare or a traditional web server. (This will be a hosted service )
   - You could server the local file as a local server, but it would always have to be running.
   - This might be solved by replacing the bookmarklet with an actual browser extension.
 
