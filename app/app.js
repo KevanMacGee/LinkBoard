@@ -641,13 +641,19 @@ document.getElementById("importFile").addEventListener("change", (e) => {
       }
       
       // All validations passed, accept the import
-      state = imported;
-      migrateState();
-      save();
-      render();
-      alert("Import successful!");
+      if (confirm("Importing will replace your current board. Are you sure?")) {
+        if (confirm("This will permanently overwrite your existing data. Proceed?")) {
+          state = imported;
+          migrateState();
+          save();
+          render();
+          alert("Import successful!");
+        }
+      }
+      e.target.value = ""; // clear input so same file can be selected again
     } catch (err) {
       alert("Import failed: " + (err.message || "Invalid JSON file"));
+      e.target.value = "";
     }
   };
   reader.readAsText(file);
