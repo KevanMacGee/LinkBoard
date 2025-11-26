@@ -9,7 +9,7 @@ LinkBoard is an app to create lists of often used bookmarks for specific niches 
 - [ Future Plans](#-future-plans)
 
 ###  Screenshot
-![App screenshot](https://raw.githubusercontent.com/KevanMacGee/LinkBoard/refs/heads/master/screenshots/Screenshot2025-09-26-192559.png)
+![App screenshot](https://raw.githubusercontent.com/KevanMacGee/LinkBoard/refs/heads/master/app/assets/screenshots/Screenshot%202025-11-02%20233701.png)
 
 ###  Features
 - Bookmarks can be added and sorted into topic areas upon creation, but they are also "drag-and-dropable" later.
