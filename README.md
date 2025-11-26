@@ -11,14 +11,14 @@ LinkBoard is an app to create lists of often used bookmarks for specific niches 
 ###  Screenshot
 ![App screenshot](https://raw.githubusercontent.com/KevanMacGee/LinkBoard/refs/heads/master/app/assets/screenshots/Screenshot%202025-11-02%20233701.png)
 
-###  Features
+###  ✨ Features
 - Bookmarks can be added and sorted into topic areas upon creation, but they are also "drag-and-dropable" later.
 - Cards (they hold the bookmarks) can be edited and deleted by clicking the pen icon on them.
 - The app automatically pulls the favicon for any link that is added. 
 - Columns can be created, deleted and reordered by clicking the Manage Columns button.
 - Data can be exported into a JSON file, and similarly imported from the same.
 
-###  Issues
+###  🧯Issues
 - There are some design and visual inconsistencies. (Update: Many have been addressed and it's getting down to the last several personal nick-picky visual issues.)
 - Due to browser restrictions, the bookmarklet feature does not work if you use a local copy of the app from your computer's disk drive. To use the bookmarklet, you would have to deploy it to something like Cloudflare or a traditional web server. (This will be a hosted service )
   - You could server the local file as a local server, but it would always have to be running.
@@ -28,7 +28,7 @@ LinkBoard is an app to create lists of often used bookmarks for specific niches 
 - Local storage can inherently be flaky, I plan to move to a proper database solution.
 - Fixed! ~~The code is currently inline and unwieldy, that is a relic of the app being vibe coded in the beginning.~~
 
-###  Future Plans
+###  🌱 Future Plans
 - Done. ~~Clean the code from inline css and js to proper organization.~~
 - ~~Move some of the buttons to a collapsible sidebar.~~ This is going to be a modal in the short term, will come along when I add user accounts.
 - Move from data being handled by local storage to a a database.
