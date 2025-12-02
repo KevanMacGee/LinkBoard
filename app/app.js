@@ -30,6 +30,7 @@ function applyTheme(theme) {
 
 // ——— Data & Storage ———
 const STORAGE_KEY = "linkboard.v1";
+const LAST_COLUMN_KEY = "linkboard.lastColumn";
 
 const INITIAL_COLUMN_COUNT = 4;
 
@@ -50,6 +51,7 @@ function createInitialState() {
 let state = load();
 if (!state) state = createInitialState();
 migrateState();
+ensureValidLastColumnId();
 save();
 
 function load() {
@@ -65,6 +67,52 @@ function save() {
   } catch (e) {
     console.error('Save failed:', e);
     alert('⚠️ Save failed (storage full or blocked). Please Export your data immediately to avoid losing changes.');
+  }
+}
+function readStoredColumnId() {
+  try {
+    return localStorage.getItem(LAST_COLUMN_KEY);
+  } catch {
+    return null;
+  }
+}
+function columnExists(id, columns = state.columns) {
+  if (!id || !Array.isArray(columns)) return false;
+  const idStr = String(id);
+  return columns.some((c) => String(c.id) === idStr);
+}
+function getLastColumnId(columns = state.columns) {
+  const stored = readStoredColumnId();
+  if (!stored) return null;
+  return columnExists(stored, columns) ? stored : null;
+}
+function setLastColumnId(id, columns = state.columns) {
+  if (!id) {
+    clearLastColumnId();
+    return;
+  }
+  if (!columnExists(id, columns)) {
+    clearLastColumnId();
+    return;
+  }
+  try {
+    localStorage.setItem(LAST_COLUMN_KEY, String(id));
+  } catch (e) {
+    console.warn("Remembered column could not be saved:", e);
+  }
+}
+function clearLastColumnId() {
+  try {
+    localStorage.removeItem(LAST_COLUMN_KEY);
+  } catch (e) {
+    console.warn("Remembered column could not be cleared:", e);
+  }
+}
+function ensureValidLastColumnId(columns = state.columns) {
+  const stored = readStoredColumnId();
+  if (!stored) return;
+  if (!columnExists(stored, columns)) {
+    clearLastColumnId();
   }
 }
 
@@ -421,6 +469,7 @@ function deleteColumn(colId, destId, { commit = true, columns = state.columns, d
   columns.splice(srcIdx, 1);
   
   if (commit) {
+    ensureValidLastColumnId(state.columns);
     save();
     render();
   }
@@ -551,6 +600,7 @@ function openDialog(card = null, colId = null) {
           return;
         }
         updateCard(card.id, data, fCol.value);
+        setLastColumnId(fCol.value);
       },
       { once: true }
     );
@@ -559,7 +609,17 @@ function openDialog(card = null, colId = null) {
     fUrl.value = "";
     fTitle.value = "";
     fNote.value = "";
-    fCol.value = colId || state.columns[0].id;
+    const rememberedColId = getLastColumnId();
+    const fallbackColId = state.columns[0]?.id || "";
+    let defaultColId = colId && columnExists(colId) ? colId : rememberedColId;
+    if (!defaultColId && fallbackColId) {
+      defaultColId = fallbackColId;
+    }
+    if (defaultColId) {
+      fCol.value = defaultColId;
+    } else if (fCol.options.length) {
+      fCol.selectedIndex = 0;
+    }
     dlgDelete.style.display = "none";
     dlg.returnValue = "";
     dlg.showModal();
@@ -577,6 +637,7 @@ function openDialog(card = null, colId = null) {
         }
         if (!data.title) data.title = domainFrom(data.url);
         addCard(data, fCol.value);
+        setLastColumnId(fCol.value);
       },
       { once: true }
     );
@@ -645,6 +706,7 @@ document.getElementById("importFile").addEventListener("change", (e) => {
         if (confirm("Your data cannot be recovered if overwritten. Proceed?")) {
           state = imported;
           migrateState();
+          ensureValidLastColumnId();
           save();
           render();
           alert("Import successful!");
@@ -669,6 +731,7 @@ document.getElementById("btnReset").addEventListener("click", () => {
           }))
         : createBlankColumns();
       state = { columns };
+      clearLastColumnId();
       save();
       render();
     }
@@ -775,6 +838,7 @@ function openColsDialog() {
       });
       state.columns = stagedColumns.map((col) => ({ id: col.id, title: col.title, cards: [...col.cards] }));
       stagedColumns = null;
+      ensureValidLastColumnId(state.columns);
       LinkBoardStorage.saveState(state);
       render();
     },
