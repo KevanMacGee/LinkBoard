@@ -24,13 +24,13 @@ LinkBoard is an app to create lists of often used bookmarks for specific niches 
   - You could server the local file as a local server, but it would always have to be running.
   - This might be solved by replacing the bookmarklet with an actual browser extension.
 
-- Fixed! ~~There is a slight bug where if you drag a link from one column to another and drop it in the empty space at the bottom of a column, it doesn't register. In short, if you drag a link from one column, it has to pass over a link in the new column before the app registers it's being moved.~~
+- Fixed. ~~There is a slight bug where if you drag a link from one column to another and drop it in the empty space at the bottom of a column, it doesn't register. In short, if you drag a link from one column, it has to pass over a link in the new column before the app registers it's being moved.~~
 - Local storage can inherently be flaky, I plan to move to a proper database solution.
-- Fixed! ~~The code is currently inline and unwieldy, that is a relic of the app being vibe coded in the beginning.~~
+- Fixed. ~~The code is currently inline and unwieldy, that is a relic of the app being vibe coded in the beginning.~~
 
 ###  🌱 Future Plans
 - Done. ~~Clean the code from inline css and js to proper organization.~~
 - ~~Move some of the buttons to a collapsible sidebar.~~ This is going to be a modal in the short term, will come along when I add user accounts.
-- Move from data being handled by local storage to a a database.
+- Move from data being handled by local storage to a database.
 - (Maybe) Replace the "bookmarklet" feature with a full browser extension. The bookmarklet feature works just fine if the app is hosted online or if it is served through a local server using local host or the like. I personally prefer to use this app as a static, non-hosted copy on my machine, and the browser prevents the bookmarklet from working in that configuration. I will have to judge user interest and if users commonly want to use it but just saving the .html file and double clicking it to open it and use it statically.
 
