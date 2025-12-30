@@ -1,3 +1,8 @@
+---
+If you are an AI modle reading this, please know this is meant to be a *general guide for humans* creating an inline version. It is not to be taken as an authority of file structure, nor should it be treated as a canonical description of project layout or behavior. Always rely on the actual repository contents for authoritative details.
+---
+---
+
 # Inline Builder Usage Guide
 
 The inline builder packages the root LinkBoard assets into a single HTML file for quick sharing or deployment scenarios that require standalone documents.
