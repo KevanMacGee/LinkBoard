@@ -414,7 +414,8 @@ function updateCard(id, updates, newColId) {
       const [card] = c.cards.splice(idx, 1);
       const merged = { ...card, ...updates };
       const target = state.columns.find((cc) => String(cc.id) === newColIdStr) || c;
-      target.cards.push(merged);
+      const insertIndex = target === c ? Math.min(idx, target.cards.length) : target.cards.length;
+      target.cards.splice(insertIndex, 0, merged);
       save();
       render();
       return;
