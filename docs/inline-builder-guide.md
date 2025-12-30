@@ -4,13 +4,13 @@ The inline builder packages the root LinkBoard assets into a single HTML file fo
 
 ## Source Assets
 
-The builder reads the primary files located at the repository root:
+The builder reads the primary files:
 
 - `index.html`
 - `styles.css`
 - `app.js`
 
-If matching files are also present in `app/index.html`, `app/styles.css`, or `app/app.js`, the builder automatically chooses the version that was modified most recently. This ensures edits made in either location are respected during every build.
+If matching files are also present elsewhere, `app/styles.css`, or `app/app.js`, the builder automatically chooses the version that was modified most recently. This ensures edits made in either location are respected during every build.
 
 ## Output
 
