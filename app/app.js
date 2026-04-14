@@ -727,17 +727,18 @@ document.getElementById("importFile").addEventListener("change", (e) => {
           }
         }
       }
-      
+
+      // Confirmation dialog to overwrite existing data
       const step1 = await showConfirm({
         title: "Import Data",
-        message: "Importing will permanently overwrite your existing ALL you existing bookmarks with the new data. Proceed?",
+        message: "Importing will permanently overwrite your ALL your existing bookmarks with the new data. Proceed?",
         confirmText: "Continue",
       });
       if (!step1) { e.target.value = ""; return; }
 
       const step2 = await showConfirm({
         title: "Overwrite Data",
-        message: "No, seriously, this is permanent. Are you sure?",
+        message: "No, seriously! This is permanent. Are you sure?",
         confirmText: "Overwrite",
         danger: true,
       });
@@ -750,7 +751,7 @@ document.getElementById("importFile").addEventListener("change", (e) => {
       render();
       await showConfirm({
         title: "Import Complete",
-        message: "Your data was imported successfully.(Sorry for all the popups!)",
+        message: "Your data was imported successfully. (Sorry for all the popups!)",
         confirmText: "OK",
         cancelText: "",
       });
