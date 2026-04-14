@@ -730,14 +730,14 @@ document.getElementById("importFile").addEventListener("change", (e) => {
       
       const step1 = await showConfirm({
         title: "Import Data",
-        message: "Importing will permanently overwrite your existing data. Are you sure?",
+        message: "Importing will permanently overwrite your existing ALL you existing bookmarks with the new data. Proceed?",
         confirmText: "Continue",
       });
       if (!step1) { e.target.value = ""; return; }
 
       const step2 = await showConfirm({
         title: "Overwrite Data",
-        message: "Your data cannot be recovered if overwritten. Proceed?",
+        message: "No, seriously, this is permanent. Are you sure?",
         confirmText: "Overwrite",
         danger: true,
       });
@@ -750,7 +750,7 @@ document.getElementById("importFile").addEventListener("change", (e) => {
       render();
       await showConfirm({
         title: "Import Complete",
-        message: "Your data was imported successfully.",
+        message: "Your data was imported successfully.(Sorry for all the popups!)",
         confirmText: "OK",
         cancelText: "",
       });
@@ -902,16 +902,6 @@ function renderColsManager() {
     const row = document.createElement("div");
     row.className = "colmgr-row";
     
-    // OLD (pattern replaced for security - Issue 4):
-    // row.innerHTML = `
-    //   <div class="order">
-    //     <button type="button" class="btn-icon" title="Move up" data-up="${escapeAttr(idx)}">↑</button>
-    //     <button type="button" class="btn-icon" title="Move down" data-down="${escapeAttr(idx)}">↓</button>
-    //   </div>
-    //   <input type="text" data-col-id="${escapeAttr(c.id)}" value="${escapeAttr(c.title)}" />
-    //   <div class="colmgr-actions">
-    //     <button type="button" class="btn-icon" title="Delete" data-del="${escapeAttr(c.id)}">🗑</button>
-    //   </div>`;
     
     // NEW (safe DOM-API version):
     const orderDiv = document.createElement('div');
@@ -982,13 +972,7 @@ function renderColsManager() {
       const delColInfo = document.getElementById("delColInfo");
       delColInfo.textContent = `⚠️ Are you sure you want to delete column "${c.title}"? It contains ${cardText}.`;
       
-      // Build dest options excluding this column
-      // OLD (pattern replaced for security - Issue 5):
-      // delDest.innerHTML = columns
-      //   .filter((x) => String(x.id) !== String(c.id))
-      //   .map((x, i) => `<option value="${escapeAttr(x.id)}">${i + 1}. ${escapeHTML(x.title)}</option>`)
-      //   .join("");
-      
+       
       // NEW (safe DOM-API version):
       delDest.replaceChildren(); // Clear existing options safely
       columns
