@@ -312,8 +312,8 @@ dialog::backdrop {
   padding: 14px 16px;
   border-bottom: 1px solid #e5e7eb;
   display: flex;
-  /* align-items: center;
-  justify-content: space-between; */
+  align-items: center;
+  justify-content: space-between;
 }
 .dlg-head h3 {
   margin: 0;
@@ -323,15 +323,6 @@ dialog::backdrop {
   padding: 16px;
   display: grid;
   gap: 12px;
-  justify-items: center; /* Centers the <p> block within the grid */
-  text-align: center;    /* Ensures multi-line text stays centered inside the <p> */
-}
-.dlg-foot {
-  padding: 14px 16px;
-  border-top: 1px solid #e5e7eb;
-  display: flex;
-  gap: 8px;
-  justify-content: flex-end;
 }
 .row {
   display: grid;
@@ -360,6 +351,13 @@ textarea:focus {
 textarea {
   min-height: 80px;
   resize: vertical;
+}
+.dlg-foot {
+  padding: 14px 16px;
+  border-top: 1px solid #e5e7eb;
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
 }
 .pill {
   border-radius: 999px;

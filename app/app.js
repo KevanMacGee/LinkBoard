@@ -485,33 +485,6 @@ function swapColumns(i, j, columns = state.columns) {
   columns[j] = tmp;
 }
 
-// ——— Reusable Confirm Dialog ———
-const _confirmDlg = document.getElementById("dlgConfirm");
-const _confirmTitle = document.getElementById("dlgConfirmTitle");
-const _confirmMsg = document.getElementById("dlgConfirmMsg");
-const _confirmOk = document.getElementById("dlgConfirmOk");
-const _confirmCancel = document.getElementById("dlgConfirmCancel");
-
-function showConfirm({ title = "Confirm", message = "", confirmText = "OK", cancelText = "Cancel", danger = false } = {}) {
-  return new Promise((resolve) => {
-    _confirmTitle.textContent = title;
-    _confirmMsg.textContent = message;
-    _confirmOk.textContent = confirmText;
-    _confirmCancel.textContent = cancelText;
-
-    _confirmOk.className = danger ? "pill danger" : "pill";
-    _confirmCancel.style.display = cancelText ? "" : "none";
-
-    _confirmDlg.returnValue = "";
-
-    _confirmDlg.addEventListener("close", () => {
-      resolve(_confirmDlg.returnValue === "ok");
-    }, { once: true });
-
-    _confirmDlg.showModal();
-  });
-}
-
 // ——— Dialog ———
 const dlg = document.getElementById("dialog");
 const dlgTitle = document.getElementById("dlgTitle");
@@ -687,7 +660,7 @@ document.getElementById("importFile").addEventListener("change", (e) => {
   const file = e.target.files[0];
   if (!file) return;
   const reader = new FileReader();
-  reader.onload = async () => {
+  reader.onload = () => {
     try {
       const imported = JSON.parse(reader.result);
       
@@ -725,45 +698,24 @@ document.getElementById("importFile").addEventListener("change", (e) => {
           if (typeof card.url !== "string") {
             throw new Error("Card missing valid 'url'");
           }
+          // title and note are optional
         }
       }
-
-      // Confirmation dialog to overwrite existing data
-      const step1 = await showConfirm({
-        title: "Import Data",
-        message: "Importing will permanently overwrite your ALL your existing bookmarks with the new data. Proceed?",
-        confirmText: "Continue",
-      });
-      if (!step1) { e.target.value = ""; return; }
-
-      const step2 = await showConfirm({
-        title: "Overwrite Data",
-        message: "No, seriously! This is permanent. Are you sure?",
-        confirmText: "Overwrite",
-        danger: true,
-      });
-      if (!step2) { e.target.value = ""; return; }
-
-      state = imported;
-      migrateState();
-      ensureValidLastColumnId();
-      save();
-      render();
-      await showConfirm({
-        title: "Import Complete",
-        message: "Your data was imported successfully. (Sorry for all the popups!)",
-        confirmText: "OK",
-        cancelText: "",
-      });
-      e.target.value = "";
+      
+      // All validations passed, accept the import
+      if (confirm("Importing will permanently overwrite your existing data. Are you sure?")) {
+        if (confirm("Your data cannot be recovered if overwritten. Proceed?")) {
+          state = imported;
+          migrateState();
+          ensureValidLastColumnId();
+          save();
+          render();
+          alert("Import successful!");
+        }
+      }
+      e.target.value = ""; // clear input so same file can be selected again
     } catch (err) {
-      await showConfirm({
-        title: "Import Failed",
-        message: err.message || "Invalid JSON file",
-        confirmText: "OK",
-        cancelText: "",
-        danger: true,
-      });
+      alert("Import failed: " + (err.message || "Invalid JSON file"));
       e.target.value = "";
     }
   };
@@ -903,6 +855,16 @@ function renderColsManager() {
     const row = document.createElement("div");
     row.className = "colmgr-row";
     
+    // OLD (pattern replaced for security - Issue 4):
+    // row.innerHTML = `
+    //   <div class="order">
+    //     <button type="button" class="btn-icon" title="Move up" data-up="${escapeAttr(idx)}">↑</button>
+    //     <button type="button" class="btn-icon" title="Move down" data-down="${escapeAttr(idx)}">↓</button>
+    //   </div>
+    //   <input type="text" data-col-id="${escapeAttr(c.id)}" value="${escapeAttr(c.title)}" />
+    //   <div class="colmgr-actions">
+    //     <button type="button" class="btn-icon" title="Delete" data-del="${escapeAttr(c.id)}">🗑</button>
+    //   </div>`;
     
     // NEW (safe DOM-API version):
     const orderDiv = document.createElement('div');
@@ -973,7 +935,13 @@ function renderColsManager() {
       const delColInfo = document.getElementById("delColInfo");
       delColInfo.textContent = `⚠️ Are you sure you want to delete column "${c.title}"? It contains ${cardText}.`;
       
-       
+      // Build dest options excluding this column
+      // OLD (pattern replaced for security - Issue 5):
+      // delDest.innerHTML = columns
+      //   .filter((x) => String(x.id) !== String(c.id))
+      //   .map((x, i) => `<option value="${escapeAttr(x.id)}">${i + 1}. ${escapeHTML(x.title)}</option>`)
+      //   .join("");
+      
       // NEW (safe DOM-API version):
       delDest.replaceChildren(); // Clear existing options safely
       columns
