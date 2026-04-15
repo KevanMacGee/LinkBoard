@@ -323,8 +323,10 @@ dialog::backdrop {
   padding: 16px;
   display: grid;
   gap: 12px;
-  text-align: center; /* temporary */
+  justify-items: center; /* Centers the <p> block within the grid */
+  text-align: center;    /* Ensures multi-line text stays centered inside the <p> */
 }
+
 .row {
   display: grid;
   gap: 6px;
