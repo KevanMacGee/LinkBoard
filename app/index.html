@@ -182,6 +182,23 @@
       </form>
     </dialog>
 
+    <!-- Reusable Confirm/Alert Dialog -->
+    <dialog id="dlgConfirm">
+      <form method="dialog">
+        <div class="dlg-head">
+          <h3 id="dlgConfirmTitle">Confirm</h3>
+          <button class="pill alt" value="cancel" aria-label="Close" formnovalidate>✕</button>
+        </div>
+        <div class="dlg-body">
+          <p id="dlgConfirmMsg" style="margin: 0; line-height: 1.5;"></p>
+        </div>
+        <div class="dlg-foot">
+          <button id="dlgConfirmCancel" class="pill alt" value="cancel" formnovalidate>Cancel</button>
+          <button id="dlgConfirmOk" class="pill" value="ok">OK</button>
+        </div>
+      </form>
+    </dialog>
+
     <script
       src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"
       integrity="sha256-ymhDBwPE9ZYOkHNYZ8bpTSm1o943EH2BAOWjAQB+nm4="

@@ -646,6 +646,44 @@ function openDialog(card = null, colId = null) {
   requestAnimationFrame(() => fUrl.focus());
 }
 
+// ——— App Confirm/Alert Helpers ———
+const dlgConfirm = document.getElementById("dlgConfirm");
+const dlgConfirmTitle = document.getElementById("dlgConfirmTitle");
+const dlgConfirmMsg = document.getElementById("dlgConfirmMsg");
+const dlgConfirmOk = document.getElementById("dlgConfirmOk");
+const dlgConfirmCancel = document.getElementById("dlgConfirmCancel");
+
+function showAppConfirm({ title = "Confirm", message, confirmLabel = "OK", cancelLabel = "Cancel", danger = false } = {}) {
+  return new Promise((resolve) => {
+    dlgConfirmTitle.textContent = title;
+    dlgConfirmMsg.textContent = message;
+    dlgConfirmOk.textContent = confirmLabel;
+    dlgConfirmOk.className = danger ? "pill danger" : "pill";
+    dlgConfirmCancel.textContent = cancelLabel;
+    dlgConfirmCancel.style.display = "";
+    dlgConfirm.returnValue = "";
+    dlgConfirm.showModal();
+    dlgConfirm.addEventListener("close", () => {
+      resolve(dlgConfirm.returnValue === "ok");
+    }, { once: true });
+  });
+}
+
+function showAppAlert({ title = "Notice", message, buttonLabel = "OK" } = {}) {
+  return new Promise((resolve) => {
+    dlgConfirmTitle.textContent = title;
+    dlgConfirmMsg.textContent = message;
+    dlgConfirmOk.textContent = buttonLabel;
+    dlgConfirmOk.className = "pill";
+    dlgConfirmCancel.style.display = "none";
+    dlgConfirm.returnValue = "";
+    dlgConfirm.showModal();
+    dlgConfirm.addEventListener("close", () => {
+      resolve();
+    }, { once: true });
+  });
+}
+
 // ——— Export/Import/Reset ———
 document.getElementById("btnExport").addEventListener("click", () => {
   const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
@@ -660,7 +698,7 @@ document.getElementById("importFile").addEventListener("change", (e) => {
   const file = e.target.files[0];
   if (!file) return;
   const reader = new FileReader();
-  reader.onload = () => {
+  reader.onload = async () => {
     try {
       const imported = JSON.parse(reader.result);
       
@@ -698,24 +736,44 @@ document.getElementById("importFile").addEventListener("change", (e) => {
           if (typeof card.url !== "string") {
             throw new Error("Card missing valid 'url'");
           }
-          // title and note are optional
         }
       }
       
-      // All validations passed, accept the import
-      if (confirm("Importing will permanently overwrite your existing data. Are you sure?")) {
-        if (confirm("Your data cannot be recovered if overwritten. Proceed?")) {
-          state = imported;
-          migrateState();
-          ensureValidLastColumnId();
-          save();
-          render();
-          alert("Import successful!");
-        }
+      // Sequential confirmation — both must be accepted to proceed
+      const firstConfirm = await showAppConfirm({
+        title: "Import Data",
+        message: "Importing will permanently overwrite your existing data. Are you sure?",
+        confirmLabel: "Continue",
+        danger: true,
+      });
+      if (!firstConfirm) {
+        e.target.value = "";
+        return;
       }
-      e.target.value = ""; // clear input so same file can be selected again
+
+      const secondConfirm = await showAppConfirm({
+        title: "Final Warning",
+        message: "Your data cannot be recovered if overwritten. Proceed?",
+        confirmLabel: "Overwrite My Data",
+        danger: true,
+      });
+      if (!secondConfirm) {
+        e.target.value = "";
+        return;
+      }
+
+      state = imported;
+      migrateState();
+      ensureValidLastColumnId();
+      save();
+      render();
+      await showAppAlert({ title: "Import Complete", message: "Import successful!" });
+      e.target.value = "";
     } catch (err) {
-      alert("Import failed: " + (err.message || "Invalid JSON file"));
+      await showAppAlert({
+        title: "Import Failed",
+        message: "Import failed: " + (err.message || "Invalid JSON file"),
+      });
       e.target.value = "";
     }
   };
@@ -765,6 +823,9 @@ document.addEventListener("keydown", (e) => {
       e.preventDefault();
     } else if (dlgAddCol.open) {
       dlgAddCol.close("cancel");
+      e.preventDefault();
+    } else if (dlgConfirm.open) {
+      dlgConfirm.close("cancel");
       e.preventDefault();
     } else if (document.getElementById("dlgBm").open) {
       document.getElementById("dlgBm").close();
