@@ -252,10 +252,18 @@ h1 .dot {
   height: 100%;
   object-fit: cover;
 }
-.card a.title {
+.card .card-link-area {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+.card .card-link-area:hover .title {
+  text-decoration: underline;
+}
+.card .title {
   color: var(--text);
   font-weight: 600;
-  text-decoration: none;
 }
 .card .meta {
   color: var(--muted);
@@ -587,7 +595,7 @@ textarea {
   border: 1px solid var(--border);
   color: var(--text);
 }
-[data-theme="dark"] .card a.title {
+[data-theme="dark"] .card .title {
   color: var(--text);
 }
 [data-theme="dark"] .card .meta {
