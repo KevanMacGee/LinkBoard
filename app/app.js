@@ -286,20 +286,11 @@ function cardEl(card) {
   }
 
   const contentDiv = document.createElement("div");
-  if (normalizedUrl) {
-    const link = document.createElement("a");
-    link.className = "title";
-    link.textContent = titleText;
-    link.href = normalizedUrl;
-    link.target = "_blank";
-    link.rel = "noopener";
-    contentDiv.appendChild(link);
-  } else {
-    const span = document.createElement("span");
-    span.className = "title";
-    span.textContent = titleText;
-    contentDiv.appendChild(span);
-  }
+  contentDiv.className = "content";
+
+  const titleEl = document.createElement("div");
+  titleEl.className = "title";
+  titleEl.textContent = titleText;
 
   const meta = document.createElement("div");
   meta.className = "meta";
@@ -310,7 +301,25 @@ function cardEl(card) {
     if (domainText) meta.append(" • ");
     meta.append(noteText);
   }
-  contentDiv.appendChild(meta);
+
+  if (normalizedUrl) {
+    const linkArea = document.createElement("a");
+    linkArea.className = "card-link-area";
+    linkArea.href = normalizedUrl;
+    linkArea.target = "_blank";
+    linkArea.rel = "noopener";
+    linkArea.append(titleEl, meta);
+    contentDiv.appendChild(linkArea);
+  } else {
+    contentDiv.append(titleEl, meta);
+  }
+
+  const dragHandle = document.createElement("button");
+  dragHandle.className = "drag-handle";
+  dragHandle.type = "button";
+  dragHandle.title = "Drag card";
+  dragHandle.setAttribute("aria-label", "Drag card");
+  dragHandle.textContent = "⠿";
 
   const buttons = document.createElement("div");
   buttons.className = "buttons";
@@ -328,7 +337,7 @@ function cardEl(card) {
   deleteBtn.textContent = "🗑";
   buttons.append(editBtn, deleteBtn);
 
-  li.append(iconDiv, contentDiv, buttons);
+  li.append(iconDiv, contentDiv, dragHandle, buttons);
 
   li.addEventListener("click", (e) => {
     const act = e.target?.dataset?.act;
@@ -356,6 +365,7 @@ function makeSortable(listEl) {
     animation: 150,
     emptyInsertThreshold: 10,
     draggable: ".card",
+    handle: ".drag-handle",
     onStart() {
       if (searchEl.value.trim()) {
         wiggleSearchHint();
