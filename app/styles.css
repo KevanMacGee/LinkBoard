@@ -226,13 +226,17 @@ h1 .dot {
 
 .card {
   display: grid;
-  grid-template-columns: 28px 1fr auto auto;
+  grid-template-columns: 28px 1fr auto;
   align-items: center;
   gap: 10px;
   padding: 10px;
   border-radius: 12px;
   background: #ffffff;
   border: 1px solid #e5e7eb;
+  cursor: grab;
+}
+.card:active {
+  cursor: grabbing;
 }
 .card .icon {
   width: 22px;
@@ -248,37 +252,14 @@ h1 .dot {
   height: 100%;
   object-fit: cover;
 }
-.card .content {
-  min-width: 0;
-}
-.card .card-link-area {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  min-height: 44px;
-  padding: 6px 0;
-  color: var(--text);
-  text-decoration: none;
-  cursor: pointer;
-}
-.card .card-link-area:hover .title,
-.card .card-link-area:focus .title {
-  text-decoration: underline;
-}
-.card .title {
+.card a.title {
   color: var(--text);
   font-weight: 600;
   text-decoration: none;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 .card .meta {
   color: var(--muted);
   font-size: 12px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 .card .buttons {
   display: flex;
@@ -298,30 +279,6 @@ h1 .dot {
 }
 .btn-icon:hover,
 .btn-icon:focus {
-  color: var(--text);
-  border-color: #cbd5e1;
-  outline: 2px solid rgba(37, 99, 235, 0.18);
-}
-.drag-handle {
-  border: 1px solid #e5e7eb;
-  background: #f8fafc;
-  color: #64748b;
-  width: 28px;
-  height: 28px;
-  border-radius: 8px;
-  display: grid;
-  place-items: center;
-  cursor: grab;
-  outline: none;
-  font: inherit;
-  line-height: 1;
-  padding: 0;
-}
-.drag-handle:active {
-  cursor: grabbing;
-}
-.drag-handle:hover,
-.drag-handle:focus {
   color: var(--text);
   border-color: #cbd5e1;
   outline: 2px solid rgba(37, 99, 235, 0.18);
@@ -630,21 +587,11 @@ textarea {
   border: 1px solid var(--border);
   color: var(--text);
 }
-[data-theme="dark"] .card .title {
+[data-theme="dark"] .card a.title {
   color: var(--text);
 }
 [data-theme="dark"] .card .meta {
   color: var(--muted);
-}
-[data-theme="dark"] .drag-handle {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
-  border: 1px solid var(--border);
-  color: #cfcfcf;
-}
-[data-theme="dark"] .drag-handle:hover,
-[data-theme="dark"] .drag-handle:focus {
-  color: var(--text);
-  border-color: #3a3a3a;
 }
 /* Modal header/footer dividers in dark mode */
 [data-theme="dark"] .dlg-head,
