@@ -54,6 +54,23 @@ migrateState();
 ensureValidLastColumnId();
 save();
 
+async function testSupabaseConnection() {
+  try {
+    const { supabase } = await import("./supabaseClient.js");
+    const { data, error } = await supabase
+      .from("boards")
+      .select("*");
+
+    console.log("Supabase test data:", data);
+    console.log("Supabase test error:", error);
+  } catch (error) {
+    console.log("Supabase test data:", null);
+    console.log("Supabase test error:", error);
+  }
+}
+
+testSupabaseConnection();
+
 function load() {
   try {
     return JSON.parse(localStorage.getItem(STORAGE_KEY));
