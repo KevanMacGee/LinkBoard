@@ -48,28 +48,10 @@ function createInitialState() {
 
 /** @typedef {{id:string,url:string,title?:string,note?:string}} Card */
 /** @type {{columns: {id:string,title:string,cards: Card[]}[]}} */
-let state = load();
-if (!state) state = createInitialState();
-migrateState();
-ensureValidLastColumnId();
-save();
-
-async function testSupabaseConnection() {
-  try {
-    const { supabase } = await import("./supabaseClient.js");
-    const { data, error } = await supabase
-      .from("boards")
-      .select("*");
-
-    console.log("Supabase test data:", data);
-    console.log("Supabase test error:", error);
-  } catch (error) {
-    console.log("Supabase test data:", null);
-    console.log("Supabase test error:", error);
-  }
-}
-
-testSupabaseConnection();
+let state = createInitialState();
+let remotePersistenceEnabled = false;
+let remotePersistenceDisabledReason = null;
+let persistQueue = Promise.resolve();
 
 function load() {
   try {
@@ -85,6 +67,68 @@ function save() {
     console.error('Save failed:', e);
     alert('⚠️ Save failed (storage full or blocked). Please Export your data immediately to avoid losing changes.');
   }
+}
+function getLocalSeedState() {
+  let nextState = load();
+  if (!nextState) nextState = createInitialState();
+  state = nextState;
+  migrateState();
+  ensureValidLastColumnId();
+  save();
+  return state;
+}
+function persistState() {
+  save();
+
+  if (!remotePersistenceEnabled || !window.LinkBoardSupabase) {
+    return persistQueue;
+  }
+
+  persistQueue = persistQueue
+    .then(() => window.LinkBoardSupabase.saveState(state))
+    .catch((error) => {
+      remotePersistenceEnabled = false;
+      remotePersistenceDisabledReason = error;
+      console.error("Supabase save failed; falling back to local-only persistence for this session.", error);
+    });
+
+  return persistQueue;
+}
+async function bootstrapState() {
+  if (!window.LinkBoardSupabase) {
+    getLocalSeedState();
+    return;
+  }
+
+  const result = await window.LinkBoardSupabase.loadState();
+  if (result.status === "ok" && result.state) {
+    state = result.state;
+    migrateState();
+    ensureValidLastColumnId();
+    save();
+    remotePersistenceEnabled = true;
+    remotePersistenceDisabledReason = null;
+    return;
+  }
+
+  const fallbackState = getLocalSeedState();
+  if (result.status === "empty") {
+    try {
+      await window.LinkBoardSupabase.saveState(fallbackState);
+      remotePersistenceEnabled = true;
+      remotePersistenceDisabledReason = null;
+      return;
+    } catch (error) {
+      remotePersistenceEnabled = false;
+      remotePersistenceDisabledReason = error;
+      console.error("Supabase seed failed; continuing with local-only data for this session.", error);
+      return;
+    }
+  }
+
+  remotePersistenceEnabled = false;
+  remotePersistenceDisabledReason = result.error || new Error("Supabase unavailable.");
+  console.warn("Supabase unavailable; rendering local data without remote sync.", remotePersistenceDisabledReason);
 }
 function readStoredColumnId() {
   try {
@@ -404,7 +448,7 @@ function persistOrder() {
     newState.columns.push({ id: col.id, title: col.title, cards: newCards });
   }
   state = newState;
-  save();
+  persistState();
   render();
 }
 
@@ -422,7 +466,7 @@ function addCard(card, colId) {
   const colIdStr = String(colId);
   const col = state.columns.find((c) => String(c.id) === colIdStr) || state.columns[0];
   col.cards.push({ id: uid(), ...card });
-  save();
+  persistState();
   render();
 }
 function updateCard(id, updates, newColId) {
@@ -436,7 +480,7 @@ function updateCard(id, updates, newColId) {
       const target = state.columns.find((cc) => String(cc.id) === newColIdStr) || c;
       const insertIndex = target === c ? Math.min(idx, target.cards.length) : target.cards.length;
       target.cards.splice(insertIndex, 0, merged);
-      save();
+      persistState();
       render();
       return;
     }
@@ -449,7 +493,7 @@ function removeCard(id) {
     const idx = c.cards.findIndex((x) => String(x.id) === idStr);
     if (idx > -1) {
       c.cards.splice(idx, 1);
-      save();
+      persistState();
       render();
       return;
     }
@@ -491,7 +535,7 @@ function deleteColumn(colId, destId, { commit = true, columns = state.columns, d
   
   if (commit) {
     ensureValidLastColumnId(state.columns);
-    save();
+    persistState();
     render();
   }
   
@@ -581,7 +625,7 @@ function openDialog(card = null, colId = null) {
         // Create the new column
         const newCol = { id: uid(), title: title, cards: [] };
         state.columns.push(newCol);
-        save();
+        persistState();
         render(); // Update the main board
         
         // Refresh dropdown and select new column
@@ -789,7 +833,7 @@ document.getElementById("importFile").addEventListener("change", (e) => {
       state = imported;
       migrateState();
       ensureValidLastColumnId();
-      save();
+      persistState();
       render();
       await showAppAlert({ title: "Import Complete", message: "Import successful!" });
       e.target.value = "";
@@ -815,7 +859,7 @@ document.getElementById("btnReset").addEventListener("click", () => {
         : createBlankColumns();
       state = { columns };
       clearLastColumnId();
-      save();
+      persistState();
       render();
     }
   }
@@ -925,7 +969,7 @@ function openColsDialog() {
       state.columns = stagedColumns.map((col) => ({ id: col.id, title: col.title, cards: [...col.cards] }));
       stagedColumns = null;
       ensureValidLastColumnId(state.columns);
-      LinkBoardStorage.saveState(state);
+      persistState();
       render();
     },
     { once: true }
@@ -1226,17 +1270,30 @@ document.getElementById("btnBookmarklet").addEventListener("click", () => {
 })();
 
 // ——— Bootstrap ———
-render();
- 
-// Hide loading indicator after initial render
-requestAnimationFrame(() => {
-  const loadingEl = document.getElementById('loading');
-  if (loadingEl) {
-    loadingEl.classList.add('loaded');
-    // Remove from DOM after transition completes
-    setTimeout(() => loadingEl.remove(), 300);
+function hideLoadingIndicator() {
+  requestAnimationFrame(() => {
+    const loadingEl = document.getElementById('loading');
+    if (loadingEl) {
+      loadingEl.classList.add('loaded');
+      // Remove from DOM after transition completes
+      setTimeout(() => loadingEl.remove(), 300);
+    }
+  });
+}
+
+async function bootstrapApp() {
+  try {
+    await bootstrapState();
+  } catch (error) {
+    console.error("Bootstrap failed; rendering local-only data.", error);
+    getLocalSeedState();
   }
-});
+
+  render();
+  hideLoadingIndicator();
+}
+
+bootstrapApp();
 
 // ——— Helpers ———
 function escapeHTML(str) {
