@@ -102,6 +102,7 @@ async function bootstrapState() {
 
   const result = await window.LinkBoardSupabase.loadState();
   if (result.status === "ok" && result.state) {
+    console.log("Loading from Supabase");
     state = result.state;
     migrateState();
     ensureValidLastColumnId();
@@ -114,6 +115,7 @@ async function bootstrapState() {
   const fallbackState = getLocalSeedState();
   if (result.status === "empty") {
     try {
+      console.log("Seeding Supabase from local data");
       await window.LinkBoardSupabase.saveState(fallbackState);
       remotePersistenceEnabled = true;
       remotePersistenceDisabledReason = null;
@@ -128,6 +130,7 @@ async function bootstrapState() {
 
   remotePersistenceEnabled = false;
   remotePersistenceDisabledReason = result.error || new Error("Supabase unavailable.");
+  console.log("Using local fallback (Supabase unavailable)");
   console.warn("Supabase unavailable; rendering local data without remote sync.", remotePersistenceDisabledReason);
 }
 function readStoredColumnId() {
