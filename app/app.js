@@ -489,8 +489,15 @@ function updateCard(id, updates, newColId) {
     }
   }
 }
-function removeCard(id) {
-  if (!confirm("Delete this link?")) return;
+async function removeCard(id) {
+  const confirmed = await showAppConfirm({
+    title: "Delete Link",
+    message: "Delete this link?",
+    confirmLabel: "Delete",
+    cancelLabel: "Cancel",
+    danger: true,
+  });
+  if (!confirmed) return;
   const idStr = String(id);
   for (const c of state.columns) {
     const idx = c.cards.findIndex((x) => String(x.id) === idStr);
