@@ -1230,8 +1230,10 @@ document.getElementById("btnBookmarklet").addEventListener("click", () => {
   bmDlg.showModal();
 });
 
-// On-load: check for ?add= URL param from bookmarklet
-(function initFromParams() {
+// Check for ?add= URL param from bookmarklet after storage bootstrap has
+// finished. Opening the dialog before an async Supabase load completes would
+// populate its column dropdown from the temporary four-column blank state.
+function initFromParams() {
   const p = new URLSearchParams(location.search);
   const add = p.get("add");
   if (!add) return;
@@ -1277,7 +1279,7 @@ document.getElementById("btnBookmarklet").addEventListener("click", () => {
   });
 
   history.replaceState({}, "", location.pathname); // clean URL
-})();
+}
 
 // ——— Bootstrap ———
 function hideLoadingIndicator() {
@@ -1300,6 +1302,7 @@ async function bootstrapApp() {
   }
 
   render();
+  initFromParams();
   hideLoadingIndicator();
 }
 
